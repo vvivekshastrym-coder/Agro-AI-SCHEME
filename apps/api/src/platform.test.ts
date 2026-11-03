@@ -554,6 +554,17 @@ describe("@agro/api — Phase 0, 1, 2, 3 Unit, Security & Integration Tests", ()
     });
     expect(waStop.record.optedOut).toBe(true);
 
+    // 6b. Twilio WhatsApp Direct Dispatch & Direct Link Generation
+    const waReport = await platform.sendWhatsAppReport({
+      userId: farmer.user.id,
+      phone: "9876543210",
+      reportText: "Agro AI Farmer Report: 3 Eligible Schemes",
+    });
+    expect(waReport.to).toBe("whatsapp:+919876543210");
+    expect(waReport.directWhatsAppUrl).toContain("https://api.whatsapp.com/send?phone=919876543210");
+    expect(waReport.directWhatsAppUrl).toContain(encodeURIComponent("Agro AI Farmer Report: 3 Eligible Schemes"));
+    expect(waReport.messageSid).toBeDefined();
+
     // 7. Admin Overview (Negative auth for Farmer, allowed for Admin)
     expect(() => platform.getAdminOverview(farmer.user.id)).toThrow(
       AuthorizationError

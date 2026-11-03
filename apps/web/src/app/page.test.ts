@@ -137,7 +137,8 @@ describe("@agro/web UI integration and Phase 0 & 1 Acceptance Tests", () => {
     );
     expect(pageSource).toContain("whatsapp-action-fab");
     expect(pageSource).toContain("handleSendWhatsAppReport");
-    expect(pageSource).toContain("https://api.whatsapp.com/send?text=");
+    expect(pageSource).toContain("https://api.whatsapp.com/send?");
+    expect(pageSource).toContain("handleSendViaTwilio");
     expect(pageSource).toContain("floating-actions-cluster");
     expect(pageSource).toContain("WhatsApp Papers & Advisory");
   });

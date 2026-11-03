@@ -207,3 +207,123 @@ export class MockBhashiniSttProvider implements SttProvider {
     };
   }
 }
+
+// ============================================================================
+// Twilio & Direct WhatsApp Integration Adapters
+// ============================================================================
+
+export interface WhatsAppSendResult {
+  messageSid: string;
+  status: "queued" | "sent" | "delivered" | "failed" | "mock_delivered";
+  isMock: boolean;
+  provider: "twilio" | "mock_direct";
+  to: string;
+  from: string;
+  sentAt: string;
+  directWhatsAppUrl: string;
+}
+
+export interface WhatsAppProvider {
+  sendWhatsAppReport(params: {
+    toPhone: string;
+    bodyText: string;
+    mediaUrl?: string;
+  }): Promise<WhatsAppSendResult>;
+}
+
+export class TwilioWhatsAppProvider implements WhatsAppProvider {
+  constructor(
+    private readonly accountSid?: string,
+    private readonly authToken?: string,
+    private readonly fromNumber: string = "whatsapp:+14155238886"
+  ) {}
+
+  public isConfigured(): boolean {
+    return Boolean(this.accountSid && this.authToken);
+  }
+
+  async sendWhatsAppReport(params: {
+    toPhone: string;
+    bodyText: string;
+    mediaUrl?: string;
+  }): Promise<WhatsAppSendResult> {
+    const cleanPhone = (params.toPhone || "").replace(/\D/g, "").slice(-10) || "9876543210";
+    const toFormatted = `whatsapp:+91${cleanPhone}`;
+    const directUrl = `https://api.whatsapp.com/send?phone=91${cleanPhone}&text=${encodeURIComponent(params.bodyText)}`;
+
+    if (!this.accountSid || !this.authToken) {
+      // Graceful fallback with valid direct wa.me link
+      return {
+        messageSid: `SM_mock_${Date.now()}_${cleanPhone}`,
+        status: "mock_delivered",
+        isMock: true,
+        provider: "mock_direct",
+        to: toFormatted,
+        from: this.fromNumber,
+        sentAt: new Date().toISOString(),
+        directWhatsAppUrl: directUrl,
+      };
+    }
+
+    const endpoint = `https://api.twilio.com/2010-04-01/Accounts/${this.accountSid}/Messages.json`;
+    const basicAuth = Buffer.from(`${this.accountSid}:${this.authToken}`).toString("base64");
+
+    const formData = new URLSearchParams();
+    formData.append("From", this.fromNumber);
+    formData.append("To", toFormatted);
+    formData.append("Body", params.bodyText);
+    if (params.mediaUrl) {
+      formData.append("MediaUrl", params.mediaUrl);
+    }
+
+    try {
+      const res = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          Authorization: `Basic ${basicAuth}`,
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: formData.toString(),
+      });
+
+      if (!res.ok) {
+        const errorText = await res.text();
+        console.warn(`[TwilioWhatsApp] API error ${res.status}: ${errorText}`);
+        return {
+          messageSid: `SM_err_${Date.now()}`,
+          status: "failed",
+          isMock: false,
+          provider: "twilio",
+          to: toFormatted,
+          from: this.fromNumber,
+          sentAt: new Date().toISOString(),
+          directWhatsAppUrl: directUrl,
+        };
+      }
+
+      const data = (await res.json()) as any;
+      return {
+        messageSid: data.sid || `SM_${Date.now()}`,
+        status: data.status || "queued",
+        isMock: false,
+        provider: "twilio",
+        to: toFormatted,
+        from: this.fromNumber,
+        sentAt: new Date().toISOString(),
+        directWhatsAppUrl: directUrl,
+      };
+    } catch (err: any) {
+      console.warn(`[TwilioWhatsApp] Request failed: ${err.message}`);
+      return {
+        messageSid: `SM_network_err_${Date.now()}`,
+        status: "failed",
+        isMock: false,
+        provider: "twilio",
+        to: toFormatted,
+        from: this.fromNumber,
+        sentAt: new Date().toISOString(),
+        directWhatsAppUrl: directUrl,
+      };
+    }
+  }
+}

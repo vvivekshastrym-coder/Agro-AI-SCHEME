@@ -753,6 +753,32 @@ export function createApiServer(platform = new AgroPlatformService()) {
         return;
       }
 
+      if (req.method === "POST" && pathname === "/api/v1/whatsapp/send-report") {
+        const body = (await readJsonBody(req)) as {
+          phone?: string;
+          reportText?: string;
+          mediaUrl?: string;
+          userId?: string;
+        };
+        const out = await platform.sendWhatsAppReport({
+          userId: body.userId,
+          phone: body.phone ?? "",
+          reportText: body.reportText ?? "",
+          mediaUrl: body.mediaUrl,
+        });
+        sendJson(res, 200, out);
+        return;
+      }
+
+      if (req.method === "GET" && pathname === "/api/v1/whatsapp/status") {
+        sendJson(res, 200, {
+          twilioConfigured: platform.twilioWhatsAppProvider.isConfigured(),
+          fromNumber: platform.config.TWILIO_WHATSAPP_FROM,
+          directLinkEnabled: true,
+        });
+        return;
+      }
+
       if (req.method === "POST" && pathname === "/api/v1/admin/backup") {
         const { userId } = extractBearerUser(req);
         const out = platform.createVerifiedBackupSnapshot(userId);

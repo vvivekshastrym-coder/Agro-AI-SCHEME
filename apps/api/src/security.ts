@@ -45,6 +45,9 @@ export const EnvConfigSchema = z.object({
     .string()
     .min(8)
     .default("agro_dev_whatsapp_verify_token"),
+  TWILIO_ACCOUNT_SID: z.string().optional(),
+  TWILIO_AUTH_TOKEN: z.string().optional(),
+  TWILIO_WHATSAPP_FROM: z.string().default("whatsapp:+14155238886"),
 });
 
 export type EnvConfig = z.infer<typeof EnvConfigSchema>;

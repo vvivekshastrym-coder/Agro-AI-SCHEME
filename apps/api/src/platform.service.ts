@@ -54,7 +54,9 @@ import {
   MockBhashiniSttProvider,
   MockEmailProvider,
   MockSmsProvider,
+  TwilioWhatsAppProvider,
   type LlmExplanationOutput,
+  type WhatsAppSendResult,
 } from "./adapters.js";
 
 // ============================================================================
@@ -557,6 +559,7 @@ export class AgroPlatformService {
   public readonly emailProvider = new MockEmailProvider();
   public readonly llmProvider = new CachedMockLlmProvider();
   public readonly sttProvider = new MockBhashiniSttProvider();
+  public readonly twilioWhatsAppProvider: TwilioWhatsAppProvider;
 
   private readonly users = new Map<string, UserRecord>();
   private readonly profiles = new Map<string, UserProfileRecord>();
@@ -608,6 +611,11 @@ export class AgroPlatformService {
 
   constructor(config?: Partial<EnvConfig>, persistencePath?: string) {
     this.config = { ...loadEnvConfig(), ...config };
+    this.twilioWhatsAppProvider = new TwilioWhatsAppProvider(
+      this.config.TWILIO_ACCOUNT_SID,
+      this.config.TWILIO_AUTH_TOKEN,
+      this.config.TWILIO_WHATSAPP_FROM
+    );
     this.persistencePath = persistencePath;
     if (this.persistencePath && fs.existsSync(this.persistencePath)) {
       this.loadFromDisk();
@@ -3334,6 +3342,58 @@ export class AgroPlatformService {
       metadata: { selectedOption, handedOffToCsc, within24hWindow },
     });
     return { deduplicated: false, record };
+  }
+
+  public async sendWhatsAppReport(params: {
+    userId?: string;
+    phone: string;
+    reportText: string;
+    mediaUrl?: string;
+  }): Promise<WhatsAppSendResult> {
+    const cleanPhone = (params.phone || "").replace(/\D/g, "").slice(-10);
+    const result = await this.twilioWhatsAppProvider.sendWhatsAppReport({
+      toPhone: cleanPhone,
+      bodyText: params.reportText,
+      mediaUrl: params.mediaUrl,
+    });
+
+    const wamid = `wamid-${result.messageSid}`;
+    const phoneHash = crypto
+      .createHash("sha256")
+      .update(cleanPhone || "anonymous")
+      .digest("hex");
+
+    const record: WhatsAppMessageLogRecord = {
+      wamid,
+      fromPhoneHash: phoneHash,
+      farmerId: params.userId ?? null,
+      inboundText: "OUTBOUND_FARMER_REPORT",
+      selectedOption: "TWILIO_WHATSAPP_DISPATCH",
+      replyTextKn: params.reportText,
+      replyTextEn: params.reportText,
+      within24hWindow: true,
+      optedOut: false,
+      handedOffToCsc: false,
+      isMock: true,
+      createdAt: result.sentAt,
+    };
+    this.whatsappMessages.set(wamid, record);
+
+    this.appendAudit({
+      actorId: params.userId ?? "anonymous",
+      actorRole: "FARMER",
+      action: "WHATSAPP_REPORT_DISPATCHED",
+      targetType: "WHATSAPP_MESSAGE",
+      targetId: result.messageSid,
+      metadata: {
+        provider: result.provider,
+        status: result.status,
+        isMock: result.isMock,
+        to: result.to,
+      },
+    });
+
+    return result;
   }
 
   // --------------------------------------------------------------------------
