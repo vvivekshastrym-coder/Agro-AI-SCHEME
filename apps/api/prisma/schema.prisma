@@ -1,0 +1,277 @@
+// ============================================================================
+// Agro AI Scheme — Prisma Schema (Phases 0, 1, 2, 3)
+// Supports PostgreSQL 16 (+PostGIS + pgvector) in production and SQLite in dev
+// ============================================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                  String    @id
+  email               String?   @unique
+  phoneEncrypted      String?
+  phoneHash           String?   @unique
+  passwordHash        String?
+  emailVerifiedAt     DateTime?
+  phoneVerifiedAt     DateTime?
+  failedLoginAttempts Int       @default(0)
+  lockedUntil         DateTime?
+  deletionRequestedAt DateTime?
+  deletedAt           DateTime?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  profile             UserProfile?
+  roles               UserRole[]
+  sessions            Session[]
+  mfaSecret           MfaSecret?
+  consents            ConsentRecord[]
+  grantedShares       AuthorizedShare[] @relation("ShareOwner")
+  receivedShares      AuthorizedShare[] @relation("ShareGrantee")
+  farms               Farm[]
+  ruleEvaluations     RuleEvaluation[]
+}
+
+model UserProfile {
+  id                      String   @id
+  userId                  String   @unique
+  fullName                String
+  preferredLanguage       String   @default("kn")
+  state                   String   @default("Karnataka")
+  districtCode            String?
+  talukCode               String?
+  villageCode             String?
+  farmerCategory          String?
+  hasKccCard              Boolean  @default(false)
+  livestockTypesJson      String   @default("[]")
+  elderOrLowLiteracyMode  Boolean  @default(false)
+  provenance              String   @default("FARMER_ENTERED")
+  verifiedAt              DateTime?
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+
+  user                    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model RoleRecord {
+  id          String     @id
+  name        String     @unique
+  description String
+  userRoles   UserRole[]
+}
+
+model UserRole {
+  id        String     @id
+  userId    String
+  roleName  String
+  createdAt DateTime   @default(now())
+
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role      RoleRecord @relation(fields: [roleName], references: [name], onDelete: Cascade)
+
+  @@unique([userId, roleName])
+}
+
+model Session {
+  id               String    @id
+  userId           String
+  tokenFamilyId    String
+  refreshTokenHash String    @unique
+  userAgent        String
+  ipAddress        String
+  expiresAt        DateTime
+  revokedAt        DateTime?
+  createdAt        DateTime  @default(now())
+
+  user             User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model MfaSecret {
+  id              String   @id
+  userId          String   @unique
+  secretEncrypted String
+  enabled         Boolean  @default(false)
+  backupCodesJson String   @default("[]")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model ConsentRecord {
+  id            String    @id
+  userId        String
+  consentType   String    // TERMS | PRIVACY_POLICY | DPDP_DATA_PROCESSING
+  policyVersion String
+  grantedAt     DateTime  @default(now())
+  revokedAt     DateTime?
+
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model AuthorizedShare {
+  id          String    @id
+  ownerId     String
+  granteeId   String
+  granteeRole String
+  scopesJson  String
+  purpose     String
+  expiresAt   DateTime
+  revokedAt   DateTime?
+  createdAt   DateTime  @default(now())
+
+  owner       User      @relation("ShareOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  grantee     User      @relation("ShareGrantee", fields: [granteeId], references: [id], onDelete: Cascade)
+}
+
+model DocumentAccessLog {
+  id         String   @id
+  documentId String
+  ownerId    String
+  accessorId String
+  shareId    String?
+  action     String
+  createdAt  DateTime @default(now())
+}
+
+model AuditLog {
+  id         String   @id
+  actorId    String?
+  actorRole  String?
+  action     String
+  targetType String
+  targetId   String?
+  metadata   String
+  ipAddress  String?
+  createdAt  DateTime @default(now())
+}
+
+model Farm {
+  id           String     @id
+  ownerId      String
+  name         String
+  districtCode String
+  talukCode    String
+  villageCode  String
+  provenance   String     @default("FARMER_ENTERED")
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  owner        User       @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  plots        FarmPlot[]
+}
+
+model FarmPlot {
+  id                 String       @id
+  farmId             String
+  ownerId            String
+  plotName           String
+  surveyNumberEnc    String
+  surveyNumberMasked String
+  districtCode       String
+  talukCode          String
+  villageCode        String
+  areaValue          Float
+  areaUnit           String
+  areaHectares       Float
+  ownershipType      String
+  irrigationType     String
+  soilType           String?
+  boundaryGeoJson    String?
+  provenance         String       @default("FARMER_ENTERED")
+  verifiedAt         DateTime?
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
+
+  farm               Farm         @relation(fields: [farmId], references: [id], onDelete: Cascade)
+  crops              CropRecord[]
+}
+
+model CropRecord {
+  id                  String   @id
+  plotId              String
+  ownerId             String
+  season              String
+  year                Int
+  cropCode            String
+  cropNameEn          String
+  cropNameKn          String
+  sownAreaHectares    Float
+  sowingDate          String?
+  isInsuredUnderPmfby Boolean  @default(false)
+  provenance          String   @default("FARMER_ENTERED")
+  createdAt           DateTime @default(now())
+
+  plot                FarmPlot @relation(fields: [plotId], references: [id], onDelete: Cascade)
+}
+
+model Scheme {
+  id                String          @id
+  slug              String          @unique
+  code              String          @unique
+  departmentName    String
+  isDemoData        Boolean         @default(true)
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+
+  versions          SchemeVersion[]
+}
+
+model SchemeVersion {
+  id                  String    @id
+  schemeId            String
+  versionNumber       Int
+  status              String    // DRAFT | IN_REVIEW | APPROVED | PUBLISHED | ARCHIVED
+  titleEn             String
+  titleKn             String
+  summaryEn           String
+  summaryKn           String
+  benefitsDescriptionEn String
+  benefitsDescriptionKn String
+  requiredDocumentsJson String
+  applicationStepsJson  String
+  rulesJson           String    // JSON DSL validated by @agro/rules-engine
+  sourceUrl           String
+  sourceLastVerifiedAt DateTime?
+  sourceVerifiedById  String?
+  authorId            String
+  approvedById        String?
+  publishedAt         DateTime?
+  isMock              Boolean   @default(true)
+  createdAt           DateTime  @default(now())
+
+  scheme              Scheme    @relation(fields: [schemeId], references: [id], onDelete: Cascade)
+  deadlines           SchemeDeadline[]
+}
+
+model SchemeDeadline {
+  id              String        @id
+  schemeVersionId String
+  titleEn         String
+  titleKn         String
+  windowType      String        // APPLICATION_CUTOFF | CLAIM_REPORTING | RENEWAL
+  dueDateIso      String?
+  isVerified      Boolean       @default(false)
+  sourceUrl       String
+  lastVerifiedAt  DateTime?
+
+  schemeVersion   SchemeVersion @relation(fields: [schemeVersionId], references: [id], onDelete: Cascade)
+}
+
+model RuleEvaluation {
+  id              String   @id
+  farmerId        String
+  schemeVersionId String
+  factsSnapshot   String
+  status          String
+  resultJson      String
+  createdAt       DateTime @default(now())
+
+  farmer          User     @relation(fields: [farmerId], references: [id], onDelete: Cascade)
+}

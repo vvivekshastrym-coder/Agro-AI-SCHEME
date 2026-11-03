@@ -1,0 +1,32 @@
+# Agro AI Scheme — API Reference
+
+## Core Endpoints
+- `GET /health` — Liveness probe
+- `GET /ready` — Readiness probe + adapter mock status
+- `GET /docs` — OpenAPI 3.1 specification
+- `GET /api/v1/reference/locations` — Seeded Karnataka District/Taluk/Village reference (`isDemoReference: true`)
+- `POST /api/v1/auth/signup` — Farmer signup with DPDP consent versions & breached-password check
+- `POST /api/v1/auth/verify-email` — Single-use email verification token
+- `POST /api/v1/auth/login` — Email + password (+ TOTP/backup code for staff) login
+- `POST /api/v1/auth/refresh` — Refresh token rotation with reuse detection
+- `POST /api/v1/auth/otp/request` & `POST /api/v1/auth/otp/verify` — Farmer mobile OTP login
+- `POST /api/v1/auth/invitations` & `POST /api/v1/auth/invitations/accept` — Admin staff invitation flow
+- `GET / PUT /api/v1/farmers/:id/passport` — Farmer Benefit Passport (owner or `profile:read` share)
+- `POST /api/v1/farmers/:id/plots` — Register farm plot (owner or `plots:write` share)
+- `POST /api/v1/farmers/:id/crops` — Record seasonal crop
+- `POST /api/v1/farmers/:id/shares` — Grant scoped Family Helper / CSC access share
+- `GET /api/v1/farmers/:id/schemes/match` — Deterministic scheme evaluation + cached AI explanation
+- `POST /api/v1/farmers/:id/schemes/what-if` — What-If eligibility simulation
+- `GET /api/v1/schemes/catalogue` — Published & draft scheme versions
+- `POST /api/v1/schemes/drafts` & `POST /api/v1/schemes/:id/publish` — Reviewer Maker-Checker workflow
+- `GET / POST /api/v1/farmers/:id/claims` — Crop Loss Claim Rescue Room (no universal 72h rule; unverified deadlines explicitly labelled)
+- `POST /api/v1/farmers/:id/claims/:claimId/evidence` — Add geo-tagged, blur-checked Photo Proof Pack item with SHA-256 hash
+- `POST /api/v1/farmers/:id/claims/:claimId/submit` — Submit prepared claim package & generate Receipt Vault acknowledgement
+- `POST /api/v1/farmers/:id/documents/xray` — Deterministic RTC/Pahani vs. Farmer Profile mismatch detector (`compareDocumentXRay`)
+- `POST /api/v1/farmers/:id/rejections/analyze` — Rejection Repair Studio & Officer Call Coach
+- `POST /api/v1/scam-shield/inspect` — Allow-list `.gov.in`/`.nic.in` inspector, `.apk` trap & UPI PIN phishing detector (`inspectSuspiciousMessage`)
+- `GET /api/v1/farmers/:id/benefits` & `POST /api/v1/farmers/:id/expenses` — DEMO-badged Benefit Pipeline, KCC Reminder, Subsidy Before Purchase, and Farm Expense Ledger
+- `GET / POST /api/v1/farmers/:id/csc-tokens` & `GET /api/v1/csc/workspace` — CSC Visit Tokens & 3-Column CSC Operator Workspace
+- `GET / POST /api/v1/whatsapp/webhook` & `POST /api/v1/whatsapp/simulate` — `X-Hub-Signature-256` HMAC verification, `wamid` idempotency deduplication, 24h service window check, STOP opt-out, and 8-option menu router
+- `POST /api/v1/voice/speak-to-fill` — Kannada/English voice transcription stub (`requiresFarmerConfirmation: true`)
+- `GET /api/v1/admin/overview` & `GET /api/v1/admin/audit-logs` — Real database metrics & append-only audit log (`PLATFORM_ADMIN` / `SECURITY_AUDITOR`)

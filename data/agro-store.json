@@ -1,0 +1,279 @@
+{
+  "users": [],
+  "profiles": [],
+  "sessions": [],
+  "mfaSecrets": [],
+  "consents": [],
+  "shares": [],
+  "auditLogs": [],
+  "plots": [],
+  "crops": [],
+  "schemeVersions": [
+    [
+      "demo-scheme-v1-drip-irrigation",
+      {
+        "id": "demo-scheme-v1-drip-irrigation",
+        "schemeId": "scheme_DEMO_KA_MICRO_IRRIGATION",
+        "schemeCode": "DEMO-KA-DRIP-01",
+        "departmentName": "DEMO — Department of Agriculture / Horticulture (Karnataka)",
+        "versionNumber": 1,
+        "status": "PUBLISHED",
+        "titleEn": "[DEMO] Karnataka Micro-Irrigation (Drip & Sprinkler) Assistance",
+        "titleKn": "[ಡೆಮೊ / ಮಾದರಿ] ಕರ್ನಾಟಕ ಸೂಕ್ಷ್ಮ ನೀರಾವರಿ (ಹನಿ ಮತ್ತು ತುಂತುರು) ಸಹಾಯಧನ ಯೋಜನೆ",
+        "summaryEn": "DEMO scheme entry for testing deterministic eligibility evaluation on plots with cultivable area between 0.2 and 5.0 hectares.",
+        "summaryKn": "0.2 ರಿಂದ 5.0 ಹೆಕ್ಟೇರ್ ಕೃಷಿ ಭೂಮಿ ಹೊಂದಿರುವ ರೈತರಿಗೆ ಸೂಕ್ಷ್ಮ ನೀರಾವರಿ ಅರ್ಹತೆ ಪರೀಕ್ಷಿಸಲು ರಚಿಸಲಾದ ಡೆಮೊ ಯೋಜನೆ.",
+        "benefitsDescriptionEn": "DEMO: Illustrative subsidy support for drip/sprinkler equipment installation (verify official rates on state portal).",
+        "benefitsDescriptionKn": "ಡೆಮೊ: ಹನಿ/ತುಂತುರು ನೀರಾವರಿ ಉಪಕರಣ ಅಳವಡಿಕೆಗೆ ಮಾದರಿ ಸಹಾಯಧನ (ಅಧಿಕೃತ ದರಗಳನ್ನು ಇಲಾಖೆ ಪೋರ್ಟಲ್‌ನಲ್ಲಿ ಪರಿಶೀಲಿಸಿ).",
+        "requiredDocumentsEn": [
+          "RTC / Pahani land record",
+          "Soil & water test report (if applicable)",
+          "Quotation from approved supplier"
+        ],
+        "requiredDocumentsKn": [
+          "ಪಹಣಿ (RTC) ದಾಖಲೆ",
+          "ಮಣ್ಣು ಮತ್ತು ನೀರಿನ ಪರೀಕ್ಷಾ ವರದಿ",
+          "ಅನುಮೋದಿತ ಸರಬರಾಜುದಾರರ ದರಪಟ್ಟಿ"
+        ],
+        "applicationStepsEn": [
+          "Check plot survey number and area in RTC",
+          "Visit Raitha Samparka Kendra (RSK) or official state portal",
+          "Keep acknowledgement receipt in your Receipt Vault"
+        ],
+        "applicationStepsKn": [
+          "ಪಹಣಿಯಲ್ಲಿ ಸರ್ವೆ ಸಂಖ್ಯೆ ಮತ್ತು ವಿಸ್ತೀರ್ಣ ಪರಿಶೀಲಿಸಿ",
+          "ರೈತ ಸಂಪರ್ಕ ಕೇಂದ್ರ (RSK) ಅಥವಾ ಅಧಿಕೃತ ಪೋರ್ಟಲ್‌ಗೆ ಭೇಟಿ ನೀಡಿ",
+          "ಸ್ವೀಕೃತಿ ರಸೀದಿಯನ್ನು ಆಪ್‌ನಲ್ಲಿ ಸುರಕ್ಷಿತವಾಗಿ ಉಳಿಸಿ"
+        ],
+        "ruleTree": {
+          "all": [
+            {
+              "id": "drip-r1",
+              "fact": "state",
+              "op": "eq",
+              "value": "Karnataka",
+              "descriptionEn": "Resides in Karnataka",
+              "descriptionKn": "ಕರ್ನಾಟಕದ ನಿವಾಸಿಯಾಗಿರಬೇಕು"
+            },
+            {
+              "id": "drip-r2",
+              "fact": "ownershipTypes",
+              "op": "in",
+              "value": [
+                "OWNER",
+                "JOINT_FAMILY"
+              ],
+              "descriptionEn": "Holds land as Owner or Joint Family",
+              "descriptionKn": "ಸ್ವಂತ ಅಥವಾ ಅವಿಭಕ್ತ ಕುಟುಂಬದ ಜಮೀನು ಹೊಂದಿರಬೇಕು",
+              "requiresOfficialVerification": true
+            },
+            {
+              "id": "drip-r3",
+              "fact": "totalLandHectares",
+              "op": "between",
+              "value": [
+                0.2,
+                5
+              ],
+              "descriptionEn": "Total cultivable land between 0.2 ha and 5.0 ha",
+              "descriptionKn": "ಒಟ್ಟು ಕೃಷಿ ಭೂಮಿ 0.2 ರಿಂದ 5.0 ಹೆಕ್ಟೇರ್ ಒಳಗಿರಬೇಕು"
+            }
+          ]
+        },
+        "sourceUrl": "https://raitamitra.karnataka.gov.in/ (DEMO REFERENCE)",
+        "sourceLastVerifiedAt": "2026-11-02T23:08:15.262Z",
+        "sourceVerifiedById": "system-seed-reviewer",
+        "authorId": "system-seed-author",
+        "approvedById": "system-seed-reviewer",
+        "publishedAt": "2026-11-02T23:08:15.262Z",
+        "isMock": true,
+        "deadlines": [
+          {
+            "id": "dl-demo-1",
+            "schemeVersionId": "demo-scheme-v1-drip-irrigation",
+            "titleEn": "[DEMO] Kharif Application Window",
+            "titleKn": "[ಡೆಮೊ] ಮುಂಗಾರು ಅರ್ಜಿ ಗಡುವು",
+            "windowType": "APPLICATION_CUTOFF",
+            "dueDateIso": "2026-12-15T18:00:00.000Z",
+            "isVerified": true,
+            "sourceUrl": "https://raitamitra.karnataka.gov.in/ (DEMO)",
+            "lastVerifiedAt": "2026-11-02T23:08:15.262Z"
+          }
+        ],
+        "createdAt": "2026-11-02T23:08:15.262Z"
+      }
+    ],
+    [
+      "demo-scheme-v1-crop-insurance",
+      {
+        "id": "demo-scheme-v1-crop-insurance",
+        "schemeId": "scheme_DEMO_CROP_INSURANCE",
+        "schemeCode": "DEMO-CROP-INS-02",
+        "departmentName": "DEMO — Crop Insurance Cell (Verification Required)",
+        "versionNumber": 1,
+        "status": "PUBLISHED",
+        "titleEn": "[DEMO] Seasonal Notified Crop Insurance Enrolment & Protection",
+        "titleKn": "[ಡೆಮೊ / ಮಾದರಿ] ಹಂಗಾಮಿನ ಅಧಿಸೂಚಿತ ಬೆಳೆ ವಿಮೆ ನೋಂದಣಿ ಮತ್ತು ರಕ್ಷಣೆ",
+        "summaryEn": "DEMO scheme illustrating seasonal crop matching (Paddy, Ragi, Tur, Maize) and unverified deadline handling.",
+        "summaryKn": "ಮುಂಗಾರು/ಹಿಂಗಾರು ಬೆಳೆ (ಭತ್ತ, ರಾಗಿ, ತೊಗರಿ, ಮೆಕ್ಕೆಜೋಳ) ಹೊಂದಾಣಿಕೆ ಮತ್ತು ಗಡುವು ಪರಿಶೀಲನೆ ತೋರಿಸುವ ಡೆಮೊ ಯೋಜನೆ.",
+        "benefitsDescriptionEn": "DEMO: Coverage against notified natural perils subject to official notification for yourHobli/Gram Panchayat.",
+        "benefitsDescriptionKn": "ಡೆಮೊ: ನಿಮ್ಮ ಹೋಬಳಿ/ಗ್ರಾಮ ಪಂಚಾಯಿತಿಗೆ ಅಧಿಕೃತ ಅಧಿಸೂಚನೆಯಂತೆ ಬೆಳೆ ಹಾನಿ ವಿಮಾ ರಕ್ಷಣೆ.",
+        "requiredDocumentsEn": [
+          "Land RTC / Tenancy agreement (where supported)",
+          "Sowing certificate / Crop declaration",
+          "Bank passbook copy (for official portal verification only)"
+        ],
+        "requiredDocumentsKn": [
+          "ಪಹಣಿ (RTC) / ಗೇಣಿ ಒಪ್ಪಂದ",
+          "ಬೆಳೆ ಬಿತ್ತನೆ ದೃಢೀಕರಣ ಪತ್ರ",
+          "ಬ್ಯಾಂಕ್ ಪಾಸ್‌ಬುಕ್ ಪ್ರತಿ (ಅಧಿಕೃತ ಪೋರ್ಟಲ್‌ಗೆ ಮಾತ್ರ)"
+        ],
+        "applicationStepsEn": [
+          "Confirm your crop is notified in your Taluk/Hobli for this season",
+          "Enrol before the notified cutoff date via CSC or official portal",
+          "Store your policy/application receipt in the Receipt Vault"
+        ],
+        "applicationStepsKn": [
+          "ನಿಮ್ಮ ತಾಲ್ಲೂಕು/ಹೋಬಳಿಗೆ ಈ ಬೆಳೆ ಅಧಿಸೂಚಿತವಾಗಿದೆಯೇ ಎಂದು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಿ",
+          "ನಿಗದಿತ ಗಡುವಿನೊಳಗೆ CSC ಅಥವಾ ಅಧಿಕೃತ ಪೋರ್ಟಲ್ ಮೂಲಕ ನೋಂದಾಯಿಸಿ",
+          "ಅರ್ಜಿ ಸ್ವೀಕೃತಿ ಸಂಖ್ಯೆಯನ್ನು ರಸೀದಿ ವಾಲ್ಟ್‌ನಲ್ಲಿ ಉಳಿಸಿ"
+        ],
+        "ruleTree": {
+          "all": [
+            {
+              "id": "ins-r1",
+              "fact": "state",
+              "op": "eq",
+              "value": "Karnataka",
+              "descriptionEn": "Plot located in Karnataka",
+              "descriptionKn": "ಜಮೀನು ಕರ್ನಾಟಕದಲ್ಲಿರಬೇಕು"
+            },
+            {
+              "id": "ins-r2",
+              "fact": "crops",
+              "op": "in",
+              "value": [
+                "PADDY",
+                "RAGI",
+                "TUR",
+                "MAIZE",
+                "COTTON"
+              ],
+              "descriptionEn": "Grows a notified seasonal crop (Paddy, Ragi, Tur, Maize, Cotton)",
+              "descriptionKn": "ಅಧಿಸೂಚಿತ ಬೆಳೆ (ಭತ್ತ, ರಾಗಿ, ತೊಗರಿ, ಮೆಕ್ಕೆಜೋಳ, ಹತ್ತಿ) ಬೆಳೆಯುತ್ತಿರಬೇಕು"
+            },
+            {
+              "id": "ins-r3",
+              "fact": "plotCount",
+              "op": "gte",
+              "value": 1,
+              "descriptionEn": "At least 1 plot registered",
+              "descriptionKn": "ಕನಿಷ್ಠ 1 ಜಮೀನು ತಾಕು ನೋಂದಾಯಿಸಿರಬೇಕು"
+            }
+          ]
+        },
+        "sourceUrl": "https://samrakshane.karnataka.gov.in/ (DEMO REFERENCE)",
+        "sourceLastVerifiedAt": "2026-11-02T23:08:15.262Z",
+        "sourceVerifiedById": "system-seed-reviewer",
+        "authorId": "system-seed-author",
+        "approvedById": "system-seed-reviewer",
+        "publishedAt": "2026-11-02T23:08:15.262Z",
+        "isMock": true,
+        "deadlines": [
+          {
+            "id": "dl-demo-2-unverified",
+            "schemeVersionId": "demo-scheme-v1-crop-insurance",
+            "titleEn": "[DEMO] Rabi Enrolment Cutoff (Unverified Demo)",
+            "titleKn": "[ಡೆಮೊ] ಹಿಂಗಾರು ನೋಂದಣಿ ಗಡುವು (ಪರಿಶೀಲಿಸಲಾಗಿಲ್ಲ)",
+            "windowType": "APPLICATION_CUTOFF",
+            "dueDateIso": "2026-12-30T00:00:00.000Z",
+            "isVerified": false,
+            "sourceUrl": "https://samrakshane.karnataka.gov.in/ (DEMO)",
+            "lastVerifiedAt": null
+          }
+        ],
+        "createdAt": "2026-11-02T23:08:15.262Z"
+      }
+    ],
+    [
+      "demo-scheme-v1-allied-dairy",
+      {
+        "id": "demo-scheme-v1-allied-dairy",
+        "schemeId": "scheme_DEMO_ALLIED_LIVESTOCK",
+        "schemeCode": "DEMO-ALLIED-DAIRY-03",
+        "departmentName": "DEMO — Department of Animal Husbandry & Fisheries",
+        "versionNumber": 1,
+        "status": "PUBLISHED",
+        "titleEn": "[DEMO] Smallholder Allied Dairy & Sericulture Support",
+        "titleKn": "[ಡೆಮೊ / ಮಾದರಿ] ಸಣ್ಣ ರೈತರ ಹೈನುಗಾರಿಕೆ ಮತ್ತು ರೇಷ್ಮೆ ಕೃಷಿ ಪ್ರೋತ್ಸಾಹ ಯೋಜನೆ",
+        "summaryEn": "DEMO scheme testing allied livestock/sericulture rules and small/marginal farmer category matching.",
+        "summaryKn": "ಹೈನುಗಾರಿಕೆ/ರೇಷ್ಮೆ ಕೃಷಿ ಮತ್ತು ಸಣ್ಣ/ಅತಿ ಸಣ್ಣ ರೈತ ವರ್ಗದ ಅರ್ಹತೆ ಪರೀಕ್ಷಿಸಲು ರಚಿಸಲಾದ ಡೆಮೊ ಯೋಜನೆ.",
+        "benefitsDescriptionEn": "DEMO: Illustrative shed/equipment assistance for small & marginal farmers engaged in dairy or sericulture.",
+        "benefitsDescriptionKn": "ಡೆಮೊ: ಹೈನುಗಾರಿಕೆ ಅಥವಾ ರೇಷ್ಮೆ ಕೃಷಿ ಮಾಡುವ ಸಣ್ಣ ಮತ್ತು ಅತಿ ಸಣ್ಣ ರೈತರಿಗೆ ಮಾದರಿ ಸಹಾಯಧನ.",
+        "requiredDocumentsEn": [
+          "Small/Marginal Farmer Certificate or RTC",
+          "Livestock / Sericulture registration details"
+        ],
+        "requiredDocumentsKn": [
+          "ಸಣ್ಣ/ಅತಿ ಸಣ್ಣ ರೈತ ಪ್ರಮಾಣಪತ್ರ ಅಥವಾ ಪಹಣಿ",
+          "ಹೈನುಗಾರಿಕೆ / ರೇಷ್ಮೆ ಇಲಾಖೆ ನೋಂದಣಿ ವಿವರ"
+        ],
+        "applicationStepsEn": [
+          "Add DAIRY or SERICULTURE in your Farmer Benefit Passport",
+          "Verify local veterinary/sericulture office window"
+        ],
+        "applicationStepsKn": [
+          "ನಿಮ್ಮ ರೈತ ಪಾಸ್‌ಪೋರ್ಟ್‌ನಲ್ಲಿ ಹೈನುಗಾರಿಕೆ ಅಥವಾ ರೇಷ್ಮೆ ಆಯ್ಕೆ ಸೇರಿಸಿ",
+          "ಸ್ಥಳೀಯ ಪಶುವೈದ್ಯಕೀಯ/ರೇಷ್ಮೆ ಕಚೇರಿಯಲ್ಲಿ ಅರ್ಜಿ ಸಲ್ಲಿಸಿ"
+        ],
+        "ruleTree": {
+          "all": [
+            {
+              "id": "allied-r1",
+              "fact": "farmerCategory",
+              "op": "in",
+              "value": [
+                "MARGINAL",
+                "SMALL"
+              ],
+              "descriptionEn": "Farmer category is Marginal or Small",
+              "descriptionKn": "ಸಣ್ಣ ಅಥವಾ ಅತಿ ಸಣ್ಣ ರೈತ ವರ್ಗಕ್ಕೆ ಸೇರಿರಬೇಕು"
+            },
+            {
+              "id": "allied-r2",
+              "fact": "livestockTypes",
+              "op": "in",
+              "value": [
+                "DAIRY",
+                "SERICULTURE",
+                "GOAT_SHEEP"
+              ],
+              "descriptionEn": "Engaged in Dairy, Sericulture, or Goat/Sheep rearing",
+              "descriptionKn": "ಹೈನುಗಾರಿಕೆ, ರೇಷ್ಮೆ ಅಥವಾ ಕುರಿ/ಮೇಕೆ ಸಾಕಾಣಿಕೆ ಹೊಂದಿರಬೇಕು"
+            }
+          ]
+        },
+        "sourceUrl": "https://ahvs.karnataka.gov.in/ (DEMO REFERENCE)",
+        "sourceLastVerifiedAt": "2026-11-02T23:08:15.262Z",
+        "sourceVerifiedById": "system-seed-reviewer",
+        "authorId": "system-seed-author",
+        "approvedById": "system-seed-reviewer",
+        "publishedAt": "2026-11-02T23:08:15.262Z",
+        "isMock": true,
+        "deadlines": [],
+        "createdAt": "2026-11-02T23:08:15.262Z"
+      }
+    ]
+  ],
+  "ruleEvaluations": [],
+  "claims": [],
+  "receipts": [],
+  "scamReports": [],
+  "expenses": [],
+  "cscTokens": [],
+  "whatsappMessages": [],
+  "reminderPrefs": [],
+  "reminderDeliveries": [],
+  "statusCases": [],
+  "privateDocuments": [],
+  "pendingAiActions": []
+}

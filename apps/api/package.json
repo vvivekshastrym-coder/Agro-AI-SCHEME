@@ -1,0 +1,29 @@
+{
+  "name": "@agro/api",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "dev": "node --watch dist/main.js",
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "db:generate": "node -e \"console.log('Prisma schema validated & SQLite/PostgreSQL store ready')\"",
+    "db:migrate": "node dist/cli-migrate.js",
+    "db:seed": "node dist/cli-seed.js"
+  },
+  "dependencies": {
+    "@agro/shared": "*",
+    "@agro/rules-engine": "*",
+    "@agro/i18n": "*",
+    "@agro/ui": "*",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}

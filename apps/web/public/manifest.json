@@ -1,0 +1,10 @@
+{
+  "name": "Agro AI Scheme — ರೈತ ಸೌಲಭ್ಯ ಮಾರ್ಗದರ್ಶಿ",
+  "short_name": "Agro AI",
+  "description": "Farmer-first scheme intelligence, deterministic rules matcher, deadline guardian, and crop-risk guidance.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FAF8F5",
+  "theme_color": "#14532D",
+  "lang": "kn"
+}

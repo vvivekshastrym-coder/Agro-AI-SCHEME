@@ -1,0 +1,1868 @@
+{
+  "users": [
+    [
+      "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      {
+        "id": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+        "email": "demo.farmer@agro.example",
+        "phoneEncrypted": null,
+        "phoneHash": null,
+        "passwordHash": "scrypt$16384$8$1$e50775e091a79eeb7347749e39ea7459$e70a589f833dc5ec50d81586224cf45617ee42344210cb5129d25b0f0166d1905f2ddf6611d9417f034a2fc54eedd5466d5dbb8421979171a18f1d399ba8d5eb",
+        "emailVerifiedAt": "2026-11-03T00:12:16.987Z",
+        "phoneVerifiedAt": "2026-11-03T00:12:16.987Z",
+        "failedLoginAttempts": 0,
+        "lockedUntil": null,
+        "deletionRequestedAt": null,
+        "deletionGraceEndsAt": null,
+        "roles": [
+          "FARMER"
+        ],
+        "createdAt": "2026-11-03T00:12:16.987Z",
+        "updatedAt": "2026-11-03T00:12:16.987Z"
+      }
+    ],
+    [
+      "01a19f35-8d71-7dde-a3a6-cf8f20f0ce5c",
+      {
+        "id": "01a19f35-8d71-7dde-a3a6-cf8f20f0ce5c",
+        "email": null,
+        "phoneEncrypted": "3fc9df24e62842074caf2e76:de319c7782a159451ef8e7a87f90897b:388e03ebabef836473a27ba56e",
+        "phoneHash": "7a869c4303071479a9fee126c43cc0400e2009a94ea6f01bf965647d767e7289",
+        "passwordHash": null,
+        "emailVerifiedAt": null,
+        "phoneVerifiedAt": "2026-11-03T02:20:49.393Z",
+        "failedLoginAttempts": 0,
+        "lockedUntil": null,
+        "deletionRequestedAt": null,
+        "deletionGraceEndsAt": null,
+        "roles": [
+          "FARMER"
+        ],
+        "createdAt": "2026-11-03T02:20:49.393Z",
+        "updatedAt": "2026-11-03T02:20:49.393Z"
+      }
+    ]
+  ],
+  "profiles": [
+    [
+      "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      {
+        "id": "01a19ebf-df00-7b2c-acbf-02b9198abb05",
+        "userId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+        "fullName": "ಶಿವಣ್ಣ ಗೌಡ (Shivanna Gowda)",
+        "preferredLanguage": "kn",
+        "state": "Karnataka",
+        "districtCode": "KA-MYS",
+        "talukCode": "KA-MYS-HDK",
+        "villageCode": "KA-MYS-HDK-001",
+        "farmerCategory": "SMALL",
+        "hasKccCard": true,
+        "livestockTypes": [
+          "DAIRY"
+        ],
+        "elderOrLowLiteracyMode": false,
+        "provenance": "FARMER_ENTERED",
+        "verifiedAt": null,
+        "updatedAt": "2026-11-03T00:21:30.461Z",
+        "experienceMode": "AI_PREDICTION"
+      }
+    ],
+    [
+      "01a19f35-8d71-7dde-a3a6-cf8f20f0ce5c",
+      {
+        "id": "01a19f35-8d72-7190-97dd-967caa8831d6",
+        "userId": "01a19f35-8d71-7dde-a3a6-cf8f20f0ce5c",
+        "fullName": "karthik.g",
+        "preferredLanguage": "kn",
+        "state": "Karnataka",
+        "districtCode": "KA-MYS",
+        "talukCode": "KA-MYS-HDK",
+        "villageCode": "KA-MYS-HDK-001",
+        "farmerCategory": "SMALL",
+        "hasKccCard": false,
+        "livestockTypes": [],
+        "elderOrLowLiteracyMode": false,
+        "provenance": "FARMER_ENTERED",
+        "verifiedAt": null,
+        "updatedAt": "2026-11-03T02:20:49.393Z"
+      }
+    ]
+  ],
+  "sessions": [
+    [
+      "01a19ebf-df02-7ddb-850b-32b2ff04b353",
+      {
+        "id": "01a19ebf-df02-7ddb-850b-32b2ff04b353",
+        "userId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+        "tokenFamilyId": "01a19ebf-df02-79a1-8525-25b4e4053a7a",
+        "refreshTokenHash": "53888d79060252a38ba76646de565118f4e1b7304839c38135085f43763f2bc5",
+        "userAgent": "AgroDemoBootstrap/1.0",
+        "ipAddress": "127.0.0.1",
+        "expiresAt": "2026-11-10T00:12:17.026Z",
+        "revokedAt": null,
+        "createdAt": "2026-11-03T00:12:17.026Z"
+      }
+    ],
+    [
+      "01a19ec0-ecc9-7b85-b44e-e4704ee27d4e",
+      {
+        "id": "01a19ec0-ecc9-7b85-b44e-e4704ee27d4e",
+        "userId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+        "tokenFamilyId": "01a19ec0-ecc9-7c11-a9ab-cb25dc224852",
+        "refreshTokenHash": "f85c6c2930a035434e461127adf94fcde7b8883465eb7a65b778f2222f1729e7",
+        "userAgent": "AgroDemoBootstrap/1.0",
+        "ipAddress": "127.0.0.1",
+        "expiresAt": "2026-11-10T00:13:26.089Z",
+        "revokedAt": null,
+        "createdAt": "2026-11-03T00:13:26.089Z"
+      }
+    ],
+    [
+      "01a19ec7-b8dc-71be-beee-3f609a4cfe25",
+      {
+        "id": "01a19ec7-b8dc-71be-beee-3f609a4cfe25",
+        "userId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+        "tokenFamilyId": "01a19ec7-b8dc-7a00-a70c-1a067e115612",
+        "refreshTokenHash": "7d17f36d6deae23cdc4f19ffcc597199d28eb9a2be15260fc4f46cd06bf75f41",
+        "userAgent": "AgroDemoBootstrap/1.0",
+        "ipAddress": "127.0.0.1",
+        "expiresAt": "2026-11-10T00:20:51.548Z",
+        "revokedAt": null,
+        "createdAt": "2026-11-03T00:20:51.548Z"
+      }
+    ],
+    [
+      "01a19ec7-c4de-7151-8c66-056442af003c",
+      {
+        "id": "01a19ec7-c4de-7151-8c66-056442af003c",
+        "userId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+        "tokenFamilyId": "01a19ec7-c4de-7f19-b7c1-bed100f35d4a",
+        "refreshTokenHash": "25e54ff71cdab6eba3051bbb6e894ae162848e48fd2bca9336f24c78f61483d5",
+        "userAgent": "AgroDemoBootstrap/1.0",
+        "ipAddress": "127.0.0.1",
+        "expiresAt": "2026-11-10T00:20:54.622Z",
+        "revokedAt": null,
+        "createdAt": "2026-11-03T00:20:54.622Z"
+      }
+    ],
+    [
+      "01a19ec7-d1b0-7005-b5db-d437d4ee7450",
+      {
+        "id": "01a19ec7-d1b0-7005-b5db-d437d4ee7450",
+        "userId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+        "tokenFamilyId": "01a19ec7-d1af-716a-a7af-1ddc8bf211a6",
+        "refreshTokenHash": "3170ebb10fe3ff2d4e23114cdcd44690afa5c6b049bfde375b646be21bbe8a69",
+        "userAgent": "AgroDemoBootstrap/1.0",
+        "ipAddress": "127.0.0.1",
+        "expiresAt": "2026-11-10T00:20:57.904Z",
+        "revokedAt": null,
+        "createdAt": "2026-11-03T00:20:57.904Z"
+      }
+    ],
+    [
+      "01a19ec7-d929-7a64-9db1-307f4e1fab08",
+      {
+        "id": "01a19ec7-d929-7a64-9db1-307f4e1fab08",
+        "userId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+        "tokenFamilyId": "01a19ec7-d929-7c31-b448-66d28ac9486b",
+        "refreshTokenHash": "ae57eecd49e1ace787bd03630d7fd004820b08979d0c3453f166951f9121441c",
+        "userAgent": "AgroDemoBootstrap/1.0",
+        "ipAddress": "127.0.0.1",
+        "expiresAt": "2026-11-10T00:20:59.817Z",
+        "revokedAt": null,
+        "createdAt": "2026-11-03T00:20:59.817Z"
+      }
+    ],
+    [
+      "01a19ec8-3070-73db-9481-7cc971c24b77",
+      {
+        "id": "01a19ec8-3070-73db-9481-7cc971c24b77",
+        "userId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+        "tokenFamilyId": "01a19ec8-3070-7311-af04-82c8f5130229",
+        "refreshTokenHash": "cda6a97013135d2d90228ad27b9df25beda11cc00bcf687a2b86164f5738f22a",
+        "userAgent": "AgroDemoBootstrap/1.0",
+        "ipAddress": "127.0.0.1",
+        "expiresAt": "2026-11-10T00:21:22.160Z",
+        "revokedAt": null,
+        "createdAt": "2026-11-03T00:21:22.160Z"
+      }
+    ],
+    [
+      "01a19ed4-dc36-7b5f-86fc-5fc920293244",
+      {
+        "id": "01a19ed4-dc36-7b5f-86fc-5fc920293244",
+        "userId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+        "tokenFamilyId": "01a19ed4-dc36-7139-b3de-4a25ff52254c",
+        "refreshTokenHash": "b848b15094796a425a99fb2de8cafb9a8cf0566263690e15f2775721ce937c69",
+        "userAgent": "AgroDemoBootstrap/1.0",
+        "ipAddress": "127.0.0.1",
+        "expiresAt": "2026-11-10T00:35:12.566Z",
+        "revokedAt": null,
+        "createdAt": "2026-11-03T00:35:12.566Z"
+      }
+    ],
+    [
+      "01a19ed4-dc3a-7a77-b817-9c72ffe51ff5",
+      {
+        "id": "01a19ed4-dc3a-7a77-b817-9c72ffe51ff5",
+        "userId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+        "tokenFamilyId": "01a19ed4-dc3a-7a0d-882e-927ef4c67a7b",
+        "refreshTokenHash": "d0e8340a44f471e44cead5e3607622a3fd6da9938d269fac9aae9cc245b89670",
+        "userAgent": "AgroDemoBootstrap/1.0",
+        "ipAddress": "127.0.0.1",
+        "expiresAt": "2026-11-10T00:35:12.570Z",
+        "revokedAt": null,
+        "createdAt": "2026-11-03T00:35:12.570Z"
+      }
+    ],
+    [
+      "01a19ed4-dcd0-7fad-b36e-23d0bfdc1296",
+      {
+        "id": "01a19ed4-dcd0-7fad-b36e-23d0bfdc1296",
+        "userId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+        "tokenFamilyId": "01a19ed4-dcd0-78ae-be77-a14225b6dfb9",
+        "refreshTokenHash": "13688f7469c277a718c5530e58e970e641e5d9aae410ba804c846841a3e2c878",
+        "userAgent": "AgroDemoBootstrap/1.0",
+        "ipAddress": "127.0.0.1",
+        "expiresAt": "2026-11-10T00:35:12.720Z",
+        "revokedAt": null,
+        "createdAt": "2026-11-03T00:35:12.720Z"
+      }
+    ],
+    [
+      "01a19ed4-dcd5-7e91-a53d-cf5a81e86c80",
+      {
+        "id": "01a19ed4-dcd5-7e91-a53d-cf5a81e86c80",
+        "userId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+        "tokenFamilyId": "01a19ed4-dcd5-7aee-8c3a-e109f2fef5b2",
+        "refreshTokenHash": "25c718d6c26b822c9f92de218316d1f3b3ca41da96ed3612ebd0eeafde007f38",
+        "userAgent": "AgroDemoBootstrap/1.0",
+        "ipAddress": "127.0.0.1",
+        "expiresAt": "2026-11-10T00:35:12.725Z",
+        "revokedAt": null,
+        "createdAt": "2026-11-03T00:35:12.725Z"
+      }
+    ],
+    [
+      "01a19ed9-6a4d-7ab8-b242-ccfe2bfa3211",
+      {
+        "id": "01a19ed9-6a4d-7ab8-b242-ccfe2bfa3211",
+        "userId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+        "tokenFamilyId": "01a19ed9-6a4d-7e96-b7c8-bd48384e881f",
+        "refreshTokenHash": "037a841ee58bcfc58b8f6a13d1b6ef9d2e8c8fd0cc036fc39e492c3ef6312b39",
+        "userAgent": "AgroDemoBootstrap/1.0",
+        "ipAddress": "127.0.0.1",
+        "expiresAt": "2026-11-10T00:40:11.085Z",
+        "revokedAt": null,
+        "createdAt": "2026-11-03T00:40:11.085Z"
+      }
+    ],
+    [
+      "01a19edb-55e5-7dfd-b31d-b3970b00e9cc",
+      {
+        "id": "01a19edb-55e5-7dfd-b31d-b3970b00e9cc",
+        "userId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+        "tokenFamilyId": "01a19edb-55e5-7e06-ab9a-87a67769a9bb",
+        "refreshTokenHash": "6c1652663c82af2f4ed7aabd3542d7a9f70b8108d9746844fbf1939dc2eca58b",
+        "userAgent": "AgroDemoBootstrap/1.0",
+        "ipAddress": "127.0.0.1",
+        "expiresAt": "2026-11-10T00:42:16.933Z",
+        "revokedAt": null,
+        "createdAt": "2026-11-03T00:42:16.933Z"
+      }
+    ],
+    [
+      "01a19edb-5be0-7725-a184-f48e52b94575",
+      {
+        "id": "01a19edb-5be0-7725-a184-f48e52b94575",
+        "userId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+        "tokenFamilyId": "01a19edb-5be0-7a77-972f-1247983f045d",
+        "refreshTokenHash": "a91807a38421f598ec7c07debce9ab5b07f66c5b660c3b7473633dc8be52258e",
+        "userAgent": "AgroDemoBootstrap/1.0",
+        "ipAddress": "127.0.0.1",
+        "expiresAt": "2026-11-10T00:42:18.464Z",
+        "revokedAt": null,
+        "createdAt": "2026-11-03T00:42:18.464Z"
+      }
+    ],
+    [
+      "01a19edb-5be2-7cec-ad14-6470674141bc",
+      {
+        "id": "01a19edb-5be2-7cec-ad14-6470674141bc",
+        "userId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+        "tokenFamilyId": "01a19edb-5be2-730c-98fc-4f784977c7fa",
+        "refreshTokenHash": "1b2e120457cae56e97d65a2fe5c120305c1d8497093397d20a91fedef42c4603",
+        "userAgent": "AgroDemoBootstrap/1.0",
+        "ipAddress": "127.0.0.1",
+        "expiresAt": "2026-11-10T00:42:18.466Z",
+        "revokedAt": null,
+        "createdAt": "2026-11-03T00:42:18.466Z"
+      }
+    ],
+    [
+      "01a19edb-5e53-77af-a66f-cefc11cf9d95",
+      {
+        "id": "01a19edb-5e53-77af-a66f-cefc11cf9d95",
+        "userId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+        "tokenFamilyId": "01a19edb-5e53-7264-b433-2f2052d4e0f9",
+        "refreshTokenHash": "ffeaf29b1ef447efa39707f97469d8a5d75992c6b013b557f2b782d8a48c00f1",
+        "userAgent": "AgroDemoBootstrap/1.0",
+        "ipAddress": "127.0.0.1",
+        "expiresAt": "2026-11-10T00:42:19.091Z",
+        "revokedAt": null,
+        "createdAt": "2026-11-03T00:42:19.091Z"
+      }
+    ],
+    [
+      "01a19edb-5e55-7808-af62-5e1416e1328e",
+      {
+        "id": "01a19edb-5e55-7808-af62-5e1416e1328e",
+        "userId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+        "tokenFamilyId": "01a19edb-5e55-70e4-82ef-9dae5bce7403",
+        "refreshTokenHash": "da0b10d6647bc9e79aaa43740f044248ecd10677c9a3367c6dee73c8b18e65eb",
+        "userAgent": "AgroDemoBootstrap/1.0",
+        "ipAddress": "127.0.0.1",
+        "expiresAt": "2026-11-10T00:42:19.093Z",
+        "revokedAt": null,
+        "createdAt": "2026-11-03T00:42:19.093Z"
+      }
+    ],
+    [
+      "01a19edb-606a-702e-b6bd-dc25bfd559df",
+      {
+        "id": "01a19edb-606a-702e-b6bd-dc25bfd559df",
+        "userId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+        "tokenFamilyId": "01a19edb-606a-70bf-9801-edd248e25f3c",
+        "refreshTokenHash": "fb359dfa092a3ab7dfbcb8d2f460683f352734acb2bcc29fe164b64898334960",
+        "userAgent": "AgroDemoBootstrap/1.0",
+        "ipAddress": "127.0.0.1",
+        "expiresAt": "2026-11-10T00:42:19.626Z",
+        "revokedAt": null,
+        "createdAt": "2026-11-03T00:42:19.626Z"
+      }
+    ],
+    [
+      "01a19edb-606c-7f16-8aec-bff4b2cbbd4f",
+      {
+        "id": "01a19edb-606c-7f16-8aec-bff4b2cbbd4f",
+        "userId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+        "tokenFamilyId": "01a19edb-606c-7a7c-8810-b96af7f26a0b",
+        "refreshTokenHash": "461f22c18019eb9a647f04457add708bf61d86150266a1d149830ef5ae0835c2",
+        "userAgent": "AgroDemoBootstrap/1.0",
+        "ipAddress": "127.0.0.1",
+        "expiresAt": "2026-11-10T00:42:19.629Z",
+        "revokedAt": null,
+        "createdAt": "2026-11-03T00:42:19.629Z"
+      }
+    ],
+    [
+      "01a19edb-69c0-732b-a896-eb83a740bd8f",
+      {
+        "id": "01a19edb-69c0-732b-a896-eb83a740bd8f",
+        "userId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+        "tokenFamilyId": "01a19edb-69c0-7d95-a710-12a32635e42c",
+        "refreshTokenHash": "9e6f0c5b5ef20006866044892e0f8272bb0dfd052d8b41b707ee2b659c822220",
+        "userAgent": "AgroDemoBootstrap/1.0",
+        "ipAddress": "127.0.0.1",
+        "expiresAt": "2026-11-10T00:42:22.016Z",
+        "revokedAt": null,
+        "createdAt": "2026-11-03T00:42:22.016Z"
+      }
+    ],
+    [
+      "01a19edb-6f78-73e6-83a1-a05d2ffdbccc",
+      {
+        "id": "01a19edb-6f78-73e6-83a1-a05d2ffdbccc",
+        "userId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+        "tokenFamilyId": "01a19edb-6f78-7c4e-a41c-d62133d405fd",
+        "refreshTokenHash": "92a9656a19db9ca63d177e841ecaf8c86f987c2cde30e463364a50a7baa7e503",
+        "userAgent": "AgroDemoBootstrap/1.0",
+        "ipAddress": "127.0.0.1",
+        "expiresAt": "2026-11-10T00:42:23.480Z",
+        "revokedAt": null,
+        "createdAt": "2026-11-03T00:42:23.480Z"
+      }
+    ],
+    [
+      "01a19edb-6f7a-7fe2-b9ef-21200780b63b",
+      {
+        "id": "01a19edb-6f7a-7fe2-b9ef-21200780b63b",
+        "userId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+        "tokenFamilyId": "01a19edb-6f7a-7040-add1-a7ede9f4bafe",
+        "refreshTokenHash": "b0d4f5f69f4972a82d3849f01fdc150e41b02e3ae0e0e87f7255af63694a1f2c",
+        "userAgent": "AgroDemoBootstrap/1.0",
+        "ipAddress": "127.0.0.1",
+        "expiresAt": "2026-11-10T00:42:23.482Z",
+        "revokedAt": null,
+        "createdAt": "2026-11-03T00:42:23.482Z"
+      }
+    ],
+    [
+      "01a19edf-9405-7f41-99a0-0677e879cd96",
+      {
+        "id": "01a19edf-9405-7f41-99a0-0677e879cd96",
+        "userId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+        "tokenFamilyId": "01a19edf-9404-76e5-b213-26542f39803b",
+        "refreshTokenHash": "689038803235bb93bdbf8e17e92158da4192101ff5098a31f0e2f3655a50ba63",
+        "userAgent": "AgroDemoBootstrap/1.0",
+        "ipAddress": "127.0.0.1",
+        "expiresAt": "2026-11-10T00:46:54.981Z",
+        "revokedAt": null,
+        "createdAt": "2026-11-03T00:46:54.981Z"
+      }
+    ],
+    [
+      "01a19edf-9408-719a-839a-4a1825326fed",
+      {
+        "id": "01a19edf-9408-719a-839a-4a1825326fed",
+        "userId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+        "tokenFamilyId": "01a19edf-9408-701d-ac13-0ba03a1db6de",
+        "refreshTokenHash": "6b9ec9b0869f2d745af3ab63bd6a0a1e7b0819c216db5a9dbf2aff2d0d558a04",
+        "userAgent": "AgroDemoBootstrap/1.0",
+        "ipAddress": "127.0.0.1",
+        "expiresAt": "2026-11-10T00:46:54.984Z",
+        "revokedAt": null,
+        "createdAt": "2026-11-03T00:46:54.984Z"
+      }
+    ],
+    [
+      "01a19edf-98b4-79bd-a4a3-7a59fba7dc49",
+      {
+        "id": "01a19edf-98b4-79bd-a4a3-7a59fba7dc49",
+        "userId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+        "tokenFamilyId": "01a19edf-98b4-7b22-9259-c2da4151d408",
+        "refreshTokenHash": "84f49c88973a422b96498f59c8a4c4ab7689d6a5332ad5ac58538102df22c856",
+        "userAgent": "AgroDemoBootstrap/1.0",
+        "ipAddress": "127.0.0.1",
+        "expiresAt": "2026-11-10T00:46:56.180Z",
+        "revokedAt": null,
+        "createdAt": "2026-11-03T00:46:56.180Z"
+      }
+    ],
+    [
+      "01a19edf-98b6-781a-b9b2-45af83275861",
+      {
+        "id": "01a19edf-98b6-781a-b9b2-45af83275861",
+        "userId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+        "tokenFamilyId": "01a19edf-98b6-7eb0-8808-618f3a944007",
+        "refreshTokenHash": "65ba200ece1c27e02e95e1ef2cafdbbe0193d27af12d478a43f10ee1799a851e",
+        "userAgent": "AgroDemoBootstrap/1.0",
+        "ipAddress": "127.0.0.1",
+        "expiresAt": "2026-11-10T00:46:56.182Z",
+        "revokedAt": null,
+        "createdAt": "2026-11-03T00:46:56.182Z"
+      }
+    ],
+    [
+      "01a19edf-9aab-78ac-9a5d-7b4e3c907ef6",
+      {
+        "id": "01a19edf-9aab-78ac-9a5d-7b4e3c907ef6",
+        "userId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+        "tokenFamilyId": "01a19edf-9aab-7d9c-b53c-d9a52ddcdda5",
+        "refreshTokenHash": "dd40ba49c932cae3953846bb8d1893b2850cdf63af3e1a9abd093d6d12355940",
+        "userAgent": "AgroDemoBootstrap/1.0",
+        "ipAddress": "127.0.0.1",
+        "expiresAt": "2026-11-10T00:46:56.683Z",
+        "revokedAt": null,
+        "createdAt": "2026-11-03T00:46:56.683Z"
+      }
+    ],
+    [
+      "01a19edf-9aae-72b5-93da-44146f5736b5",
+      {
+        "id": "01a19edf-9aae-72b5-93da-44146f5736b5",
+        "userId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+        "tokenFamilyId": "01a19edf-9aae-7ab2-8852-01a0f5a3c904",
+        "refreshTokenHash": "8e5a70b061c3e14cdb0a75d54660227cd162b02310f760051cb4ee9efcfcba61",
+        "userAgent": "AgroDemoBootstrap/1.0",
+        "ipAddress": "127.0.0.1",
+        "expiresAt": "2026-11-10T00:46:56.686Z",
+        "revokedAt": null,
+        "createdAt": "2026-11-03T00:46:56.686Z"
+      }
+    ],
+    [
+      "01a19edf-9b73-7f3a-9151-c6849731ea6e",
+      {
+        "id": "01a19edf-9b73-7f3a-9151-c6849731ea6e",
+        "userId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+        "tokenFamilyId": "01a19edf-9b73-7f34-a5e8-53381adb1254",
+        "refreshTokenHash": "a56b1ea6b361411237ed0ab15c3450dd727caab6ffc4dd0c13e13c98bc5d5556",
+        "userAgent": "AgroDemoBootstrap/1.0",
+        "ipAddress": "127.0.0.1",
+        "expiresAt": "2026-11-10T00:46:56.883Z",
+        "revokedAt": null,
+        "createdAt": "2026-11-03T00:46:56.883Z"
+      }
+    ],
+    [
+      "01a19edf-9b74-7dc6-88df-9a80e262a6a1",
+      {
+        "id": "01a19edf-9b74-7dc6-88df-9a80e262a6a1",
+        "userId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+        "tokenFamilyId": "01a19edf-9b74-7448-8dcb-c6c2adc74e5b",
+        "refreshTokenHash": "5d46e1f6386819a7868ae6cea9d773036df86753e92009dae3c8e4aac7f1aeb6",
+        "userAgent": "AgroDemoBootstrap/1.0",
+        "ipAddress": "127.0.0.1",
+        "expiresAt": "2026-11-10T00:46:56.884Z",
+        "revokedAt": null,
+        "createdAt": "2026-11-03T00:46:56.884Z"
+      }
+    ],
+    [
+      "01a19edf-a3e6-7a53-9573-fcb1d9d163bd",
+      {
+        "id": "01a19edf-a3e6-7a53-9573-fcb1d9d163bd",
+        "userId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+        "tokenFamilyId": "01a19edf-a3e6-7ad2-a816-5b33b44aea8b",
+        "refreshTokenHash": "927df024918dfe326aaeaab235aa5ee72e3e81e75101ef1aa3a4824264c983b7",
+        "userAgent": "AgroDemoBootstrap/1.0",
+        "ipAddress": "127.0.0.1",
+        "expiresAt": "2026-11-10T00:46:59.046Z",
+        "revokedAt": null,
+        "createdAt": "2026-11-03T00:46:59.046Z"
+      }
+    ],
+    [
+      "01a19edf-a3e9-71e9-a37b-d4db2cbed392",
+      {
+        "id": "01a19edf-a3e9-71e9-a37b-d4db2cbed392",
+        "userId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+        "tokenFamilyId": "01a19edf-a3e8-7edb-aec4-c3dfdfb665e2",
+        "refreshTokenHash": "7d435199ebb18e3b5040fac544a6fe9f6a93e0645b8dccd0eb476ba2a355d17b",
+        "userAgent": "AgroDemoBootstrap/1.0",
+        "ipAddress": "127.0.0.1",
+        "expiresAt": "2026-11-10T00:46:59.049Z",
+        "revokedAt": null,
+        "createdAt": "2026-11-03T00:46:59.049Z"
+      }
+    ],
+    [
+      "01a19ee0-14b4-75c2-81f8-130c5fcd9e24",
+      {
+        "id": "01a19ee0-14b4-75c2-81f8-130c5fcd9e24",
+        "userId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+        "tokenFamilyId": "01a19ee0-14b4-7271-8ff0-f97cfb616b8d",
+        "refreshTokenHash": "cdd6a5af7c204225bd7e6b381ec728d1756e44ab0cf4e4d7ec637ff09f18f338",
+        "userAgent": "AgroDemoBootstrap/1.0",
+        "ipAddress": "127.0.0.1",
+        "expiresAt": "2026-11-10T00:47:27.924Z",
+        "revokedAt": null,
+        "createdAt": "2026-11-03T00:47:27.924Z"
+      }
+    ],
+    [
+      "01a19ee9-d864-7134-b428-8467494d0e73",
+      {
+        "id": "01a19ee9-d864-7134-b428-8467494d0e73",
+        "userId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+        "tokenFamilyId": "01a19ee9-d864-7f9f-af26-355edd2f858b",
+        "refreshTokenHash": "badd3768b662207827882de3f9fe98a3a9fda06f8ba78fc6bf882cd168c14bfa",
+        "userAgent": "AgroDemoBootstrap/1.0",
+        "ipAddress": "127.0.0.1",
+        "expiresAt": "2026-11-10T00:58:07.844Z",
+        "revokedAt": null,
+        "createdAt": "2026-11-03T00:58:07.844Z"
+      }
+    ],
+    [
+      "01a19ee9-d867-728f-993e-ff1176f6813e",
+      {
+        "id": "01a19ee9-d867-728f-993e-ff1176f6813e",
+        "userId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+        "tokenFamilyId": "01a19ee9-d867-7c20-a494-ef103c2ba4d8",
+        "refreshTokenHash": "2aff7d01b39c501f402ebc0e967f9aa4d7c148ceff4ddf4ab7fb64b0040ab4c0",
+        "userAgent": "AgroDemoBootstrap/1.0",
+        "ipAddress": "127.0.0.1",
+        "expiresAt": "2026-11-10T00:58:07.847Z",
+        "revokedAt": null,
+        "createdAt": "2026-11-03T00:58:07.847Z"
+      }
+    ],
+    [
+      "01a19eea-ceaa-7e97-8c57-08bdd0810374",
+      {
+        "id": "01a19eea-ceaa-7e97-8c57-08bdd0810374",
+        "userId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+        "tokenFamilyId": "01a19eea-cea9-7a49-a2ae-3c2cbac677d2",
+        "refreshTokenHash": "5a2506e4d90e938467c3e86fbc21a8295f8a566d981b029487951d8d6a9b0276",
+        "userAgent": "AgroDemoBootstrap/1.0",
+        "ipAddress": "127.0.0.1",
+        "expiresAt": "2026-11-10T00:59:10.890Z",
+        "revokedAt": null,
+        "createdAt": "2026-11-03T00:59:10.890Z"
+      }
+    ],
+    [
+      "01a19eeb-a107-7525-a4ad-3761eb4005f9",
+      {
+        "id": "01a19eeb-a107-7525-a4ad-3761eb4005f9",
+        "userId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+        "tokenFamilyId": "01a19eeb-a107-7dd9-ab97-861f93af3bad",
+        "refreshTokenHash": "451c5af75f5121237ad212e09cef77855ce47f5b68ad71e882bbd76f21fa705f",
+        "userAgent": "AgroDemoBootstrap/1.0",
+        "ipAddress": "127.0.0.1",
+        "expiresAt": "2026-11-10T01:00:04.744Z",
+        "revokedAt": null,
+        "createdAt": "2026-11-03T01:00:04.744Z"
+      }
+    ],
+    [
+      "01a19eeb-b9a5-7aaa-b0c8-abeec833b273",
+      {
+        "id": "01a19eeb-b9a5-7aaa-b0c8-abeec833b273",
+        "userId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+        "tokenFamilyId": "01a19eeb-b9a5-7e7d-b4e3-7dfd72de188d",
+        "refreshTokenHash": "e06327baf6975e38f4e953cc2d709376656e2b114f453f54a92963a62687022b",
+        "userAgent": "AgroDemoBootstrap/1.0",
+        "ipAddress": "127.0.0.1",
+        "expiresAt": "2026-11-10T01:00:11.045Z",
+        "revokedAt": null,
+        "createdAt": "2026-11-03T01:00:11.045Z"
+      }
+    ],
+    [
+      "01a19eeb-d0c1-737e-ad63-8509529f987f",
+      {
+        "id": "01a19eeb-d0c1-737e-ad63-8509529f987f",
+        "userId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+        "tokenFamilyId": "01a19eeb-d0c1-7c4a-b19a-1e4291c68161",
+        "refreshTokenHash": "977eaf88cab63012346a8c3928aff8b26c9ea9c02aaf02db45a51e61d35cff2a",
+        "userAgent": "AgroDemoBootstrap/1.0",
+        "ipAddress": "127.0.0.1",
+        "expiresAt": "2026-11-10T01:00:16.961Z",
+        "revokedAt": null,
+        "createdAt": "2026-11-03T01:00:16.961Z"
+      }
+    ],
+    [
+      "01a19eec-d3c6-7fc5-be1c-c33a820af307",
+      {
+        "id": "01a19eec-d3c6-7fc5-be1c-c33a820af307",
+        "userId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+        "tokenFamilyId": "01a19eec-d3c6-7ab3-ae48-00ca5a70f42e",
+        "refreshTokenHash": "8fadac0698b9cd79eca8b5699f434ccb21d80b024c9f0595a19a1033afae1b10",
+        "userAgent": "AgroDemoBootstrap/1.0",
+        "ipAddress": "127.0.0.1",
+        "expiresAt": "2026-11-10T01:01:23.270Z",
+        "revokedAt": null,
+        "createdAt": "2026-11-03T01:01:23.270Z"
+      }
+    ],
+    [
+      "01a19eed-85fa-7820-a5a4-bf5889be3183",
+      {
+        "id": "01a19eed-85fa-7820-a5a4-bf5889be3183",
+        "userId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+        "tokenFamilyId": "01a19eed-85fa-7c8a-a15a-82b6591cf96a",
+        "refreshTokenHash": "faf6eb92ceac4facc8e02699005d49e8c76e397647fbeda2f1f5897e5430a49d",
+        "userAgent": "AgroDemoBootstrap/1.0",
+        "ipAddress": "127.0.0.1",
+        "expiresAt": "2026-11-10T01:02:08.891Z",
+        "revokedAt": null,
+        "createdAt": "2026-11-03T01:02:08.890Z"
+      }
+    ],
+    [
+      "01a19eed-85fe-78ae-987a-15af4a7ae003",
+      {
+        "id": "01a19eed-85fe-78ae-987a-15af4a7ae003",
+        "userId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+        "tokenFamilyId": "01a19eed-85fe-7983-a29a-d1a304ac49ae",
+        "refreshTokenHash": "be716d812a2c379aa45734ec295ea716d4016fd6a657b6504f89449525cfaf36",
+        "userAgent": "AgroDemoBootstrap/1.0",
+        "ipAddress": "127.0.0.1",
+        "expiresAt": "2026-11-10T01:02:08.894Z",
+        "revokedAt": null,
+        "createdAt": "2026-11-03T01:02:08.894Z"
+      }
+    ],
+    [
+      "01a19eef-45cf-7f85-bb92-f777fc076fbc",
+      {
+        "id": "01a19eef-45cf-7f85-bb92-f777fc076fbc",
+        "userId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+        "tokenFamilyId": "01a19eef-45cf-7400-882e-1b1c8fbd98c9",
+        "refreshTokenHash": "3abdededc73887cb724ae380508ab9e7dea6d317443ed978797f4cde0b9b84de",
+        "userAgent": "AgroDemoBootstrap/1.0",
+        "ipAddress": "127.0.0.1",
+        "expiresAt": "2026-11-10T01:04:03.535Z",
+        "revokedAt": null,
+        "createdAt": "2026-11-03T01:04:03.535Z"
+      }
+    ],
+    [
+      "01a19ef9-a4aa-78c5-824a-a7f113ad0861",
+      {
+        "id": "01a19ef9-a4aa-78c5-824a-a7f113ad0861",
+        "userId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+        "tokenFamilyId": "01a19ef9-a4aa-7b3f-84c7-da36b8935b1e",
+        "refreshTokenHash": "5cdc5780a534f3ca7ec530f7f5c4a92ef0ebca8043292b59d0ce821c4818a481",
+        "userAgent": "AgroDemoBootstrap/1.0",
+        "ipAddress": "127.0.0.1",
+        "expiresAt": "2026-11-10T01:15:23.178Z",
+        "revokedAt": null,
+        "createdAt": "2026-11-03T01:15:23.178Z"
+      }
+    ],
+    [
+      "01a19f35-8d72-716f-b3c6-cd30bf22fdc2",
+      {
+        "id": "01a19f35-8d72-716f-b3c6-cd30bf22fdc2",
+        "userId": "01a19f35-8d71-7dde-a3a6-cf8f20f0ce5c",
+        "tokenFamilyId": "01a19f35-8d72-7ab1-b554-f099f3641c3e",
+        "refreshTokenHash": "798abbcc843a42ccb75fc35b5a7a5ff7ae6e8a300d27260c4b3d42c1204866c8",
+        "userAgent": "AgroPhoneOTP/1.0",
+        "ipAddress": "::1",
+        "expiresAt": "2026-11-10T02:20:49.394Z",
+        "revokedAt": null,
+        "createdAt": "2026-11-03T02:20:49.394Z"
+      }
+    ],
+    [
+      "01a19f35-9626-74b4-974f-b892cbffeaa1",
+      {
+        "id": "01a19f35-9626-74b4-974f-b892cbffeaa1",
+        "userId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+        "tokenFamilyId": "01a19f35-9626-7c40-891b-8ae7f7a73be6",
+        "refreshTokenHash": "87753a1949b88d81351f238f118f260b45d1ea415f574d7d29fb214dde65e2b8",
+        "userAgent": "AgroDemoBootstrap/1.0",
+        "ipAddress": "127.0.0.1",
+        "expiresAt": "2026-11-10T02:20:51.622Z",
+        "revokedAt": null,
+        "createdAt": "2026-11-03T02:20:51.622Z"
+      }
+    ],
+    [
+      "01a19f35-962c-78c7-9995-2c3b169015dd",
+      {
+        "id": "01a19f35-962c-78c7-9995-2c3b169015dd",
+        "userId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+        "tokenFamilyId": "01a19f35-962b-77de-a80f-e5754b1c26a9",
+        "refreshTokenHash": "dd82bd0a2cfb14eb266957dd3c7e88ac6f9822c50869e602d14311c6134c5ca7",
+        "userAgent": "AgroDemoBootstrap/1.0",
+        "ipAddress": "127.0.0.1",
+        "expiresAt": "2026-11-10T02:20:51.628Z",
+        "revokedAt": null,
+        "createdAt": "2026-11-03T02:20:51.628Z"
+      }
+    ],
+    [
+      "01a19f35-fec3-727e-85c1-e9deab14cc81",
+      {
+        "id": "01a19f35-fec3-727e-85c1-e9deab14cc81",
+        "userId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+        "tokenFamilyId": "01a19f35-fec3-7ae0-a7b2-ff17b3308eab",
+        "refreshTokenHash": "4b71e799606c3f5773b92f49f6040cf33c4131600ab0630fb4ac5994fdeeabd7",
+        "userAgent": "AgroDemoBootstrap/1.0",
+        "ipAddress": "127.0.0.1",
+        "expiresAt": "2026-11-10T02:21:18.403Z",
+        "revokedAt": null,
+        "createdAt": "2026-11-03T02:21:18.403Z"
+      }
+    ],
+    [
+      "01a19f35-fec8-72c5-9c49-f58a07e2787d",
+      {
+        "id": "01a19f35-fec8-72c5-9c49-f58a07e2787d",
+        "userId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+        "tokenFamilyId": "01a19f35-fec8-7a4d-8315-c0d8818a69a7",
+        "refreshTokenHash": "6cb4da9a288f88b2b5dab1b0f920f0830635cbe705f73b81d5894212057c4498",
+        "userAgent": "AgroDemoBootstrap/1.0",
+        "ipAddress": "127.0.0.1",
+        "expiresAt": "2026-11-10T02:21:18.408Z",
+        "revokedAt": null,
+        "createdAt": "2026-11-03T02:21:18.408Z"
+      }
+    ],
+    [
+      "01a19f70-50cb-7211-8e91-2c3823713164",
+      {
+        "id": "01a19f70-50cb-7211-8e91-2c3823713164",
+        "userId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+        "tokenFamilyId": "01a19f70-50ca-79f3-b44e-ef61f640be20",
+        "refreshTokenHash": "e5352299d0b391a05fa7641703b2e0db263e20c157ac5b086400e72d777a3bb7",
+        "userAgent": "AgroDemoBootstrap/1.0",
+        "ipAddress": "127.0.0.1",
+        "expiresAt": "2026-11-10T03:25:00.491Z",
+        "revokedAt": null,
+        "createdAt": "2026-11-03T03:25:00.491Z"
+      }
+    ],
+    [
+      "01a19f70-50cd-7f97-9e4d-92b3846a53a2",
+      {
+        "id": "01a19f70-50cd-7f97-9e4d-92b3846a53a2",
+        "userId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+        "tokenFamilyId": "01a19f70-50cd-71ee-815a-42bdfcf9f718",
+        "refreshTokenHash": "408e4284cd0329313304d50aa8144d00171174a0ba1c56ce2aec2367f49bb51e",
+        "userAgent": "AgroDemoBootstrap/1.0",
+        "ipAddress": "127.0.0.1",
+        "expiresAt": "2026-11-10T03:25:00.493Z",
+        "revokedAt": null,
+        "createdAt": "2026-11-03T03:25:00.493Z"
+      }
+    ]
+  ],
+  "mfaSecrets": [],
+  "consents": [
+    {
+      "id": "01a19f35-8d72-7bf3-abef-9e8d69927412",
+      "userId": "01a19f35-8d71-7dde-a3a6-cf8f20f0ce5c",
+      "consentType": "DPDP_DATA_PROCESSING",
+      "policyVersion": "v1.0",
+      "grantedAt": "2026-11-03T02:20:49.393Z",
+      "revokedAt": null
+    }
+  ],
+  "shares": [],
+  "auditLogs": [
+    {
+      "id": "01a19ebf-df01-76ed-8e4a-f0a7887b381d",
+      "actorId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "actorRole": "FARMER",
+      "action": "FARM_PLOT_CREATED",
+      "targetType": "PLOT",
+      "targetId": "01a19ebf-df00-7bbe-9752-991df5c034d7",
+      "metadata": {},
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-03T00:12:17.025Z"
+    },
+    {
+      "id": "01a19ebf-df03-7e2c-8cad-d8058f16c7fb",
+      "actorId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "actorRole": "FARMER",
+      "action": "SESSION_ISSUED",
+      "targetType": "SESSION",
+      "targetId": "01a19ebf-df02-7ddb-850b-32b2ff04b353",
+      "metadata": {},
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-03T00:12:17.027Z"
+    },
+    {
+      "id": "01a19ec0-1312-7ac5-b51d-d4c4b17fd8fb",
+      "actorId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "actorRole": "FARMER",
+      "action": "EXPERIENCE_MODE_UPDATED",
+      "targetType": "PROFILE",
+      "targetId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "metadata": {
+        "experienceMode": "AI_PREDICTION"
+      },
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-03T00:12:30.354Z"
+    },
+    {
+      "id": "01a19ec0-ecc9-7b24-829c-95bf5b65e771",
+      "actorId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "actorRole": "FARMER",
+      "action": "SESSION_ISSUED",
+      "targetType": "SESSION",
+      "targetId": "01a19ec0-ecc9-7b85-b44e-e4704ee27d4e",
+      "metadata": {},
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-03T00:13:26.089Z"
+    },
+    {
+      "id": "01a19ec7-b8dc-711b-924e-a37dd03f2496",
+      "actorId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "actorRole": "FARMER",
+      "action": "SESSION_ISSUED",
+      "targetType": "SESSION",
+      "targetId": "01a19ec7-b8dc-71be-beee-3f609a4cfe25",
+      "metadata": {},
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-03T00:20:51.548Z"
+    },
+    {
+      "id": "01a19ec7-c4df-7652-b0ff-3055bbac0153",
+      "actorId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "actorRole": "FARMER",
+      "action": "SESSION_ISSUED",
+      "targetType": "SESSION",
+      "targetId": "01a19ec7-c4de-7151-8c66-056442af003c",
+      "metadata": {},
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-03T00:20:54.623Z"
+    },
+    {
+      "id": "01a19ec7-d1b0-72d0-ab70-1e80d8399561",
+      "actorId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "actorRole": "FARMER",
+      "action": "SESSION_ISSUED",
+      "targetType": "SESSION",
+      "targetId": "01a19ec7-d1b0-7005-b5db-d437d4ee7450",
+      "metadata": {},
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-03T00:20:57.904Z"
+    },
+    {
+      "id": "01a19ec7-d929-7f56-886c-20fb0960c5f6",
+      "actorId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "actorRole": "FARMER",
+      "action": "SESSION_ISSUED",
+      "targetType": "SESSION",
+      "targetId": "01a19ec7-d929-7a64-9db1-307f4e1fab08",
+      "metadata": {},
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-03T00:20:59.817Z"
+    },
+    {
+      "id": "01a19ec8-3070-763e-bc85-6ee30ee33b4f",
+      "actorId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "actorRole": "FARMER",
+      "action": "SESSION_ISSUED",
+      "targetType": "SESSION",
+      "targetId": "01a19ec8-3070-73db-9481-7cc971c24b77",
+      "metadata": {},
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-03T00:21:22.160Z"
+    },
+    {
+      "id": "01a19ec8-50dd-7d6e-8168-4f21716820ab",
+      "actorId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "actorRole": "FARMER",
+      "action": "EXPERIENCE_MODE_UPDATED",
+      "targetType": "PROFILE",
+      "targetId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "metadata": {
+        "experienceMode": "AI_PREDICTION"
+      },
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-03T00:21:30.461Z"
+    },
+    {
+      "id": "01a19ed4-dc37-7c78-8322-38dda9003895",
+      "actorId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "actorRole": "FARMER",
+      "action": "SESSION_ISSUED",
+      "targetType": "SESSION",
+      "targetId": "01a19ed4-dc36-7b5f-86fc-5fc920293244",
+      "metadata": {},
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-03T00:35:12.567Z"
+    },
+    {
+      "id": "01a19ed4-dc3a-71ed-b830-8d28701fabdd",
+      "actorId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "actorRole": "FARMER",
+      "action": "SESSION_ISSUED",
+      "targetType": "SESSION",
+      "targetId": "01a19ed4-dc3a-7a77-b817-9c72ffe51ff5",
+      "metadata": {},
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-03T00:35:12.570Z"
+    },
+    {
+      "id": "01a19ed4-dcd1-72c8-8433-17c3c9b3eeeb",
+      "actorId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "actorRole": "FARMER",
+      "action": "SESSION_ISSUED",
+      "targetType": "SESSION",
+      "targetId": "01a19ed4-dcd0-7fad-b36e-23d0bfdc1296",
+      "metadata": {},
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-03T00:35:12.721Z"
+    },
+    {
+      "id": "01a19ed4-dcd6-7f79-8bab-3d6521f44ce7",
+      "actorId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "actorRole": "FARMER",
+      "action": "SESSION_ISSUED",
+      "targetType": "SESSION",
+      "targetId": "01a19ed4-dcd5-7e91-a53d-cf5a81e86c80",
+      "metadata": {},
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-03T00:35:12.726Z"
+    },
+    {
+      "id": "01a19ed9-6a4d-747b-925e-2913a77c7f8b",
+      "actorId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "actorRole": "FARMER",
+      "action": "SESSION_ISSUED",
+      "targetType": "SESSION",
+      "targetId": "01a19ed9-6a4d-7ab8-b242-ccfe2bfa3211",
+      "metadata": {},
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-03T00:40:11.085Z"
+    },
+    {
+      "id": "01a19edb-55e5-7ab2-9747-74eb2e8557a8",
+      "actorId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "actorRole": "FARMER",
+      "action": "SESSION_ISSUED",
+      "targetType": "SESSION",
+      "targetId": "01a19edb-55e5-7dfd-b31d-b3970b00e9cc",
+      "metadata": {},
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-03T00:42:16.933Z"
+    },
+    {
+      "id": "01a19edb-5be0-714a-a911-57333de48de0",
+      "actorId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "actorRole": "FARMER",
+      "action": "SESSION_ISSUED",
+      "targetType": "SESSION",
+      "targetId": "01a19edb-5be0-7725-a184-f48e52b94575",
+      "metadata": {},
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-03T00:42:18.464Z"
+    },
+    {
+      "id": "01a19edb-5be2-70c8-8fcb-6823b262428f",
+      "actorId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "actorRole": "FARMER",
+      "action": "SESSION_ISSUED",
+      "targetType": "SESSION",
+      "targetId": "01a19edb-5be2-7cec-ad14-6470674141bc",
+      "metadata": {},
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-03T00:42:18.466Z"
+    },
+    {
+      "id": "01a19edb-5e53-7f9d-b202-663423e6c299",
+      "actorId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "actorRole": "FARMER",
+      "action": "SESSION_ISSUED",
+      "targetType": "SESSION",
+      "targetId": "01a19edb-5e53-77af-a66f-cefc11cf9d95",
+      "metadata": {},
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-03T00:42:19.091Z"
+    },
+    {
+      "id": "01a19edb-5e55-731a-bc65-849329e6769a",
+      "actorId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "actorRole": "FARMER",
+      "action": "SESSION_ISSUED",
+      "targetType": "SESSION",
+      "targetId": "01a19edb-5e55-7808-af62-5e1416e1328e",
+      "metadata": {},
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-03T00:42:19.093Z"
+    },
+    {
+      "id": "01a19edb-606b-7c6b-a679-286bb6c8b4da",
+      "actorId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "actorRole": "FARMER",
+      "action": "SESSION_ISSUED",
+      "targetType": "SESSION",
+      "targetId": "01a19edb-606a-702e-b6bd-dc25bfd559df",
+      "metadata": {},
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-03T00:42:19.627Z"
+    },
+    {
+      "id": "01a19edb-606d-7c76-a022-4ede3dcb6e3c",
+      "actorId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "actorRole": "FARMER",
+      "action": "SESSION_ISSUED",
+      "targetType": "SESSION",
+      "targetId": "01a19edb-606c-7f16-8aec-bff4b2cbbd4f",
+      "metadata": {},
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-03T00:42:19.629Z"
+    },
+    {
+      "id": "01a19edb-69c0-7d2b-bf24-5c36ee5b44ab",
+      "actorId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "actorRole": "FARMER",
+      "action": "SESSION_ISSUED",
+      "targetType": "SESSION",
+      "targetId": "01a19edb-69c0-732b-a896-eb83a740bd8f",
+      "metadata": {},
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-03T00:42:22.016Z"
+    },
+    {
+      "id": "01a19edb-6f78-7184-b103-b14d28c37396",
+      "actorId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "actorRole": "FARMER",
+      "action": "SESSION_ISSUED",
+      "targetType": "SESSION",
+      "targetId": "01a19edb-6f78-73e6-83a1-a05d2ffdbccc",
+      "metadata": {},
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-03T00:42:23.480Z"
+    },
+    {
+      "id": "01a19edb-6f7a-7002-8301-54caace075a2",
+      "actorId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "actorRole": "FARMER",
+      "action": "SESSION_ISSUED",
+      "targetType": "SESSION",
+      "targetId": "01a19edb-6f7a-7fe2-b9ef-21200780b63b",
+      "metadata": {},
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-03T00:42:23.482Z"
+    },
+    {
+      "id": "01a19edf-9405-7ded-95f3-8675acbd30b1",
+      "actorId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "actorRole": "FARMER",
+      "action": "SESSION_ISSUED",
+      "targetType": "SESSION",
+      "targetId": "01a19edf-9405-7f41-99a0-0677e879cd96",
+      "metadata": {},
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-03T00:46:54.981Z"
+    },
+    {
+      "id": "01a19edf-9408-77fd-a42f-d9770472898e",
+      "actorId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "actorRole": "FARMER",
+      "action": "SESSION_ISSUED",
+      "targetType": "SESSION",
+      "targetId": "01a19edf-9408-719a-839a-4a1825326fed",
+      "metadata": {},
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-03T00:46:54.984Z"
+    },
+    {
+      "id": "01a19edf-9661-73d2-98a5-cf13896ebe06",
+      "actorId": null,
+      "actorRole": "RELIABILITY_GUARD",
+      "action": "EXTERNAL_PROVIDER_CALL_FAILED",
+      "targetType": "EXTERNAL_PROVIDER",
+      "targetId": "mandi_agmarknet_api",
+      "metadata": {
+        "consecutiveFailures": 1,
+        "openedUntilIso": null,
+        "isIdempotent": true,
+        "attemptsRun": 2,
+        "error": "Upstream Agmarknet HTTP 403"
+      },
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-03T00:46:55.585Z"
+    },
+    {
+      "id": "01a19edf-9710-766e-9eaf-dec4fdbcc332",
+      "actorId": null,
+      "actorRole": "RELIABILITY_GUARD",
+      "action": "EXTERNAL_PROVIDER_CALL_FAILED",
+      "targetType": "EXTERNAL_PROVIDER",
+      "targetId": "mandi_agmarknet_api",
+      "metadata": {
+        "consecutiveFailures": 2,
+        "openedUntilIso": null,
+        "isIdempotent": true,
+        "attemptsRun": 2,
+        "error": "Upstream Agmarknet HTTP 403"
+      },
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-03T00:46:55.760Z"
+    },
+    {
+      "id": "01a19edf-98b4-7161-816c-bbe0d3bdfaf4",
+      "actorId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "actorRole": "FARMER",
+      "action": "SESSION_ISSUED",
+      "targetType": "SESSION",
+      "targetId": "01a19edf-98b4-79bd-a4a3-7a59fba7dc49",
+      "metadata": {},
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-03T00:46:56.180Z"
+    },
+    {
+      "id": "01a19edf-98b6-7747-a41b-30d1851370da",
+      "actorId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "actorRole": "FARMER",
+      "action": "SESSION_ISSUED",
+      "targetType": "SESSION",
+      "targetId": "01a19edf-98b6-781a-b9b2-45af83275861",
+      "metadata": {},
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-03T00:46:56.182Z"
+    },
+    {
+      "id": "01a19edf-9978-7f27-aedb-7b72c4f95ab5",
+      "actorId": null,
+      "actorRole": "RELIABILITY_GUARD",
+      "action": "EXTERNAL_PROVIDER_CIRCUIT_OPENED",
+      "targetType": "EXTERNAL_PROVIDER",
+      "targetId": "mandi_agmarknet_api",
+      "metadata": {
+        "consecutiveFailures": 3,
+        "openedUntilIso": "2026-11-03T00:47:56.376Z",
+        "isIdempotent": true,
+        "attemptsRun": 2,
+        "error": "Upstream Agmarknet HTTP 403"
+      },
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-03T00:46:56.376Z"
+    },
+    {
+      "id": "01a19edf-9aab-7505-ad9a-f209db017fa8",
+      "actorId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "actorRole": "FARMER",
+      "action": "SESSION_ISSUED",
+      "targetType": "SESSION",
+      "targetId": "01a19edf-9aab-78ac-9a5d-7b4e3c907ef6",
+      "metadata": {},
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-03T00:46:56.683Z"
+    },
+    {
+      "id": "01a19edf-9aae-7444-acce-ab7bb5e450b9",
+      "actorId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "actorRole": "FARMER",
+      "action": "SESSION_ISSUED",
+      "targetType": "SESSION",
+      "targetId": "01a19edf-9aae-72b5-93da-44146f5736b5",
+      "metadata": {},
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-03T00:46:56.686Z"
+    },
+    {
+      "id": "01a19edf-9b73-7d6b-86e7-bcb20c6473c0",
+      "actorId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "actorRole": "FARMER",
+      "action": "SESSION_ISSUED",
+      "targetType": "SESSION",
+      "targetId": "01a19edf-9b73-7f3a-9151-c6849731ea6e",
+      "metadata": {},
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-03T00:46:56.883Z"
+    },
+    {
+      "id": "01a19edf-9b75-79f9-be98-3f1b5f7aa0e2",
+      "actorId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "actorRole": "FARMER",
+      "action": "SESSION_ISSUED",
+      "targetType": "SESSION",
+      "targetId": "01a19edf-9b74-7dc6-88df-9a80e262a6a1",
+      "metadata": {},
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-03T00:46:56.885Z"
+    },
+    {
+      "id": "01a19edf-a3e6-7e42-a6b0-a9dfdbad4ae0",
+      "actorId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "actorRole": "FARMER",
+      "action": "SESSION_ISSUED",
+      "targetType": "SESSION",
+      "targetId": "01a19edf-a3e6-7a53-9573-fcb1d9d163bd",
+      "metadata": {},
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-03T00:46:59.046Z"
+    },
+    {
+      "id": "01a19edf-a3e9-74db-86ed-0ebac843618d",
+      "actorId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "actorRole": "FARMER",
+      "action": "SESSION_ISSUED",
+      "targetType": "SESSION",
+      "targetId": "01a19edf-a3e9-71e9-a37b-d4db2cbed392",
+      "metadata": {},
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-03T00:46:59.049Z"
+    },
+    {
+      "id": "01a19ee0-14b4-7fcd-a0ff-346215467ce7",
+      "actorId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "actorRole": "FARMER",
+      "action": "SESSION_ISSUED",
+      "targetType": "SESSION",
+      "targetId": "01a19ee0-14b4-75c2-81f8-130c5fcd9e24",
+      "metadata": {},
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-03T00:47:27.924Z"
+    },
+    {
+      "id": "01a19ee9-d864-783c-a61a-9f09b41ee05c",
+      "actorId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "actorRole": "FARMER",
+      "action": "SESSION_ISSUED",
+      "targetType": "SESSION",
+      "targetId": "01a19ee9-d864-7134-b428-8467494d0e73",
+      "metadata": {},
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-03T00:58:07.844Z"
+    },
+    {
+      "id": "01a19ee9-d867-757d-ba1e-3728ac6046b6",
+      "actorId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "actorRole": "FARMER",
+      "action": "SESSION_ISSUED",
+      "targetType": "SESSION",
+      "targetId": "01a19ee9-d867-728f-993e-ff1176f6813e",
+      "metadata": {},
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-03T00:58:07.847Z"
+    },
+    {
+      "id": "01a19ee9-dacf-715a-963c-6fbae4a25a53",
+      "actorId": null,
+      "actorRole": "RELIABILITY_GUARD",
+      "action": "EXTERNAL_PROVIDER_CIRCUIT_OPENED",
+      "targetType": "EXTERNAL_PROVIDER",
+      "targetId": "mandi_agmarknet_api",
+      "metadata": {
+        "consecutiveFailures": 4,
+        "openedUntilIso": "2026-11-03T00:59:08.463Z",
+        "isIdempotent": true,
+        "attemptsRun": 2,
+        "error": "Upstream Agmarknet HTTP 403"
+      },
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-03T00:58:08.463Z"
+    },
+    {
+      "id": "01a19eea-ceab-7902-80e6-eb211928dad3",
+      "actorId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "actorRole": "FARMER",
+      "action": "SESSION_ISSUED",
+      "targetType": "SESSION",
+      "targetId": "01a19eea-ceaa-7e97-8c57-08bdd0810374",
+      "metadata": {},
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-03T00:59:10.891Z"
+    },
+    {
+      "id": "01a19eea-d283-7a74-894f-4da52ebfdd25",
+      "actorId": null,
+      "actorRole": "RELIABILITY_GUARD",
+      "action": "EXTERNAL_PROVIDER_CALL_FAILED",
+      "targetType": "EXTERNAL_PROVIDER",
+      "targetId": "mandi_agmarknet_api",
+      "metadata": {
+        "consecutiveFailures": 1,
+        "openedUntilIso": null,
+        "isIdempotent": true,
+        "attemptsRun": 2,
+        "error": "Upstream Agmarknet HTTP 403"
+      },
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-03T00:59:11.875Z"
+    },
+    {
+      "id": "01a19eeb-a108-790c-b7f9-3e582b5320d1",
+      "actorId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "actorRole": "FARMER",
+      "action": "SESSION_ISSUED",
+      "targetType": "SESSION",
+      "targetId": "01a19eeb-a107-7525-a4ad-3761eb4005f9",
+      "metadata": {},
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-03T01:00:04.744Z"
+    },
+    {
+      "id": "01a19eeb-a89b-7b88-a4a8-e7b956cc0087",
+      "actorId": null,
+      "actorRole": "RELIABILITY_GUARD",
+      "action": "EXTERNAL_PROVIDER_CALL_FAILED",
+      "targetType": "EXTERNAL_PROVIDER",
+      "targetId": "mandi_agmarknet_api",
+      "metadata": {
+        "consecutiveFailures": 2,
+        "openedUntilIso": null,
+        "isIdempotent": true,
+        "attemptsRun": 2,
+        "error": "Upstream Agmarknet HTTP 403"
+      },
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-03T01:00:06.683Z"
+    },
+    {
+      "id": "01a19eeb-b9a5-73e1-a619-5759084146b9",
+      "actorId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "actorRole": "FARMER",
+      "action": "SESSION_ISSUED",
+      "targetType": "SESSION",
+      "targetId": "01a19eeb-b9a5-7aaa-b0c8-abeec833b273",
+      "metadata": {},
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-03T01:00:11.045Z"
+    },
+    {
+      "id": "01a19eeb-bc1e-76ec-97a4-c5bb930d23fe",
+      "actorId": null,
+      "actorRole": "RELIABILITY_GUARD",
+      "action": "EXTERNAL_PROVIDER_CIRCUIT_OPENED",
+      "targetType": "EXTERNAL_PROVIDER",
+      "targetId": "mandi_agmarknet_api",
+      "metadata": {
+        "consecutiveFailures": 3,
+        "openedUntilIso": "2026-11-03T01:01:11.678Z",
+        "isIdempotent": true,
+        "attemptsRun": 2,
+        "error": "Upstream Agmarknet HTTP 403"
+      },
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-03T01:00:11.678Z"
+    },
+    {
+      "id": "01a19eeb-d0c1-78df-9b64-020438928dd6",
+      "actorId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "actorRole": "FARMER",
+      "action": "SESSION_ISSUED",
+      "targetType": "SESSION",
+      "targetId": "01a19eeb-d0c1-737e-ad63-8509529f987f",
+      "metadata": {},
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-03T01:00:16.961Z"
+    },
+    {
+      "id": "01a19eec-d3c7-783a-b90d-89f23019f28a",
+      "actorId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "actorRole": "FARMER",
+      "action": "SESSION_ISSUED",
+      "targetType": "SESSION",
+      "targetId": "01a19eec-d3c6-7fc5-be1c-c33a820af307",
+      "metadata": {},
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-03T01:01:23.271Z"
+    },
+    {
+      "id": "01a19eec-d60e-7f4a-8662-c19aa6f1a09a",
+      "actorId": null,
+      "actorRole": "RELIABILITY_GUARD",
+      "action": "EXTERNAL_PROVIDER_CIRCUIT_OPENED",
+      "targetType": "EXTERNAL_PROVIDER",
+      "targetId": "mandi_agmarknet_api",
+      "metadata": {
+        "consecutiveFailures": 4,
+        "openedUntilIso": "2026-11-03T01:02:23.854Z",
+        "isIdempotent": true,
+        "attemptsRun": 2,
+        "error": "Upstream Agmarknet HTTP 403"
+      },
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-03T01:01:23.854Z"
+    },
+    {
+      "id": "01a19eed-85fb-7ff7-8dbe-562de9e72670",
+      "actorId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "actorRole": "FARMER",
+      "action": "SESSION_ISSUED",
+      "targetType": "SESSION",
+      "targetId": "01a19eed-85fa-7820-a5a4-bf5889be3183",
+      "metadata": {},
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-03T01:02:08.891Z"
+    },
+    {
+      "id": "01a19eed-85fe-7b2f-b77d-cb9b5dd595dd",
+      "actorId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "actorRole": "FARMER",
+      "action": "SESSION_ISSUED",
+      "targetType": "SESSION",
+      "targetId": "01a19eed-85fe-78ae-987a-15af4a7ae003",
+      "metadata": {},
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-03T01:02:08.894Z"
+    },
+    {
+      "id": "01a19eef-45cf-7f32-9972-498ba9d084ee",
+      "actorId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "actorRole": "FARMER",
+      "action": "SESSION_ISSUED",
+      "targetType": "SESSION",
+      "targetId": "01a19eef-45cf-7f85-bb92-f777fc076fbc",
+      "metadata": {},
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-03T01:04:03.536Z"
+    },
+    {
+      "id": "01a19ef9-a4aa-75dc-a166-86697c4f9657",
+      "actorId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "actorRole": "FARMER",
+      "action": "SESSION_ISSUED",
+      "targetType": "SESSION",
+      "targetId": "01a19ef9-a4aa-78c5-824a-a7f113ad0861",
+      "metadata": {},
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-03T01:15:23.179Z"
+    },
+    {
+      "id": "01a19f35-8d72-7c5f-9fa2-0c1733a83fe1",
+      "actorId": "01a19f35-8d71-7dde-a3a6-cf8f20f0ce5c",
+      "actorRole": "FARMER",
+      "action": "SESSION_ISSUED",
+      "targetType": "SESSION",
+      "targetId": "01a19f35-8d72-716f-b3c6-cd30bf22fdc2",
+      "metadata": {},
+      "ipAddress": "::1",
+      "createdAt": "2026-11-03T02:20:49.394Z"
+    },
+    {
+      "id": "01a19f35-9626-763b-8b66-17ed0dd48357",
+      "actorId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "actorRole": "FARMER",
+      "action": "SESSION_ISSUED",
+      "targetType": "SESSION",
+      "targetId": "01a19f35-9626-74b4-974f-b892cbffeaa1",
+      "metadata": {},
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-03T02:20:51.622Z"
+    },
+    {
+      "id": "01a19f35-962c-7a5c-b359-b1794ba43d07",
+      "actorId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "actorRole": "FARMER",
+      "action": "SESSION_ISSUED",
+      "targetType": "SESSION",
+      "targetId": "01a19f35-962c-78c7-9995-2c3b169015dd",
+      "metadata": {},
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-03T02:20:51.628Z"
+    },
+    {
+      "id": "01a19f35-fec3-72c1-b081-ce6fa9436dcd",
+      "actorId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "actorRole": "FARMER",
+      "action": "SESSION_ISSUED",
+      "targetType": "SESSION",
+      "targetId": "01a19f35-fec3-727e-85c1-e9deab14cc81",
+      "metadata": {},
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-03T02:21:18.403Z"
+    },
+    {
+      "id": "01a19f35-fec8-704e-a772-bb6ff495fbdf",
+      "actorId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "actorRole": "FARMER",
+      "action": "SESSION_ISSUED",
+      "targetType": "SESSION",
+      "targetId": "01a19f35-fec8-72c5-9c49-f58a07e2787d",
+      "metadata": {},
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-03T02:21:18.408Z"
+    },
+    {
+      "id": "01a19f70-50cb-7f24-8bdd-b408a4641737",
+      "actorId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "actorRole": "FARMER",
+      "action": "SESSION_ISSUED",
+      "targetType": "SESSION",
+      "targetId": "01a19f70-50cb-7211-8e91-2c3823713164",
+      "metadata": {},
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-03T03:25:00.491Z"
+    },
+    {
+      "id": "01a19f70-50cd-775c-aa36-28cb9c44d3ff",
+      "actorId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "actorRole": "FARMER",
+      "action": "SESSION_ISSUED",
+      "targetType": "SESSION",
+      "targetId": "01a19f70-50cd-7f97-9e4d-92b3846a53a2",
+      "metadata": {},
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-03T03:25:00.493Z"
+    }
+  ],
+  "plots": [
+    [
+      "01a19ebf-df00-7bbe-9752-991df5c034d7",
+      {
+        "id": "01a19ebf-df00-7bbe-9752-991df5c034d7",
+        "ownerId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+        "plotName": "ಹೊಲ 1 — ಕಾವೇರಿ ತಾಕು (Plot 1)",
+        "surveyNumberEncrypted": "796a4fe966f0d76b580c02d3:2c7b8d3eaf35d352ea10daee8079f9a0:c322dce9d5a7",
+        "surveyNumberMasked": "Sy.No 142/2A",
+        "districtCode": "KA-MYS",
+        "talukCode": "KA-MYS-HDK",
+        "villageCode": "KA-MYS-HDK-001",
+        "areaValue": 2.5,
+        "areaUnit": "ACRE",
+        "areaHectares": 1.0117,
+        "ownershipType": "OWNER",
+        "irrigationType": "BOREWELL",
+        "soilType": "RED",
+        "boundaryGeoJson": null,
+        "provenance": "FARMER_ENTERED",
+        "verifiedAt": null,
+        "createdAt": "2026-11-03T00:12:17.025Z"
+      }
+    ]
+  ],
+  "crops": [
+    [
+      "01a19ebf-df02-7a4f-b868-123789bd5a26",
+      {
+        "id": "01a19ebf-df02-7a4f-b868-123789bd5a26",
+        "plotId": "01a19ebf-df00-7bbe-9752-991df5c034d7",
+        "ownerId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+        "season": "KHARIF",
+        "year": 2026,
+        "cropCode": "RAGI",
+        "cropNameEn": "Ragi (Finger Millet)",
+        "cropNameKn": "ರಾಗಿ",
+        "sownAreaHectares": 1.0117,
+        "sowingDate": null,
+        "isInsuredUnderPmfby": true,
+        "provenance": "FARMER_ENTERED",
+        "createdAt": "2026-11-03T00:12:17.026Z"
+      }
+    ]
+  ],
+  "schemeVersions": [
+    [
+      "demo-scheme-v1-drip-irrigation",
+      {
+        "id": "demo-scheme-v1-drip-irrigation",
+        "schemeId": "scheme_DEMO_KA_MICRO_IRRIGATION",
+        "schemeCode": "DEMO-KA-DRIP-01",
+        "departmentName": "DEMO — Department of Agriculture / Horticulture (Karnataka)",
+        "versionNumber": 1,
+        "status": "PUBLISHED",
+        "titleEn": "[DEMO] Karnataka Micro-Irrigation (Drip & Sprinkler) Assistance",
+        "titleKn": "[ಡೆಮೊ / ಮಾದರಿ] ಕರ್ನಾಟಕ ಸೂಕ್ಷ್ಮ ನೀರಾವರಿ (ಹನಿ ಮತ್ತು ತುಂತುರು) ಸಹಾಯಧನ ಯೋಜನೆ",
+        "summaryEn": "DEMO scheme entry for testing deterministic eligibility evaluation on plots with cultivable area between 0.2 and 5.0 hectares.",
+        "summaryKn": "0.2 ರಿಂದ 5.0 ಹೆಕ್ಟೇರ್ ಕೃಷಿ ಭೂಮಿ ಹೊಂದಿರುವ ರೈತರಿಗೆ ಸೂಕ್ಷ್ಮ ನೀರಾವರಿ ಅರ್ಹತೆ ಪರೀಕ್ಷಿಸಲು ರಚಿಸಲಾದ ಡೆಮೊ ಯೋಜನೆ.",
+        "benefitsDescriptionEn": "DEMO: Illustrative subsidy support for drip/sprinkler equipment installation (verify official rates on state portal).",
+        "benefitsDescriptionKn": "ಡೆಮೊ: ಹನಿ/ತುಂತುರು ನೀರಾವರಿ ಉಪಕರಣ ಅಳವಡಿಕೆಗೆ ಮಾದರಿ ಸಹಾಯಧನ (ಅಧಿಕೃತ ದರಗಳನ್ನು ಇಲಾಖೆ ಪೋರ್ಟಲ್‌ನಲ್ಲಿ ಪರಿಶೀಲಿಸಿ).",
+        "requiredDocumentsEn": [
+          "RTC / Pahani land record",
+          "Soil & water test report (if applicable)",
+          "Quotation from approved supplier"
+        ],
+        "requiredDocumentsKn": [
+          "ಪಹಣಿ (RTC) ದಾಖಲೆ",
+          "ಮಣ್ಣು ಮತ್ತು ನೀರಿನ ಪರೀಕ್ಷಾ ವರದಿ",
+          "ಅನುಮೋದಿತ ಸರಬರಾಜುದಾರರ ದರಪಟ್ಟಿ"
+        ],
+        "applicationStepsEn": [
+          "Check plot survey number and area in RTC",
+          "Visit Raitha Samparka Kendra (RSK) or official state portal",
+          "Keep acknowledgement receipt in your Receipt Vault"
+        ],
+        "applicationStepsKn": [
+          "ಪಹಣಿಯಲ್ಲಿ ಸರ್ವೆ ಸಂಖ್ಯೆ ಮತ್ತು ವಿಸ್ತೀರ್ಣ ಪರಿಶೀಲಿಸಿ",
+          "ರೈತ ಸಂಪರ್ಕ ಕೇಂದ್ರ (RSK) ಅಥವಾ ಅಧಿಕೃತ ಪೋರ್ಟಲ್‌ಗೆ ಭೇಟಿ ನೀಡಿ",
+          "ಸ್ವೀಕೃತಿ ರಸೀದಿಯನ್ನು ಆಪ್‌ನಲ್ಲಿ ಸುರಕ್ಷಿತವಾಗಿ ಉಳಿಸಿ"
+        ],
+        "ruleTree": {
+          "all": [
+            {
+              "id": "drip-r1",
+              "fact": "state",
+              "op": "eq",
+              "value": "Karnataka",
+              "descriptionEn": "Resides in Karnataka",
+              "descriptionKn": "ಕರ್ನಾಟಕದ ನಿವಾಸಿಯಾಗಿರಬೇಕು"
+            },
+            {
+              "id": "drip-r2",
+              "fact": "ownershipTypes",
+              "op": "in",
+              "value": [
+                "OWNER",
+                "JOINT_FAMILY"
+              ],
+              "descriptionEn": "Holds land as Owner or Joint Family",
+              "descriptionKn": "ಸ್ವಂತ ಅಥವಾ ಅವಿಭಕ್ತ ಕುಟುಂಬದ ಜಮೀನು ಹೊಂದಿರಬೇಕು",
+              "requiresOfficialVerification": true
+            },
+            {
+              "id": "drip-r3",
+              "fact": "totalLandHectares",
+              "op": "between",
+              "value": [
+                0.2,
+                5
+              ],
+              "descriptionEn": "Total cultivable land between 0.2 ha and 5.0 ha",
+              "descriptionKn": "ಒಟ್ಟು ಕೃಷಿ ಭೂಮಿ 0.2 ರಿಂದ 5.0 ಹೆಕ್ಟೇರ್ ಒಳಗಿರಬೇಕು"
+            }
+          ]
+        },
+        "sourceUrl": "https://raitamitra.karnataka.gov.in/ (DEMO REFERENCE)",
+        "sourceLastVerifiedAt": "2026-11-02T23:58:00.409Z",
+        "sourceVerifiedById": "system-seed-reviewer",
+        "authorId": "system-seed-author",
+        "approvedById": "system-seed-reviewer",
+        "publishedAt": "2026-11-02T23:58:00.409Z",
+        "isMock": true,
+        "deadlines": [
+          {
+            "id": "dl-demo-1",
+            "schemeVersionId": "demo-scheme-v1-drip-irrigation",
+            "titleEn": "[DEMO] Kharif Application Window",
+            "titleKn": "[ಡೆಮೊ] ಮುಂಗಾರು ಅರ್ಜಿ ಗಡುವು",
+            "windowType": "APPLICATION_CUTOFF",
+            "dueDateIso": "2026-12-15T18:00:00.000Z",
+            "isVerified": true,
+            "sourceUrl": "https://raitamitra.karnataka.gov.in/ (DEMO)",
+            "lastVerifiedAt": "2026-11-02T23:58:00.409Z"
+          }
+        ],
+        "createdAt": "2026-11-02T23:58:00.409Z"
+      }
+    ],
+    [
+      "demo-scheme-v1-crop-insurance",
+      {
+        "id": "demo-scheme-v1-crop-insurance",
+        "schemeId": "scheme_DEMO_CROP_INSURANCE",
+        "schemeCode": "DEMO-CROP-INS-02",
+        "departmentName": "DEMO — Crop Insurance Cell (Verification Required)",
+        "versionNumber": 1,
+        "status": "PUBLISHED",
+        "titleEn": "[DEMO] Seasonal Notified Crop Insurance Enrolment & Protection",
+        "titleKn": "[ಡೆಮೊ / ಮಾದರಿ] ಹಂಗಾಮಿನ ಅಧಿಸೂಚಿತ ಬೆಳೆ ವಿಮೆ ನೋಂದಣಿ ಮತ್ತು ರಕ್ಷಣೆ",
+        "summaryEn": "DEMO scheme illustrating seasonal crop matching (Paddy, Ragi, Tur, Maize) and unverified deadline handling.",
+        "summaryKn": "ಮುಂಗಾರು/ಹಿಂಗಾರು ಬೆಳೆ (ಭತ್ತ, ರಾಗಿ, ತೊಗರಿ, ಮೆಕ್ಕೆಜೋಳ) ಹೊಂದಾಣಿಕೆ ಮತ್ತು ಗಡುವು ಪರಿಶೀಲನೆ ತೋರಿಸುವ ಡೆಮೊ ಯೋಜನೆ.",
+        "benefitsDescriptionEn": "DEMO: Coverage against notified natural perils subject to official notification for yourHobli/Gram Panchayat.",
+        "benefitsDescriptionKn": "ಡೆಮೊ: ನಿಮ್ಮ ಹೋಬಳಿ/ಗ್ರಾಮ ಪಂಚಾಯಿತಿಗೆ ಅಧಿಕೃತ ಅಧಿಸೂಚನೆಯಂತೆ ಬೆಳೆ ಹಾನಿ ವಿಮಾ ರಕ್ಷಣೆ.",
+        "requiredDocumentsEn": [
+          "Land RTC / Tenancy agreement (where supported)",
+          "Sowing certificate / Crop declaration",
+          "Bank passbook copy (for official portal verification only)"
+        ],
+        "requiredDocumentsKn": [
+          "ಪಹಣಿ (RTC) / ಗೇಣಿ ಒಪ್ಪಂದ",
+          "ಬೆಳೆ ಬಿತ್ತನೆ ದೃಢೀಕರಣ ಪತ್ರ",
+          "ಬ್ಯಾಂಕ್ ಪಾಸ್‌ಬುಕ್ ಪ್ರತಿ (ಅಧಿಕೃತ ಪೋರ್ಟಲ್‌ಗೆ ಮಾತ್ರ)"
+        ],
+        "applicationStepsEn": [
+          "Confirm your crop is notified in your Taluk/Hobli for this season",
+          "Enrol before the notified cutoff date via CSC or official portal",
+          "Store your policy/application receipt in the Receipt Vault"
+        ],
+        "applicationStepsKn": [
+          "ನಿಮ್ಮ ತಾಲ್ಲೂಕು/ಹೋಬಳಿಗೆ ಈ ಬೆಳೆ ಅಧಿಸೂಚಿತವಾಗಿದೆಯೇ ಎಂದು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಿ",
+          "ನಿಗದಿತ ಗಡುವಿನೊಳಗೆ CSC ಅಥವಾ ಅಧಿಕೃತ ಪೋರ್ಟಲ್ ಮೂಲಕ ನೋಂದಾಯಿಸಿ",
+          "ಅರ್ಜಿ ಸ್ವೀಕೃತಿ ಸಂಖ್ಯೆಯನ್ನು ರಸೀದಿ ವಾಲ್ಟ್‌ನಲ್ಲಿ ಉಳಿಸಿ"
+        ],
+        "ruleTree": {
+          "all": [
+            {
+              "id": "ins-r1",
+              "fact": "state",
+              "op": "eq",
+              "value": "Karnataka",
+              "descriptionEn": "Plot located in Karnataka",
+              "descriptionKn": "ಜಮೀನು ಕರ್ನಾಟಕದಲ್ಲಿರಬೇಕು"
+            },
+            {
+              "id": "ins-r2",
+              "fact": "crops",
+              "op": "in",
+              "value": [
+                "PADDY",
+                "RAGI",
+                "TUR",
+                "MAIZE",
+                "COTTON"
+              ],
+              "descriptionEn": "Grows a notified seasonal crop (Paddy, Ragi, Tur, Maize, Cotton)",
+              "descriptionKn": "ಅಧಿಸೂಚಿತ ಬೆಳೆ (ಭತ್ತ, ರಾಗಿ, ತೊಗರಿ, ಮೆಕ್ಕೆಜೋಳ, ಹತ್ತಿ) ಬೆಳೆಯುತ್ತಿರಬೇಕು"
+            },
+            {
+              "id": "ins-r3",
+              "fact": "plotCount",
+              "op": "gte",
+              "value": 1,
+              "descriptionEn": "At least 1 plot registered",
+              "descriptionKn": "ಕನಿಷ್ಠ 1 ಜಮೀನು ತಾಕು ನೋಂದಾಯಿಸಿರಬೇಕು"
+            }
+          ]
+        },
+        "sourceUrl": "https://samrakshane.karnataka.gov.in/ (DEMO REFERENCE)",
+        "sourceLastVerifiedAt": "2026-11-02T23:58:00.409Z",
+        "sourceVerifiedById": "system-seed-reviewer",
+        "authorId": "system-seed-author",
+        "approvedById": "system-seed-reviewer",
+        "publishedAt": "2026-11-02T23:58:00.409Z",
+        "isMock": true,
+        "deadlines": [
+          {
+            "id": "dl-demo-2-unverified",
+            "schemeVersionId": "demo-scheme-v1-crop-insurance",
+            "titleEn": "[DEMO] Rabi Enrolment Cutoff (Unverified Demo)",
+            "titleKn": "[ಡೆಮೊ] ಹಿಂಗಾರು ನೋಂದಣಿ ಗಡುವು (ಪರಿಶೀಲಿಸಲಾಗಿಲ್ಲ)",
+            "windowType": "APPLICATION_CUTOFF",
+            "dueDateIso": "2026-12-30T00:00:00.000Z",
+            "isVerified": false,
+            "sourceUrl": "https://samrakshane.karnataka.gov.in/ (DEMO)",
+            "lastVerifiedAt": null
+          }
+        ],
+        "createdAt": "2026-11-02T23:58:00.409Z"
+      }
+    ],
+    [
+      "demo-scheme-v1-allied-dairy",
+      {
+        "id": "demo-scheme-v1-allied-dairy",
+        "schemeId": "scheme_DEMO_ALLIED_LIVESTOCK",
+        "schemeCode": "DEMO-ALLIED-DAIRY-03",
+        "departmentName": "DEMO — Department of Animal Husbandry & Fisheries",
+        "versionNumber": 1,
+        "status": "PUBLISHED",
+        "titleEn": "[DEMO] Smallholder Allied Dairy & Sericulture Support",
+        "titleKn": "[ಡೆಮೊ / ಮಾದರಿ] ಸಣ್ಣ ರೈತರ ಹೈನುಗಾರಿಕೆ ಮತ್ತು ರೇಷ್ಮೆ ಕೃಷಿ ಪ್ರೋತ್ಸಾಹ ಯೋಜನೆ",
+        "summaryEn": "DEMO scheme testing allied livestock/sericulture rules and small/marginal farmer category matching.",
+        "summaryKn": "ಹೈನುಗಾರಿಕೆ/ರೇಷ್ಮೆ ಕೃಷಿ ಮತ್ತು ಸಣ್ಣ/ಅತಿ ಸಣ್ಣ ರೈತ ವರ್ಗದ ಅರ್ಹತೆ ಪರೀಕ್ಷಿಸಲು ರಚಿಸಲಾದ ಡೆಮೊ ಯೋಜನೆ.",
+        "benefitsDescriptionEn": "DEMO: Illustrative shed/equipment assistance for small & marginal farmers engaged in dairy or sericulture.",
+        "benefitsDescriptionKn": "ಡೆಮೊ: ಹೈನುಗಾರಿಕೆ ಅಥವಾ ರೇಷ್ಮೆ ಕೃಷಿ ಮಾಡುವ ಸಣ್ಣ ಮತ್ತು ಅತಿ ಸಣ್ಣ ರೈತರಿಗೆ ಮಾದರಿ ಸಹಾಯಧನ.",
+        "requiredDocumentsEn": [
+          "Small/Marginal Farmer Certificate or RTC",
+          "Livestock / Sericulture registration details"
+        ],
+        "requiredDocumentsKn": [
+          "ಸಣ್ಣ/ಅತಿ ಸಣ್ಣ ರೈತ ಪ್ರಮಾಣಪತ್ರ ಅಥವಾ ಪಹಣಿ",
+          "ಹೈನುಗಾರಿಕೆ / ರೇಷ್ಮೆ ಇಲಾಖೆ ನೋಂದಣಿ ವಿವರ"
+        ],
+        "applicationStepsEn": [
+          "Add DAIRY or SERICULTURE in your Farmer Benefit Passport",
+          "Verify local veterinary/sericulture office window"
+        ],
+        "applicationStepsKn": [
+          "ನಿಮ್ಮ ರೈತ ಪಾಸ್‌ಪೋರ್ಟ್‌ನಲ್ಲಿ ಹೈನುಗಾರಿಕೆ ಅಥವಾ ರೇಷ್ಮೆ ಆಯ್ಕೆ ಸೇರಿಸಿ",
+          "ಸ್ಥಳೀಯ ಪಶುವೈದ್ಯಕೀಯ/ರೇಷ್ಮೆ ಕಚೇರಿಯಲ್ಲಿ ಅರ್ಜಿ ಸಲ್ಲಿಸಿ"
+        ],
+        "ruleTree": {
+          "all": [
+            {
+              "id": "allied-r1",
+              "fact": "farmerCategory",
+              "op": "in",
+              "value": [
+                "MARGINAL",
+                "SMALL"
+              ],
+              "descriptionEn": "Farmer category is Marginal or Small",
+              "descriptionKn": "ಸಣ್ಣ ಅಥವಾ ಅತಿ ಸಣ್ಣ ರೈತ ವರ್ಗಕ್ಕೆ ಸೇರಿರಬೇಕು"
+            },
+            {
+              "id": "allied-r2",
+              "fact": "livestockTypes",
+              "op": "in",
+              "value": [
+                "DAIRY",
+                "SERICULTURE",
+                "GOAT_SHEEP"
+              ],
+              "descriptionEn": "Engaged in Dairy, Sericulture, or Goat/Sheep rearing",
+              "descriptionKn": "ಹೈನುಗಾರಿಕೆ, ರೇಷ್ಮೆ ಅಥವಾ ಕುರಿ/ಮೇಕೆ ಸಾಕಾಣಿಕೆ ಹೊಂದಿರಬೇಕು"
+            }
+          ]
+        },
+        "sourceUrl": "https://ahvs.karnataka.gov.in/ (DEMO REFERENCE)",
+        "sourceLastVerifiedAt": "2026-11-02T23:58:00.409Z",
+        "sourceVerifiedById": "system-seed-reviewer",
+        "authorId": "system-seed-author",
+        "approvedById": "system-seed-reviewer",
+        "publishedAt": "2026-11-02T23:58:00.409Z",
+        "isMock": true,
+        "deadlines": [],
+        "createdAt": "2026-11-02T23:58:00.409Z"
+      }
+    ]
+  ],
+  "ruleEvaluations": [],
+  "claims": [],
+  "receipts": [],
+  "scamReports": [],
+  "expenses": [],
+  "cscTokens": [],
+  "whatsappMessages": [],
+  "reminderPrefs": [],
+  "reminderDeliveries": [],
+  "statusCases": [],
+  "privateDocuments": [],
+  "pendingAiActions": []
+}

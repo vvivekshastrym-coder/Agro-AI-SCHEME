@@ -1,0 +1,27 @@
+{
+  "name": "agro-ai-scheme",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@9.15.4",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm --workspaces --if-present run dev",
+    "build": "npm --workspace=@agro/shared run build && npm --workspace=@agro/rules-engine run build && npm --workspace=@agro/i18n run build && npm --workspace=@agro/ui run build && npm --workspace=@agro/api run build && npm --workspace=@agro/worker run build && npm --workspace=@agro/web run build",
+    "lint": "npm --workspaces --if-present run lint",
+    "typecheck": "npm --workspaces --if-present run typecheck",
+    "test": "npm --workspaces --if-present run test",
+    "db:generate": "npm --workspace=@agro/api run db:generate",
+    "db:migrate": "npm --workspace=@agro/api run db:migrate",
+    "db:seed": "npm --workspace=@agro/api run db:seed"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
