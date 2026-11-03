@@ -122,6 +122,7 @@ export default function SuperAdminPanel() {
     | "applications"
     | "banks"
     | "health"
+    | "alerts"
   >("dashboard");
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -144,6 +145,8 @@ export default function SuperAdminPanel() {
   const [schemesList, setSchemesList] = useState<SchemeItem[]>([]);
   const [applicationsList, setApplicationsList] = useState<ApplicationItem[]>([]);
   const [bankPartnersList, setBankPartnersList] = useState<BankPartnerItem[]>([]);
+  const [sourcesList, setSourcesList] = useState<any[]>([]);
+  const [policyUpdatesList, setPolicyUpdatesList] = useState<any[]>([]);
 
   // Search filter
   const [searchQuery, setSearchQuery] = useState("");
@@ -160,6 +163,17 @@ export default function SuperAdminPanel() {
   const [newCscDistrict, setNewCscDistrict] = useState("KA-MYS");
   const [cscStatusMsg, setCscStatusMsg] = useState("");
 
+  // New Policy Update Form State
+  const [newPolDept, setNewPolDept] = useState("");
+  const [newPolName, setNewPolName] = useState("");
+  const [newPolCir, setNewPolCir] = useState("");
+  const [newPolCat, setNewPolCat] = useState("GOVERNMENT_POLICY");
+  const [newPolRule, setNewPolRule] = useState("");
+  const [newPolEffDate, setNewPolEffDate] = useState("2026-11-15");
+  const [newPolUrl, setNewPolUrl] = useState("https://");
+  const [newPolPriority, setNewPolPriority] = useState("MEDIUM");
+  const [polStatusMsg, setPolStatusMsg] = useState("");
+
   async function fetchLiveAdminData() {
     setIsLoading(true);
     try {
@@ -172,6 +186,7 @@ export default function SuperAdminPanel() {
         appsRes,
         banksRes,
         healthRes,
+        alertsRes,
       ] = await Promise.all([
         fetch(`${API_BASE}/api/v1/admin/dashboard`).catch(() => null),
         fetch(`${API_BASE}/api/v1/admin/farmers`).catch(() => null),
@@ -181,6 +196,7 @@ export default function SuperAdminPanel() {
         fetch(`${API_BASE}/api/v1/admin/applications`).catch(() => null),
         fetch(`${API_BASE}/api/v1/admin/bank-partners`).catch(() => null),
         fetch(`${API_BASE}/api/v1/admin/integrations/health`).catch(() => null),
+        fetch(`${API_BASE}/api/v1/admin/alerts/registry`).catch(() => null),
       ]);
 
       if (dashRes && dashRes.ok) {
@@ -223,10 +239,52 @@ export default function SuperAdminPanel() {
         const h = await healthRes.json();
         setIntegrationHealth(h.integrations || []);
       }
+
+      if (alertsRes && alertsRes.ok) {
+        const al = await alertsRes.json();
+        setSourcesList(al.sources || []);
+        setPolicyUpdatesList(al.policyUpdates || []);
+      }
     } catch {
       // offline fallback
     } finally {
       setIsLoading(false);
+    }
+  }
+
+  async function handlePublishPolicy(e: React.FormEvent) {
+    e.preventDefault();
+    if (!newPolDept.trim() || !newPolName.trim() || !newPolRule.trim()) return;
+
+    try {
+      const res = await fetch(`${API_BASE}/api/v1/admin/alerts/publish`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          department: newPolDept.trim(),
+          schemeOrPolicyName: newPolName.trim(),
+          circularReference: newPolCir.trim() || `CIR-${Date.now().toString(36).toUpperCase()}`,
+          category: newPolCat,
+          publicationDate: new Date().toISOString().split("T")[0],
+          effectiveDate: newPolEffDate,
+          newRule: newPolRule.trim(),
+          officialSourceUrl: newPolUrl.trim(),
+          priority: newPolPriority,
+          affectedStates: ["Karnataka"],
+          affectedDistricts: ["KA-MYS", "KA-MDY", "KA-HSN"],
+        }),
+      });
+
+      if (res.ok) {
+        setPolStatusMsg("✅ Policy update published & targeted alerts generated for matching farmers!");
+        setNewPolDept("");
+        setNewPolName("");
+        setNewPolCir("");
+        setNewPolRule("");
+        fetchLiveAdminData();
+      }
+    } catch {
+      setPolStatusMsg("❌ Error publishing policy update.");
     }
   }
 
@@ -394,6 +452,7 @@ export default function SuperAdminPanel() {
           { key: "applications", label: `📑 Applications (${metrics.totalApplications})` },
           { key: "banks", label: `🏦 Bank Partners (${metrics.partnerBanksCount})` },
           { key: "health", label: "🩺 Integration Health" },
+          { key: "alerts", label: `🔔 Policy & Alerts (${policyUpdatesList.length})` },
         ].map((tab) => (
           <button
             key={tab.key}
@@ -1131,6 +1190,204 @@ export default function SuperAdminPanel() {
                       }}
                     >
                       Visit Official Endpoint ↗
+                    </a>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+        {/* TAB 9: POLICY & ALERTS CONTROL CENTRE */}
+        {activeTab === "alerts" && (
+          <div>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+              <div>
+                <h2 style={{ fontSize: 20, fontWeight: 700, margin: 0 }}>
+                  Policy & Alert Control Centre
+                </h2>
+                <div style={{ fontSize: 13, color: "#64748b", marginTop: 4 }}>
+                  Monitor verified government circulars, manage source registries, and publish targeted policy updates.
+                </div>
+              </div>
+            </div>
+
+            {/* Official Source Registry Strip */}
+            <div style={{ background: "#ffffff", padding: 18, borderRadius: 8, border: "1px solid #e2e8f0", marginBottom: 20 }}>
+              <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 10 }}>
+                Official Government, Bank & Insurance Source Registries
+              </h3>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 12 }}>
+                {sourcesList.map((src) => (
+                  <div key={src.id} style={{ background: "#f8fafc", padding: 12, borderRadius: 6, border: "1px solid #e2e8f0" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                      <span style={{ fontSize: 11, fontWeight: 700, color: "#0369a1", background: "#e0f2fe", padding: "2px 6px", borderRadius: 4 }}>
+                        {src.category}
+                      </span>
+                      <span style={{ fontSize: 11, color: "#166534", fontWeight: 700 }}>
+                        ✓ {src.status}
+                      </span>
+                    </div>
+                    <div style={{ fontSize: 13, fontWeight: 700, margin: "6px 0 2px" }}>{src.name}</div>
+                    <div style={{ fontSize: 11, color: "#64748b", marginBottom: 6 }}>{src.department}</div>
+                    <a href={src.officialPortalUrl} target="_blank" rel="noreferrer" style={{ fontSize: 11, color: "#0284c7" }}>
+                      {src.officialPortalUrl} ↗
+                    </a>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Publish Verified Policy Update Box */}
+            <div style={{ background: "#ffffff", padding: 20, borderRadius: 8, border: "1px solid #e2e8f0", marginBottom: 24 }}>
+              <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 12 }}>
+                📢 Publish Verified Policy / Scheme Update
+              </h3>
+              <form onSubmit={handlePublishPolicy} style={{ display: "grid", gap: 12 }}>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12 }}>
+                  <input
+                    type="text"
+                    required
+                    placeholder="Official Department (e.g. MoA&FW, GoI)"
+                    value={newPolDept}
+                    onChange={(e) => setNewPolDept(e.target.value)}
+                    style={{ padding: "8px 12px", borderRadius: 6, border: "1px solid #cbd5e1", fontSize: 13 }}
+                  />
+                  <input
+                    type="text"
+                    required
+                    placeholder="Scheme / Policy Name (e.g. PM-KISAN)"
+                    value={newPolName}
+                    onChange={(e) => setNewPolName(e.target.value)}
+                    style={{ padding: "8px 12px", borderRadius: 6, border: "1px solid #cbd5e1", fontSize: 13 }}
+                  />
+                  <input
+                    type="text"
+                    placeholder="Circular Ref (e.g. Cir-2026/04)"
+                    value={newPolCir}
+                    onChange={(e) => setNewPolCir(e.target.value)}
+                    style={{ padding: "8px 12px", borderRadius: 6, border: "1px solid #cbd5e1", fontSize: 13 }}
+                  />
+                </div>
+
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12 }}>
+                  <select
+                    value={newPolCat}
+                    onChange={(e) => setNewPolCat(e.target.value)}
+                    style={{ padding: "8px 12px", borderRadius: 6, border: "1px solid #cbd5e1", fontSize: 13 }}
+                  >
+                    <option value="GOVERNMENT_POLICY">GOVERNMENT_POLICY</option>
+                    <option value="BANK_SERVICE">BANK_SERVICE</option>
+                    <option value="CROP_INSURANCE">CROP_INSURANCE</option>
+                  </select>
+
+                  <select
+                    value={newPolPriority}
+                    onChange={(e) => setNewPolPriority(e.target.value)}
+                    style={{ padding: "8px 12px", borderRadius: 6, border: "1px solid #cbd5e1", fontSize: 13 }}
+                  >
+                    <option value="CRITICAL">CRITICAL (Immediate Action)</option>
+                    <option value="HIGH">HIGH (Upcoming Deadline)</option>
+                    <option value="MEDIUM">MEDIUM (Scheme Update)</option>
+                    <option value="INFORMATIONAL">INFORMATIONAL</option>
+                  </select>
+
+                  <input
+                    type="date"
+                    required
+                    value={newPolEffDate}
+                    onChange={(e) => setNewPolEffDate(e.target.value)}
+                    style={{ padding: "8px 12px", borderRadius: 6, border: "1px solid #cbd5e1", fontSize: 13 }}
+                  />
+                </div>
+
+                <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: 12 }}>
+                  <textarea
+                    rows={2}
+                    required
+                    placeholder="New Rule or Policy Amendment description..."
+                    value={newPolRule}
+                    onChange={(e) => setNewPolRule(e.target.value)}
+                    style={{ padding: "8px 12px", borderRadius: 6, border: "1px solid #cbd5e1", fontSize: 13 }}
+                  />
+                  <input
+                    type="url"
+                    required
+                    placeholder="Official Source URL (https://...)"
+                    value={newPolUrl}
+                    onChange={(e) => setNewPolUrl(e.target.value)}
+                    style={{ padding: "8px 12px", borderRadius: 6, border: "1px solid #cbd5e1", fontSize: 13 }}
+                  />
+                </div>
+
+                {polStatusMsg && (
+                  <div style={{ fontSize: 13, fontWeight: 600, color: polStatusMsg.startsWith("✅") ? "#15803d" : "#b91c1c" }}>
+                    {polStatusMsg}
+                  </div>
+                )}
+
+                <button
+                  type="submit"
+                  style={{
+                    padding: "10px 20px",
+                    background: "#15803d",
+                    color: "#ffffff",
+                    border: "none",
+                    borderRadius: 6,
+                    fontWeight: 700,
+                    cursor: "pointer",
+                    fontSize: 13,
+                    width: "fit-content",
+                  }}
+                >
+                  Publish Verified Policy & Dispatch Alerts ➔
+                </button>
+              </form>
+            </div>
+
+            {/* List of Verified Policy Circulars */}
+            <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 12 }}>
+              Verified Policy Circulars ({policyUpdatesList.length} Active Records)
+            </h3>
+            <div style={{ display: "grid", gap: 12 }}>
+              {policyUpdatesList.map((pol) => (
+                <div key={pol.id} style={{ background: "#ffffff", padding: 18, borderRadius: 8, border: "1px solid #e2e8f0" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
+                    <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                      <span
+                        style={{
+                          padding: "2px 8px",
+                          borderRadius: 4,
+                          fontSize: 10,
+                          fontWeight: 800,
+                          background:
+                            pol.priority === "CRITICAL"
+                              ? "#dc2626"
+                              : pol.priority === "HIGH"
+                                ? "#d97706"
+                                : "#0284c7",
+                          color: "#ffffff",
+                        }}
+                      >
+                        {pol.priority}
+                      </span>
+                      <strong style={{ fontSize: 15 }}>{pol.schemeOrPolicyName}</strong>
+                    </div>
+                    <span style={{ fontSize: 12, color: "#64748b" }}>
+                      Effective: {pol.effectiveDate} · Circular: {pol.circularReference}
+                    </span>
+                  </div>
+                  <div style={{ fontSize: 12, color: "#64748b", marginBottom: 6 }}>
+                    🏛️ {pol.department}
+                  </div>
+                  <p style={{ fontSize: 13, color: "#334155", margin: "6px 0", lineHeight: 1.5 }}>
+                    <strong>Rule:</strong> {pol.newRule}
+                  </p>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderTop: "1px solid #f1f5f9", paddingTop: 8 }}>
+                    <span style={{ fontSize: 11, color: "#166534", fontWeight: 600 }}>
+                      ✓ Verified Source: {pol.officialSourceUrl}
+                    </span>
+                    <a href={pol.officialSourceUrl} target="_blank" rel="noreferrer" style={{ fontSize: 12, color: "#0284c7" }}>
+                      View Circular ↗
                     </a>
                   </div>
                 </div>

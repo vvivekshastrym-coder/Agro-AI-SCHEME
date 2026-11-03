@@ -88,6 +88,73 @@ const SEASON_STEPS = [
   { key: "Sell", kn: "ಮಾರಾಟ", hi: "बिक्री", state: "upcoming" as const },
 ];
 
+const DEFAULT_VERIFIED_ALERTS = [
+  {
+    id: "al-pmkisan-ekyc",
+    category: "GOVERNMENT_POLICY",
+    priority: "CRITICAL",
+    titleEn: "PM-KISAN: Mandatory Aadhaar-NPCI Seeding for 18th Tranche",
+    titleKn: "ಪಿಎಂ-ಕಿಸಾನ್: 18 ನೇ ಕಂತಿನ ₹2,000 ಹಣ ಪಡೆಯಲು ಆಧಾರ್ ಇ-ಕೆವೈಸಿ ಕಡ್ಡಾಯ",
+    titleHi: "पीएम-किसान: 18वीं किस्त के लिए अनिवार्य आधार ई-केवाईसी",
+    messageEn: "Government circular MoA&FW/DBT/2026/Cir-18 mandates active Aadhaar-NPCI bank linking and biometric eKYC before disbursement.",
+    messageKn: "ಕೇಂದ್ರ ಕೃಷಿ ಇಲಾಖೆ ಸುತ್ತೋಲೆ ಪ್ರಕಾರ, 18 ನೇ ಕಂತು ಜಮೆಯಾಗಲು ಬ್ಯಾಂಕ್ ಖಾತೆಗೆ ಎನ್‌ಪಿಸಿಐ ಆಧಾರ್ ಲಿಂಕ್ ಮತ್ತು ಬಯೋಮೆಟ್ರಿಕ್ ಇ-ಕೆವೈಸಿ ಪೂರ್ಣಗೊಳಿಸಿ.",
+    messageHi: "कृषि मंत्रालय परिपत्र के अनुसार 18वीं किस्त प्राप्त करने के लिए आधार-एनपीसीआई लिंकिंग अनिवार्य है।",
+    schemeOrPolicyName: "PM-KISAN",
+    department: "Ministry of Agriculture & Farmers Welfare, GoI",
+    effectiveDate: "05 Nov 2026",
+    officialSourceUrl: "https://pmkisan.gov.in/",
+    actionType: "CHECK_ELIGIBILITY",
+  },
+  {
+    id: "al-pmfby-rabi",
+    category: "CROP_INSURANCE",
+    priority: "HIGH",
+    titleEn: "Crop Insurance: Rabi Season Enrolment Cut-Off Reminder",
+    titleKn: "ಬೆಳೆ ವಿಮೆ ಎಚ್ಚರಿಕೆ: ರಬಿ ಹಂಗಾಮಿನ ವಿಮೆ ನೋಂದಣಿ ಅಂತಿಮ ದಿನಾಂಕ ಸಮೀಪಿಸಿದೆ",
+    titleHi: "फसल बीमा: रबी मौसम बीमा पंजीकरण की अंतिम तिथि",
+    messageEn: "Last date to enrol Ragi, Paddy, and notified food crops on Karnataka Samrakshane portal is 31 Dec 2026.",
+    messageKn: "ಕರ್ನಾಟಕ ಸಂರಕ್ಷಣೆ ಪೋರ್ಟಲ್‌ನಲ್ಲಿ ರಾಗಿ, ಭತ್ತ ಮತ್ತು ಅಧಿಸೂಚಿತ ಆಹಾರ ಬೆಳೆಗಳಿಗೆ ವಿಮೆ ಮಾಡಿಸಲು ಡಿಸೆಂಬರ್ 31, 2026 ಕೊನೆಯ ದಿನಾಂಕ.",
+    messageHi: "कर्नाटक संरक्षने पोर्टल पर फसलों के बीमा की अंतिम तिथि 31 दिसंबर 2026 है।",
+    schemeOrPolicyName: "PMFBY & Samrakshane",
+    department: "Department of Agriculture, Govt of Karnataka",
+    effectiveDate: "31 Dec 2026",
+    officialSourceUrl: "https://samrakshane.karnataka.gov.in/",
+    actionType: "PREPARE_DOCUMENTS",
+  },
+  {
+    id: "al-kcc-credit",
+    category: "BANK_SERVICE",
+    priority: "MEDIUM",
+    titleEn: "Bank Credit: 4% Prompt Repayment Interest Subvention Available",
+    titleKn: "ಬ್ಯಾಂಕ್ ಸಾಲ: ಸಮಯಕ್ಕೆ ಮರುಪಾವತಿಸಿದಾಗ ಶೇ. 4 ರ ಬಡ್ಡಿದರದಲ್ಲಿ ಕೆಸಿಸಿ ನವೀಕರಣ",
+    titleHi: "बैंक ऋण: समय पर पुनर्भुगतान पर 4% ब्याज पर केसीसी नवीनीकरण",
+    messageEn: "Farmers with prompt repayment history qualify for instant credit line enhancement up to ₹3 Lakh via JanSamarth single-window route.",
+    messageKn: "ಸಮಯಕ್ಕೆ ಸರಿಯಾಗಿ ಸಾಲ ಮರುಪಾವತಿ ಮಾಡಿದ ರೈತರಿಗೆ ಜನ್‌ಸಮರ್ಥ್ ಮೂಲಕ ₹3 ಲಕ್ಷದವರೆಗೆ ತ್ವರಿತ ಸಾಲ ಮಿತಿ ಹೆಚ್ಚಳ ಲಭ್ಯವಿದೆ.",
+    messageHi: "समय पर पुनर्भुगतान करने वाले किसानों के लिए जनसमर्थ के माध्यम से ₹3 लाख तक की ऋण सीमा वृद्धि उपलब्ध है।",
+    schemeOrPolicyName: "Kisan Credit Card (KCC)",
+    department: "Department of Financial Services / RBI",
+    effectiveDate: "15 Oct 2026",
+    officialSourceUrl: "https://www.jansamarth.in/",
+    actionType: "TRACK_APPLICATION",
+  },
+  {
+    id: "al-raitha-siri",
+    category: "GOVERNMENT_POLICY",
+    priority: "HIGH",
+    titleEn: "Karnataka Raitha Siri: ₹10,000/ha Direct Millet Subsidy",
+    titleKn: "ಕರ್ನಾಟಕ ರೈತ ಸಿರಿ: ಸಿರಿಧಾನ್ಯ (ರಾಗಿ) ಬೆಳೆಗಾರರಿಗೆ ಹೆಕ್ಟೇರ್‌ಗೆ ₹10,000 ಪ್ರೋತ್ಸಾಹಧನ",
+    titleHi: "कर्नाटक रैत सिरी: मोटे अनाज उत्पादकों को ₹10,000 प्रति हेक्टेयर प्रोत्साहन",
+    messageEn: "Direct bank transfer for verified Ragi and millet cultivation linked to FRUITS FID number.",
+    messageKn: "ಫ್ರೂಟ್ಸ್ ಎಫ್‌ಐಡಿ ಹೊಂದಿರುವ ರಾಗಿ ಮತ್ತು ಸಿರಿಧಾನ್ಯ ಬೆಳೆಯುವ ರೈತರ ಖಾತೆಗೆ ಹೆಕ್ಟೇರ್‌ಗೆ ₹10,000 ನೇರ ಜಮೆ.",
+    messageHi: "फ्रूट्स एफआईडी से जुड़े किसानों के बैंक खाते में ₹10,000 प्रति हेक्टेयर सीधे जमा।",
+    schemeOrPolicyName: "Raitha Siri (Millets)",
+    department: "Department of Agriculture, Government of Karnataka",
+    effectiveDate: "01 Nov 2026",
+    officialSourceUrl: "https://fruits.karnataka.gov.in/",
+    actionType: "VIEW_POLICY",
+  },
+];
+
 export default function AgroApp() {
   return (
     <ErrorBoundary>
@@ -157,6 +224,12 @@ function AgroWorkspace() {
     text: string;
     isError?: boolean;
   } | null>(null);
+
+  // Dedicated Government Policy, Bank & Insurance Alert System State
+  const [farmerAlerts, setFarmerAlerts] = useState<any[]>(DEFAULT_VERIFIED_ALERTS);
+  const [alertFilter, setAlertFilter] = useState<
+    "ALL" | "GOVERNMENT_POLICY" | "BANK_SERVICE" | "CROP_INSURANCE"
+  >("ALL");
 
   // My Farm Plots & Record Check (RTC vs Profile) State
   const [plots, setPlots] = useState<FarmPlotItem[]>([
@@ -395,6 +468,19 @@ function AgroWorkspace() {
             Array.isArray(data.user.roles) ? data.user.roles[0] : "FARMER"
           );
         }
+
+        // Fetch Live Personalized Government Policy, Bank & Insurance Alerts
+        try {
+          const aRes = await fetch(`${API_BASE}/api/v1/alerts/feed`);
+          if (aRes.ok) {
+            const aData = await aRes.json();
+            if (Array.isArray(aData.alerts) && aData.alerts.length > 0) {
+              setFarmerAlerts(aData.alerts);
+            }
+          }
+        } catch {
+          // Keep verified default alerts
+        }
       } catch {
         setServiceErrorBanner(
           "Offline mode active — showing saved local data."
@@ -413,6 +499,11 @@ function AgroWorkspace() {
       Number(plots.reduce((sum, p) => sum + p.areaHectares, 0).toFixed(2)),
     [plots]
   );
+
+  const filteredAlerts = useMemo(() => {
+    if (alertFilter === "ALL") return farmerAlerts;
+    return farmerAlerts.filter((a) => a.category === alertFilter);
+  }, [farmerAlerts, alertFilter]);
 
   const farmerFacts: FarmerFactSet = useMemo(
     () => ({
@@ -1169,7 +1260,281 @@ ${customNote ? `\n💬 *Note:* ${customNote}\n` : ""}---------------------------
                       }
                     />
 
-                    {/* 2. Signature 1: Farmer Opportunity Radar (Tiles on Today) */}
+                    {/* Dedicated Government Policy, Bank & Insurance Alert Centre */}
+                    <section
+                      aria-label="Government Policy, Bank & Insurance Alert Centre"
+                      style={{
+                        background: "#ffffff",
+                        border: "1px solid #e2e8f0",
+                        borderRadius: 14,
+                        padding: 16,
+                        boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
+                        marginTop: 14,
+                        marginBottom: 16,
+                      }}
+                    >
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          flexWrap: "wrap",
+                          gap: 10,
+                          marginBottom: 12,
+                        }}
+                      >
+                        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                          <div
+                            style={{
+                              width: 38,
+                              height: 38,
+                              borderRadius: 10,
+                              background: "#fef3c7",
+                              color: "#b45309",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              fontSize: 20,
+                            }}
+                          >
+                            🔔
+                          </div>
+                          <div>
+                            <h2 style={{ fontSize: 16, fontWeight: 800, margin: 0, color: "#0f172a" }}>
+                              {L(
+                                lang,
+                                "ಸರ್ಕಾರಿ ನೀತಿ, ಬ್ಯಾಂಕ್ ಮತ್ತು ವಿಮೆ ಎಚ್ಚರಿಕೆ ಕೇಂದ್ರ",
+                                "Government Policy, Bank & Insurance Alert Centre",
+                                "सरकारी नीति, बैंक एवं बीमा अलर्ट केंद्र"
+                              )}
+                            </h2>
+                            <div style={{ fontSize: 12, color: "#64748b", marginTop: 2 }}>
+                              {L(
+                                lang,
+                                "ನಿಮ್ಮ ಬೆಳೆ ಮತ್ತು ಜಮೀನಿಗೆ ಸಂಬಂಧಿಸಿದ ನೈಜ-ಸಮಯದ ಅಧಿಕೃತ ಅಧಿಸೂಚನೆಗಳು",
+                                "Personalized real-time official alerts matching your crops, land & applications",
+                                "आपकी फसल और जमीन से जुड़े वास्तविक समय के आधिकारिक अलर्ट"
+                              )}
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Filter pills */}
+                        <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                          {[
+                            { key: "ALL", label: L(lang, "ಎಲ್ಲವೂ", "All", "सभी") },
+                            { key: "GOVERNMENT_POLICY", label: L(lang, "🏛️ ಸರ್ಕಾರಿ ನೀತಿ", "🏛️ Govt Policy", "🏛️ नीति") },
+                            { key: "BANK_SERVICE", label: L(lang, "🏦 ಬ್ಯಾಂಕ್", "🏦 Banking", "🏦 बैंक") },
+                            { key: "CROP_INSURANCE", label: L(lang, "🛡️ ಬೆಳೆ ವಿಮೆ", "🛡️ Insurance", "🛡️ बीमा") },
+                          ].map((f) => (
+                            <button
+                              key={f.key}
+                              type="button"
+                              onClick={() => setAlertFilter(f.key as any)}
+                              style={{
+                                padding: "4px 10px",
+                                borderRadius: 16,
+                                border: alertFilter === f.key ? "1px solid #15803d" : "1px solid #e2e8f0",
+                                background: alertFilter === f.key ? "#ecfdf5" : "#f8fafc",
+                                color: alertFilter === f.key ? "#166534" : "#64748b",
+                                fontSize: 12,
+                                fontWeight: alertFilter === f.key ? 700 : 500,
+                                cursor: "pointer",
+                              }}
+                            >
+                              {f.label}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Filtered alerts grid */}
+                      <div style={{ display: "grid", gap: 12 }}>
+                        {filteredAlerts.slice(0, 3).map((alert) => (
+                          <div
+                            key={alert.id}
+                            style={{
+                              background:
+                                alert.priority === "CRITICAL"
+                                  ? "#fff5f5"
+                                  : alert.priority === "HIGH"
+                                    ? "#fffbeb"
+                                    : "#f8fafc",
+                              border:
+                                alert.priority === "CRITICAL"
+                                  ? "1px solid #fecaca"
+                                  : alert.priority === "HIGH"
+                                    ? "1px solid #fde68a"
+                                    : "1px solid #e2e8f0",
+                              borderRadius: 10,
+                              padding: 14,
+                              borderLeft: `4px solid ${
+                                alert.priority === "CRITICAL"
+                                  ? "#dc2626"
+                                  : alert.priority === "HIGH"
+                                    ? "#d97706"
+                                    : "#0284c7"
+                              }`,
+                            }}
+                          >
+                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
+                              <span
+                                style={{
+                                  padding: "2px 8px",
+                                  borderRadius: 4,
+                                  fontSize: 10,
+                                  fontWeight: 800,
+                                  textTransform: "uppercase",
+                                  background:
+                                    alert.priority === "CRITICAL"
+                                      ? "#dc2626"
+                                      : alert.priority === "HIGH"
+                                        ? "#d97706"
+                                        : "#0284c7",
+                                  color: "#ffffff",
+                                }}
+                              >
+                                {alert.priority}
+                              </span>
+                              <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                                <span style={{ fontSize: 11, color: "#64748b" }}>
+                                  🗓️ {alert.effectiveDate || "Current"}
+                                </span>
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    speakDirect(
+                                      `${lang === "kn" ? alert.titleKn : lang === "hi" ? alert.titleHi : alert.titleEn}. ${lang === "kn" ? alert.messageKn : lang === "hi" ? alert.messageHi : alert.messageEn}`,
+                                      lang
+                                    )
+                                  }
+                                  title="Read alert aloud"
+                                  style={{
+                                    border: "none",
+                                    background: "none",
+                                    cursor: "pointer",
+                                    color: "#64748b",
+                                    padding: 2,
+                                  }}
+                                >
+                                  <Volume2 size={16} />
+                                </button>
+                              </div>
+                            </div>
+
+                            <h3 style={{ fontSize: 14, fontWeight: 700, margin: "4px 0", color: "#0f172a" }}>
+                              {lang === "kn" ? alert.titleKn : lang === "hi" ? alert.titleHi : alert.titleEn}
+                            </h3>
+                            <p style={{ fontSize: 12, color: "#334155", margin: "4px 0 10px", lineHeight: 1.5 }}>
+                              {lang === "kn" ? alert.messageKn : lang === "hi" ? alert.messageHi : alert.messageEn}
+                            </p>
+
+                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8 }}>
+                              <span style={{ fontSize: 11, color: "#166534", fontWeight: 600 }}>
+                                ✓ {alert.department || alert.schemeOrPolicyName}
+                              </span>
+
+                              <div style={{ display: "flex", gap: 8 }}>
+                                {alert.actionType === "CHECK_ELIGIBILITY" && (
+                                  <button
+                                    type="button"
+                                    onClick={() => setTab("schemes")}
+                                    style={{
+                                      padding: "5px 12px",
+                                      background: "#15803d",
+                                      color: "#ffffff",
+                                      border: "none",
+                                      borderRadius: 6,
+                                      fontSize: 12,
+                                      fontWeight: 600,
+                                      cursor: "pointer",
+                                    }}
+                                  >
+                                    {L(lang, "ಅರ್ಹತೆ ಪರಿಶೀಲಿಸಿ ➔", "Check Eligibility ➔", "पात्रता जांचें ➔")}
+                                  </button>
+                                )}
+                                {alert.actionType === "PREPARE_DOCUMENTS" && (
+                                  <button
+                                    type="button"
+                                    onClick={() => setClaimRescueRoomOpen(true)}
+                                    style={{
+                                      padding: "5px 12px",
+                                      background: "#d97706",
+                                      color: "#ffffff",
+                                      border: "none",
+                                      borderRadius: 6,
+                                      fontSize: 12,
+                                      fontWeight: 600,
+                                      cursor: "pointer",
+                                    }}
+                                  >
+                                    {L(lang, "ದಾಖಲೆ ಸಿದ್ಧಪಡಿಸಿ ➔", "Prepare Documents ➔", "दस्तावेज तैयार करें ➔")}
+                                  </button>
+                                )}
+                                {alert.actionType === "TRACK_APPLICATION" && (
+                                  <button
+                                    type="button"
+                                    onClick={() => setTab("papers")}
+                                    style={{
+                                      padding: "5px 12px",
+                                      background: "#0284c7",
+                                      color: "#ffffff",
+                                      border: "none",
+                                      borderRadius: 6,
+                                      fontSize: 12,
+                                      fontWeight: 600,
+                                      cursor: "pointer",
+                                    }}
+                                  >
+                                    {L(lang, "ಸ್ಥಿತಿ ಪರಿಶೀಲಿಸಿ ➔", "Track Status ➔", "स्थिति ट्रैक करें ➔")}
+                                  </button>
+                                )}
+                                {alert.actionType === "VIEW_POLICY" && alert.officialSourceUrl && (
+                                  <a
+                                    href={alert.officialSourceUrl}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    style={{
+                                      padding: "5px 12px",
+                                      background: "#f1f5f9",
+                                      color: "#0f172a",
+                                      borderRadius: 6,
+                                      fontSize: 12,
+                                      fontWeight: 600,
+                                      textDecoration: "none",
+                                      display: "inline-block",
+                                    }}
+                                  >
+                                    {L(lang, "ಸುತ್ತೋಲೆ ನೋಡಿ ↗", "View Circular ↗", "परिपत्र देखें ↗")}
+                                  </a>
+                                )}
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setWhatsAppModalOpen(true);
+                                  }}
+                                  style={{
+                                    padding: "5px 10px",
+                                    background: "#25D366",
+                                    color: "#ffffff",
+                                    border: "none",
+                                    borderRadius: 6,
+                                    fontSize: 12,
+                                    fontWeight: 700,
+                                    cursor: "pointer",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: 4,
+                                  }}
+                                >
+                                  💬 {L(lang, "ಹಂಚಿಕೊಳ್ಳಿ", "Share", "साझा करें")}
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </section>
                     <section aria-label="Farmer Opportunity Radar">
                       <div
                         style={{

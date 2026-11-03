@@ -72,17 +72,37 @@ interface ApplicationRecord {
   }>;
 }
 
+interface EmployeeAlertItem {
+  id: string;
+  priority: "CRITICAL" | "HIGH" | "MEDIUM" | "INFORMATIONAL";
+  title: string;
+  message: string;
+  action: string;
+  applicationId?: string;
+}
+
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
 
 export default function EmployeeCscPortal() {
   const [activeTab, setActiveTab] = useState<
-    "dashboard" | "register" | "schemes" | "prepare" | "tracker" | "whatsapp"
+    "dashboard" | "register" | "schemes" | "prepare" | "tracker" | "alerts" | "whatsapp"
   >("dashboard");
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [farmers, setFarmers] = useState<FarmerRecord[]>([]);
   const [schemes, setSchemes] = useState<SchemeRecord[]>([]);
   const [applications, setApplications] = useState<ApplicationRecord[]>([]);
+  const [employeeAlerts, setEmployeeAlerts] = useState<{
+    urgentCount: number;
+    pendingDocsCount: number;
+    readyReviewCount: number;
+    items: EmployeeAlertItem[];
+  }>({
+    urgentCount: 0,
+    pendingDocsCount: 0,
+    readyReviewCount: 0,
+    items: [],
+  });
 
   // Guided Registration Form
   const [regName, setRegName] = useState("");
@@ -115,10 +135,11 @@ export default function EmployeeCscPortal() {
   async function fetchLiveData() {
     setIsLoading(true);
     try {
-      const [farmersRes, schemesRes, appsRes] = await Promise.all([
+      const [farmersRes, schemesRes, appsRes, alertsRes] = await Promise.all([
         fetch(`${API_BASE}/api/v1/admin/farmers`).catch(() => null),
         fetch(`${API_BASE}/api/v1/admin/schemes`).catch(() => null),
         fetch(`${API_BASE}/api/v1/admin/applications`).catch(() => null),
+        fetch(`${API_BASE}/api/v1/employee/alerts`).catch(() => null),
       ]);
 
       if (farmersRes && farmersRes.ok) {
@@ -140,6 +161,16 @@ export default function EmployeeCscPortal() {
       if (appsRes && appsRes.ok) {
         const a = await appsRes.json();
         setApplications(a.applications || []);
+      }
+
+      if (alertsRes && alertsRes.ok) {
+        const al = await alertsRes.json();
+        setEmployeeAlerts({
+          urgentCount: al.counts?.urgentCount || 0,
+          pendingDocsCount: al.counts?.pendingDocsCount || 0,
+          readyReviewCount: al.counts?.readyReviewCount || 0,
+          items: al.items || [],
+        });
       }
     } catch {
       // offline
@@ -381,6 +412,7 @@ export default function EmployeeCscPortal() {
       >
         {[
           { key: "dashboard", label: "📋 Operator Dashboard" },
+          { key: "alerts", label: `🔔 Alerts & Actions (${employeeAlerts.items.length})` },
           { key: "register", label: "📝 Register Farmer & Consent" },
           { key: "schemes", label: `🏛️ Government Schemes (${schemes.length})` },
           { key: "prepare", label: "🚀 Application Preparation" },
@@ -570,6 +602,165 @@ export default function EmployeeCscPortal() {
                     ))}
                   </tbody>
                 </table>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* TAB: ALERTS & OPERATOR NOTIFICATIONS */}
+        {activeTab === "alerts" && (
+          <div>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+              <div>
+                <h2 style={{ fontSize: 20, fontWeight: 700, margin: "0 0 4px" }}>
+                  Operator Alert & Action Desk
+                </h2>
+                <p style={{ color: "#64748b", fontSize: 13, margin: 0 }}>
+                  Real-time policy alerts, document requests, and bank inquiry notifications for assigned farmers.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={fetchLiveData}
+                style={{
+                  padding: "8px 14px",
+                  background: "#f1f5f9",
+                  border: "1px solid #cbd5e1",
+                  borderRadius: 6,
+                  fontSize: 13,
+                  fontWeight: 600,
+                  cursor: "pointer",
+                }}
+              >
+                🔄 Refresh Feed
+              </button>
+            </div>
+
+            {/* Alert Summary Stats */}
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 16, marginBottom: 24 }}>
+              <div style={{ background: "#ffffff", border: "1px solid #fecaca", borderRadius: 8, padding: 16, borderLeft: "4px solid #ef4444" }}>
+                <div style={{ fontSize: 13, color: "#991b1b", fontWeight: 600 }}>🔴 Urgent Clarifications Required</div>
+                <div style={{ fontSize: 28, fontWeight: 800, color: "#b91c1c", margin: "6px 0" }}>
+                  {employeeAlerts.urgentCount}
+                </div>
+                <div style={{ fontSize: 12, color: "#64748b" }}>Bank inquiries or returned applications</div>
+              </div>
+              <div style={{ background: "#ffffff", border: "1px solid #fed7aa", borderRadius: 8, padding: 16, borderLeft: "4px solid #f97316" }}>
+                <div style={{ fontSize: 13, color: "#9a3412", fontWeight: 600 }}>🟠 Documents Pending Upload</div>
+                <div style={{ fontSize: 28, fontWeight: 800, color: "#c2410c", margin: "6px 0" }}>
+                  {employeeAlerts.pendingDocsCount}
+                </div>
+                <div style={{ fontSize: 12, color: "#64748b" }}>Awaiting RTC, Pahani, or Sowing Cert</div>
+              </div>
+              <div style={{ background: "#ffffff", border: "1px solid #bae6fd", borderRadius: 8, padding: 16, borderLeft: "4px solid #0284c7" }}>
+                <div style={{ fontSize: 13, color: "#075985", fontWeight: 600 }}>🔵 Ready for Submission Handoff</div>
+                <div style={{ fontSize: 28, fontWeight: 800, color: "#0369a1", margin: "6px 0" }}>
+                  {employeeAlerts.readyReviewCount}
+                </div>
+                <div style={{ fontSize: 12, color: "#64748b" }}>Verified by operator; ready for portal entry</div>
+              </div>
+            </div>
+
+            {/* List of Alerts */}
+            {employeeAlerts.items.length === 0 ? (
+              <div style={{ background: "#ffffff", padding: 40, textAlign: "center", borderRadius: 8, border: "1px solid #e2e8f0" }}>
+                <div style={{ fontSize: 32, marginBottom: 8 }}>✅</div>
+                <h3 style={{ fontSize: 16, fontWeight: 700, margin: "0 0 6px" }}>All Operator Tasks Up to Date</h3>
+                <p style={{ fontSize: 13, color: "#64748b", margin: 0 }}>
+                  No urgent application blockages, bank requests, or missing documents in this CSC centre.
+                </p>
+              </div>
+            ) : (
+              <div style={{ display: "grid", gap: 14 }}>
+                {employeeAlerts.items.map((item) => {
+                  const isCrit = item.priority === "CRITICAL";
+                  const isHigh = item.priority === "HIGH";
+                  return (
+                    <div
+                      key={item.id}
+                      style={{
+                        background: "#ffffff",
+                        border: isCrit ? "1px solid #fca5a5" : isHigh ? "1px solid #fed7aa" : "1px solid #e2e8f0",
+                        borderRadius: 8,
+                        padding: 18,
+                        boxShadow: "0 1px 3px rgba(0,0,0,0.05)",
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        gap: 16,
+                        flexWrap: "wrap",
+                      }}
+                    >
+                      <div style={{ flex: 1, minWidth: 260 }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
+                          <span
+                            style={{
+                              fontSize: 11,
+                              fontWeight: 700,
+                              padding: "2px 8px",
+                              borderRadius: 4,
+                              background: isCrit ? "#fee2e2" : isHigh ? "#ffedd5" : "#e0f2fe",
+                              color: isCrit ? "#991b1b" : isHigh ? "#9a3412" : "#0369a1",
+                            }}
+                          >
+                            {item.priority}
+                          </span>
+                          <span style={{ fontSize: 14, fontWeight: 700, color: "#0f172a" }}>
+                            {item.title}
+                          </span>
+                        </div>
+                        <div style={{ fontSize: 13, color: "#475569", marginBottom: 6 }}>
+                          {item.message}
+                        </div>
+                        {item.applicationId && (
+                          <div style={{ fontSize: 12, color: "#94a3b8" }}>
+                            Application ID: <code>{item.applicationId}</code>
+                          </div>
+                        )}
+                      </div>
+
+                      <div style={{ display: "flex", gap: 8 }}>
+                        <button
+                          type="button"
+                          onClick={() => setActiveTab("tracker")}
+                          style={{
+                            padding: "8px 14px",
+                            background: "#065f46",
+                            color: "#ffffff",
+                            border: "none",
+                            borderRadius: 6,
+                            fontSize: 13,
+                            fontWeight: 600,
+                            cursor: "pointer",
+                          }}
+                        >
+                          {item.action} ➔
+                        </button>
+                        <a
+                          href={`https://wa.me/?text=${encodeURIComponent(
+                            `Agro AI Operator Alert: ${item.title}. Action needed: ${item.message}`
+                          )}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          style={{
+                            padding: "8px 12px",
+                            background: "#25D366",
+                            color: "#ffffff",
+                            borderRadius: 6,
+                            fontSize: 13,
+                            fontWeight: 600,
+                            textDecoration: "none",
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: 6,
+                          }}
+                        >
+                          💬 Notify Farmer
+                        </a>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             )}
           </div>

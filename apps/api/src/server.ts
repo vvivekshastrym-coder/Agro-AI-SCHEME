@@ -1006,6 +1006,114 @@ export function createApiServer(platform = new AgroPlatformService()) {
         return;
       }
 
+      // ============================================================================
+      // Dedicated Government Policy, Bank & Insurance Alert System (Modules 1 - 8)
+      // ============================================================================
+
+      if (req.method === "GET" && pathname === "/api/v1/alerts/feed") {
+        const farmerId = url.searchParams.get("farmerId") || "";
+        let farmer = farmerId ? platform.enterprise.farmers.get(farmerId) : undefined;
+        if (!farmer) {
+          // If no specific farmer query, grab first registered farmer or create default verified profile
+          const allFarmers = Array.from(platform.enterprise.farmers.values());
+          if (allFarmers.length > 0) {
+            farmer = allFarmers[0];
+          } else {
+            // Default verified profile matching Mysuru / Ragi farmer
+            farmer = {
+              id: "farmer-mys-01",
+              fullName: "ಶಿವಣ್ಣ ಗೌಡ (Shivanna Gowda)",
+              mobile: "+919845012345",
+              state: "Karnataka",
+              districtCode: "KA-MYS",
+              talukCode: "KA-MYS-HDK",
+              villageCode: "KA-MYS-HDK-001",
+              cropCode: "RAGI",
+              landAreaValue: 2.5,
+              landAreaUnit: "ACRE",
+              ownershipType: "OWNER",
+              farmerCategory: "SMALL",
+              preferredLanguage: "kn",
+              identityVerificationState: "AADHAAR_EKYC_GUIDED",
+              consentStatus: "CONSENTED",
+              consentVersion: "v1.2-DPDP",
+              consentTimestampIso: new Date().toISOString(),
+              consentPurpose: "CSC assisted scheme and alert delivery",
+              registeredByActorId: "emp-lead-01",
+              createdAt: new Date().toISOString(),
+            };
+          }
+        }
+
+        const allApps = Array.from(platform.enterprise.applications.values());
+        const alerts = platform.alerts.matchAndGenerateFarmerAlerts(farmer, allApps);
+        const prefs = platform.alerts.getFarmerPreferences(farmer.id);
+        const quiet = platform.alerts.isQuietHours(farmer.id);
+
+        sendJson(res, 200, {
+          farmerId: farmer.id,
+          farmerName: farmer.fullName,
+          district: farmer.districtCode,
+          crop: farmer.cropCode,
+          isQuietHours: quiet,
+          preferences: prefs,
+          alerts,
+          count: alerts.length,
+          generatedAtIso: new Date().toISOString(),
+        });
+        return;
+      }
+
+      const alertActionRoute = pathname.match(/^\/api\/v1\/alerts\/([^/]+)\/action$/);
+      if (alertActionRoute && req.method === "POST") {
+        const alertId = alertActionRoute[1]!;
+        const alert = platform.alerts.farmerAlerts.get(alertId);
+        if (alert) {
+          alert.actionTaken = true;
+          alert.isRead = true;
+        }
+        sendJson(res, 200, { success: true, alertId });
+        return;
+      }
+
+      if (req.method === "GET" && pathname === "/api/v1/alerts/preferences") {
+        const farmerId = url.searchParams.get("farmerId") || "farmer-mys-01";
+        const prefs = platform.alerts.getFarmerPreferences(farmerId);
+        sendJson(res, 200, { preferences: prefs });
+        return;
+      }
+
+      if (req.method === "POST" && pathname === "/api/v1/alerts/preferences") {
+        const body = (await readJsonBody(req)) as any;
+        const farmerId = body.farmerId || "farmer-mys-01";
+        const updated = platform.alerts.updateFarmerPreferences(farmerId, body);
+        sendJson(res, 200, { preferences: updated });
+        return;
+      }
+
+      if (req.method === "GET" && pathname === "/api/v1/admin/alerts/registry") {
+        sendJson(res, 200, {
+          sources: Array.from(platform.alerts.sources.values()),
+          policyUpdates: Array.from(platform.alerts.policyUpdates.values()),
+        });
+        return;
+      }
+
+      if (req.method === "POST" && pathname === "/api/v1/admin/alerts/publish") {
+        const body = (await readJsonBody(req)) as any;
+        const policy = platform.alerts.publishPolicyUpdate(body);
+        sendJson(res, 201, { policyUpdate: policy });
+        return;
+      }
+
+      if (req.method === "GET" && pathname === "/api/v1/employee/alerts") {
+        const cscId = url.searchParams.get("cscCentreId") || "csc-ka-mys-01";
+        const allApps = Array.from(platform.enterprise.applications.values());
+        const empAlerts = platform.alerts.getEmployeeAlerts(cscId, allApps);
+        sendJson(res, 200, empAlerts);
+        return;
+      }
+
       // Scheme Rollback Route
       const rollbackRoute = pathname.match(
         /^\/api\/v1\/schemes\/([^/]+)\/rollback$/

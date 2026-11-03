@@ -370,6 +370,103 @@ export const ApplicationTransitionSchema = z.object({
 });
 export type ApplicationTransitionInput = z.infer<typeof ApplicationTransitionSchema>;
 
+// ============================================================================
+// 6. Dedicated Government Policy, Bank & Insurance Alert Engine (Module 1 - 6)
+// ============================================================================
+
+export const AlertCategoryEnum = z.enum([
+  "GOVERNMENT_POLICY",
+  "BANK_SERVICE",
+  "CROP_INSURANCE",
+]);
+export type AlertCategory = z.infer<typeof AlertCategoryEnum>;
+
+export const AlertPriorityEnum = z.enum([
+  "CRITICAL",
+  "HIGH",
+  "MEDIUM",
+  "INFORMATIONAL",
+]);
+export type AlertPriority = z.infer<typeof AlertPriorityEnum>;
+
+export const NotificationChannelEnum = z.enum([
+  "IN_APP",
+  "WHATSAPP",
+  "SMS",
+  "EMAIL",
+  "CSC_DESK",
+  "BANK_PORTAL",
+]);
+export type NotificationChannel = z.infer<typeof NotificationChannelEnum>;
+
+export const AlertActionTypeEnum = z.enum([
+  "CHECK_ELIGIBILITY",
+  "VIEW_POLICY",
+  "PREPARE_DOCUMENTS",
+  "TRACK_APPLICATION",
+  "CONTACT_EMPLOYEE",
+  "OPEN_PORTAL",
+]);
+export type AlertActionType = z.infer<typeof AlertActionTypeEnum>;
+
+export const GovernmentPolicyUpdateSchema = z.object({
+  id: z.string(),
+  department: z.string(),
+  schemeOrPolicyName: z.string(),
+  circularReference: z.string(),
+  category: AlertCategoryEnum.default("GOVERNMENT_POLICY"),
+  publicationDate: z.string(),
+  effectiveDate: z.string(),
+  previousRule: z.string().optional(),
+  newRule: z.string(),
+  affectedStates: z.array(z.string()).default(["Karnataka"]),
+  affectedDistricts: z.array(z.string()).default([]),
+  affectedCrops: z.array(z.string()).default([]),
+  affectedFarmerCategories: z.array(FarmerCategoryEnum).default([]),
+  officialSourceUrl: z.string().url(),
+  isSourceVerified: z.boolean().default(true),
+  lastCheckedIso: z.string(),
+  actionType: AlertActionTypeEnum.default("CHECK_ELIGIBILITY"),
+  priority: AlertPriorityEnum.default("MEDIUM"),
+});
+export type GovernmentPolicyUpdate = z.infer<typeof GovernmentPolicyUpdateSchema>;
+
+export const FarmerAlertSchema = z.object({
+  id: z.string(),
+  farmerId: z.string(),
+  category: AlertCategoryEnum,
+  priority: AlertPriorityEnum,
+  titleEn: z.string(),
+  titleKn: z.string(),
+  titleHi: z.string(),
+  messageEn: z.string(),
+  messageKn: z.string(),
+  messageHi: z.string(),
+  schemeOrPolicyName: z.string(),
+  officialSourceUrl: z.string(),
+  effectiveDate: z.string().optional(),
+  actionType: AlertActionTypeEnum,
+  actionUrl: z.string().optional(),
+  channels: z.array(NotificationChannelEnum).default(["IN_APP"]),
+  isRead: z.boolean().default(false),
+  actionTaken: z.boolean().default(false),
+  sourceVerified: z.boolean().default(true),
+  createdAt: z.string(),
+});
+export type FarmerAlert = z.infer<typeof FarmerAlertSchema>;
+
+export const AlertPreferencesSchema = z.object({
+  farmerId: z.string(),
+  inAppEnabled: z.boolean().default(true),
+  whatsappEnabled: z.boolean().default(true),
+  smsEnabled: z.boolean().default(false),
+  quietHoursStart: z.string().default("21:00"),
+  quietHoursEnd: z.string().default("07:00"),
+  preferredLanguage: SupportedLanguageEnum.default("kn"),
+  optedOut: z.boolean().default(false),
+});
+export type AlertPreferences = z.infer<typeof AlertPreferencesSchema>;
+
 export * from "./nextAction";
 
 export * from "./innovations";
