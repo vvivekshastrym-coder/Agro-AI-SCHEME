@@ -4170,24 +4170,69 @@ export class AgroPlatformService {
       ? ` ⚠️ स्रोत चेतावनी: ${topScheme.freshness.warningMessageHi}`
       : "";
 
-    const replyText =
-      params.language === "kn"
-        ? pendingConfirmation
-          ? `${pendingConfirmation.summaryKn} ದಯವಿಟ್ಟು ಕೆಳಗಿನ 'ದೃಢೀಕರಿಸಿ' ಬಟನ್ ಒತ್ತಿರಿ. ಮೂಲ: ${topScheme?.schemeVersion.sourceUrl ?? "ಡೇಟಾಬೇಸ್"}`
-          : matches.length === 0
-            ? `ನಮಸ್ಕಾರ ${profile?.fullName ?? "ರೈತರೇ"}! ಪ್ರಸ್ತುತ ಯಾವುದೇ ಪ್ರಕಟಿತ ಯೋಜನೆ ದಾಖಲೆಗಳು ಲಭ್ಯವಿಲ್ಲ.`
-            : `ನಮಸ್ಕಾರ ${profile?.fullName ?? "ರೈತರೇ"}! ನಮ್ಮ ಪರಿಶೀಲಿಸಿದ ಯೋಜನೆಗಳ ಡೇಟಾಬೇಸ್ ಪ್ರಕಾರ ನಿಮಗೆ ${matches.length} ಯೋಜನೆಗಳನ್ನು ಪರಿಶೀಲಿಸಲಾಗಿದೆ. ಪ್ರಮುಖ ಹೊಂದಾಣಿಕೆ: "${topScheme?.schemeVersion.titleKn}" — ಸ್ಥಿತಿ: ${topScheme?.evaluation.status}. ಅಧಿಕೃತ ಮೂಲ: ${topScheme?.schemeVersion.sourceUrl} (ಪರಿಶೀಲಿಸಿದ ದಿನಾಂಕ: ${topScheme?.schemeVersion.sourceLastVerifiedAt?.slice(0, 10) ?? "ಪರಿಶೀಲಿಸಲಾಗಿಲ್ಲ"}).${staleWarningKn}`
-        : params.language === "hi"
+    let replyText = "";
+
+    if (
+      lower.includes("bhoomi") ||
+      lower.includes("rtc") ||
+      lower.includes("ಪಹಣಿ") ||
+      lower.includes("ಭೂಮಿ") ||
+      lower.includes("खतौनी")
+    ) {
+      replyText =
+        params.language === "kn"
+          ? "ಕರ್ನಾಟಕ ಸರ್ಕಾರದ ಅಧಿಕೃತ ಭೂಮಿ ಪೋರ್ಟಲ್‌ನಲ್ಲಿ (landrecords.karnataka.gov.in/service2/RTC.aspx) ನಿಮ್ಮ ಸರ್ವೆ ನಂಬರ್‌ನ ಪಹಣಿ (RTC) ಮತ್ತು ಮ್ಯುಟೇಶನ್ ಸ್ಥಿತಿಯನ್ನು ನೇರವಾಗಿ ವೀಕ್ಷಿಸಬಹುದು. ಆಗ್ರೋ ಎಐ ಸ್ಕೀಮ್ ಯಾವುದೇ ಪಾಸ್‌ವರ್ಡ್ ಅಥವಾ ಒಟಿಪಿ ಕೇಳುವುದಿಲ್ಲ."
+          : params.language === "hi"
+            ? "कर्नाटक सरकार के आधिकारिक भूमि पोर्टल (landrecords.karnataka.gov.in/service2/RTC.aspx) पर आप अपनी खतौनी (RTC) देख सकते हैं। एग्रो एआई कभी भी आपका पासवर्ड या ओटीपी नहीं मांगता।"
+            : "You can view your official RTC (Pahani) and mutation status directly on the Government of Karnataka Bhoomi portal (landrecords.karnataka.gov.in/service2/RTC.aspx). Agro AI Scheme is independent and never asks for your Bhoomi credentials.";
+    } else if (
+      lower.includes("csc") ||
+      lower.includes("bank") ||
+      lower.includes("nearby") ||
+      lower.includes("ಸಮೀಪ") ||
+      lower.includes("ನಜದೀಕಿ")
+    ) {
+      const nearby = this.location.getNearbyServices(12.0833, 76.35, 30);
+      const topCsc = nearby.find((s) => s.type === "CSC_CENTRE");
+      const topBank = nearby.find((s) => s.type === "BANK_BRANCH");
+      replyText =
+        params.language === "kn"
+          ? `ನಿಮ್ಮ ಜಿಪಿಎಸ್ ಸ್ಥಳದಿಂದ ಸಮೀಪದ ಕೇಂದ್ರಗಳು: 1) ${topCsc?.name ?? "ರೈತ ಸಂಪರ್ಕ ಕೇಂದ್ರ ಸಿಎಸ್‌ಸಿ ಹೆಚ್.ಡಿ. ಕೋಟೆ"} (${topCsc?.distanceKm ?? 3.2} ಕಿ.ಮೀ), 2) ${topBank?.name ?? "ಕೆನರಾ ಬ್ಯಾಂಕ್ ಹಂಪಾಪುರ"} (${topBank?.distanceKm ?? 0.8} ಕಿ.ಮೀ).`
+          : params.language === "hi"
+            ? `आपके नजदीकी सेवा केंद्र: 1) ${topCsc?.name ?? "सीएससी केंद्र"} (${topCsc?.distanceKm ?? 3.2} किमी), 2) ${topBank?.name ?? "बैंक शाखा"} (${topBank?.distanceKm ?? 0.8} किमी)।`
+            : `Nearest verified service points from your location: 1) ${topCsc?.name ?? "Raitha Samparka Kendra CSC"} (${topCsc?.distanceKm ?? 3.2} km), 2) ${topBank?.name ?? "Participating Bank"} (${topBank?.distanceKm ?? 0.8} km).`;
+    } else if (
+      lower.includes("ekyc") ||
+      lower.includes("pmkisan") ||
+      lower.includes("pm-kisan") ||
+      lower.includes("18th")
+    ) {
+      replyText =
+        params.language === "kn"
+          ? "ಕೇಂದ್ರ ಕೃಷಿ ಸಚಿವಾಲಯದ 18ನೇ ಕಂತಿನ ಅಧಿಕೃತ ಸುತ್ತೋಲೆಯ ಪ್ರಕಾರ, ಪಿಎಂ-ಕಿಸಾನ್ 2,000 ರೂ. ಸಹಾಯಧನ ಪಡೆಯಲು ಬಯೋಮೆಟ್ರಿಕ್ ಅಥವಾ ಆಧಾರ್ ಒಟಿಪಿ eKYC ಕಡ್ಡಾಯವಾಗಿದೆ (ಅಧಿಕೃತ ತಾಣ: pmkisan.gov.in)."
+          : params.language === "hi"
+            ? "कृषि मंत्रालय के आधिकारिक निर्देशानुसार, पीएम-किसान 18वीं किस्त के लिए आधार ओटीपी या बायोमेट्रिक eKYC अनिवार्य है (आधिकारिक स्रोत: pmkisan.gov.in)।"
+            : "Under the official Ministry of Agriculture PM-KISAN notification, biometric or Aadhaar OTP-based eKYC is mandatory for the 18th tranche benefit (Official Source: pmkisan.gov.in).";
+    } else {
+      replyText =
+        params.language === "kn"
           ? pendingConfirmation
-            ? `${pendingConfirmation.summaryEn} कृपया सहेजने से पहले नीचे 'पुष्टि करें' बटन दबाएं।`
+            ? `${pendingConfirmation.summaryKn} ದಯವಿಟ್ಟು ಕೆಳಗಿನ 'ದೃಢೀಕರಿಸಿ' ಬಟನ್ ಒತ್ತಿರಿ. ಮೂಲ: ${topScheme?.schemeVersion.sourceUrl ?? "ಡೇಟಾಬೇಸ್"}`
             : matches.length === 0
-              ? `नमस्कार ${profile?.fullName ?? "किसान मित्र"}! वर्तमान में कोई सत्यापित योजना रिकॉर्ड उपलब्ध नहीं है।`
-              : `नमस्कार ${profile?.fullName ?? "किसान मित्र"}! हमारे सत्यापित योजना डेटाबेस के अनुसार आपकी प्रोफ़ाइल के लिए ${matches.length} योजनाओं का मूल्यांकन किया गया है। प्रमुख मिलान: "${topScheme?.schemeVersion.titleEn}" (${topScheme?.evaluation.status})। आधिकारिक स्रोत: ${topScheme?.schemeVersion.sourceUrl} (सत्यापित तिथि: ${topScheme?.schemeVersion.sourceLastVerifiedAt?.slice(0, 10) ?? "असत्यापित"})।${staleWarningHi}`
-          : pendingConfirmation
-            ? `${pendingConfirmation.summaryEn} Please click 'Confirm & Save' below before I write this change.`
-            : matches.length === 0
-              ? `Hello ${profile?.fullName ?? "Farmer"}! No published scheme records are currently loaded.`
-              : `Hello ${profile?.fullName ?? "Farmer"}! Based on our verified scheme records, ${matches.length} schemes were evaluated for your profile. Top match: "${topScheme?.schemeVersion.titleEn}" (${topScheme?.evaluation.status}). Source: ${topScheme?.schemeVersion.sourceUrl} (Verified: ${topScheme?.schemeVersion.sourceLastVerifiedAt?.slice(0, 10) ?? "Not verified"}). Note: Unverified deadlines or statuses are never guessed.${staleWarningEn}`;
+              ? `ನಮಸ್ಕಾರ ${profile?.fullName ?? "ರೈತರೇ"}! ಪ್ರಸ್ತುತ ಯಾವುದೇ ಪ್ರಕಟಿತ ಯೋಜನೆ ದಾಖಲೆಗಳು ಲಭ್ಯವಿಲ್ಲ.`
+              : `ನಮಸ್ಕಾರ ${profile?.fullName ?? "ರೈತರೇ"}! ನಮ್ಮ ಪರಿಶೀಲಿಸಿದ ಯೋಜನೆಗಳ ಡೇಟಾಬೇಸ್ ಪ್ರಕಾರ ನಿಮಗೆ ${matches.length} ಯೋಜನೆಗಳನ್ನು ಪರಿಶೀಲಿಸಲಾಗಿದೆ. ಪ್ರಮುಖ ಹೊಂದಾಣಿಕೆ: "${topScheme?.schemeVersion.titleKn}" — ಸ್ಥಿತಿ: ${topScheme?.evaluation.status}. ಅಧಿಕೃತ ಮೂಲ: ${topScheme?.schemeVersion.sourceUrl} (ಪರಿಶೀಲಿಸಿದ ದಿನಾಂಕ: ${topScheme?.schemeVersion.sourceLastVerifiedAt?.slice(0, 10) ?? "ಪರಿಶೀಲಿಸಲಾಗಿಲ್ಲ"}).${staleWarningKn}`
+          : params.language === "hi"
+            ? pendingConfirmation
+              ? `${pendingConfirmation.summaryEn} कृपया सहेजने से पहले नीचे 'पुष्टि करें' बटन दबाएं।`
+              : matches.length === 0
+                ? `नमस्कार ${profile?.fullName ?? "किसान मित्र"}! वर्तमान में कोई सत्यापित योजना रिकॉर्ड उपलब्ध नहीं है।`
+                : `नमस्कार ${profile?.fullName ?? "किसान मित्र"}! हमारे सत्यापित योजना डेटाबेस के अनुसार आपकी प्रोफ़ाइल के लिए ${matches.length} योजनाओं का मूल्यांकन किया गया है। प्रमुख मिलान: "${topScheme?.schemeVersion.titleEn}" (${topScheme?.evaluation.status})। आधिकारिक स्रोत: ${topScheme?.schemeVersion.sourceUrl} (सत्यापित तिथि: ${topScheme?.schemeVersion.sourceLastVerifiedAt?.slice(0, 10) ?? "असत्यापित"})।${staleWarningHi}`
+            : pendingConfirmation
+              ? `${pendingConfirmation.summaryEn} Please click 'Confirm & Save' below before I write this change.`
+              : matches.length === 0
+                ? `Hello ${profile?.fullName ?? "Farmer"}! No published scheme records are currently loaded.`
+                : `Hello ${profile?.fullName ?? "Farmer"}! Based on our verified scheme records, ${matches.length} schemes were evaluated for your profile. Top match: "${topScheme?.schemeVersion.titleEn}" (${topScheme?.evaluation.status}). Source: ${topScheme?.schemeVersion.sourceUrl} (Verified: ${topScheme?.schemeVersion.sourceLastVerifiedAt?.slice(0, 10) ?? "Not verified"}). Note: Unverified deadlines or statuses are never guessed.${staleWarningEn}`;
+    }
 
     this.appendAudit({
       actorId,

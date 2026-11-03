@@ -802,6 +802,20 @@
         "revokedAt": null,
         "createdAt": "2026-11-03T03:25:00.493Z"
       }
+    ],
+    [
+      "01a1a01b-8753-7a95-9666-ddbcc61410d4",
+      {
+        "id": "01a1a01b-8753-7a95-9666-ddbcc61410d4",
+        "userId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+        "tokenFamilyId": "01a1a01b-8752-7080-8451-436ea6135094",
+        "refreshTokenHash": "42e44660eeaadc489d1528e198d77dd7a49acfa5a9f935dff7b49f7343e20899",
+        "userAgent": "AgroDemoBootstrap/1.0",
+        "ipAddress": "127.0.0.1",
+        "expiresAt": "2026-11-10T06:32:01.107Z",
+        "revokedAt": null,
+        "createdAt": "2026-11-03T06:32:01.107Z"
+      }
     ]
   ],
   "mfaSecrets": [],
@@ -1550,6 +1564,47 @@
       "metadata": {},
       "ipAddress": "127.0.0.1",
       "createdAt": "2026-11-03T03:25:00.493Z"
+    },
+    {
+      "id": "01a1a01b-8753-77a1-9676-3b422983707a",
+      "actorId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "actorRole": "FARMER",
+      "action": "SESSION_ISSUED",
+      "targetType": "SESSION",
+      "targetId": "01a1a01b-8753-7a95-9666-ddbcc61410d4",
+      "metadata": {},
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-03T06:32:01.107Z"
+    },
+    {
+      "id": "01a1a01b-8eba-743b-8422-3b8518e121ae",
+      "actorId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "actorRole": "FARMER",
+      "action": "AGRO_GPT_QUERY_GROUNDED",
+      "targetType": "AI_ASSISTANT",
+      "targetId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "metadata": {
+        "inputMode": "TEXT",
+        "language": "en",
+        "hasPendingConfirmation": false
+      },
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-03T06:32:03.002Z"
+    },
+    {
+      "id": "01a1a01b-92ac-7667-ba22-606c1854034c",
+      "actorId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "actorRole": "FARMER",
+      "action": "AGRO_GPT_QUERY_GROUNDED",
+      "targetType": "AI_ASSISTANT",
+      "targetId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "metadata": {
+        "inputMode": "TEXT",
+        "language": "kn",
+        "hasPendingConfirmation": false
+      },
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-03T06:32:04.012Z"
     }
   ],
   "plots": [
@@ -1853,7 +1908,474 @@
       }
     ]
   ],
-  "ruleEvaluations": [],
+  "ruleEvaluations": [
+    {
+      "id": "01a1a01b-8762-7ec4-a09b-a21973e1b686",
+      "farmerId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "schemeVersionId": "demo-scheme-v1-drip-irrigation",
+      "factsSnapshot": {
+        "state": "Karnataka",
+        "districtCode": "KA-MYS",
+        "talukCode": "KA-MYS-HDK",
+        "villageCode": "KA-MYS-HDK-001",
+        "farmerCategory": "SMALL",
+        "hasKccCard": true,
+        "livestockTypes": [
+          "DAIRY"
+        ],
+        "plotCount": 1,
+        "totalLandHectares": 1.0117,
+        "ownershipTypes": [
+          "OWNER"
+        ],
+        "irrigationTypes": [
+          "BOREWELL"
+        ],
+        "crops": [
+          "RAGI"
+        ],
+        "seasons": [
+          "KHARIF"
+        ]
+      },
+      "evaluation": {
+        "status": "POTENTIALLY_ELIGIBLE",
+        "passedRules": [
+          {
+            "ruleId": "drip-r1",
+            "fact": "state",
+            "op": "eq",
+            "expectedValue": "Karnataka",
+            "actualValue": "Karnataka",
+            "descriptionEn": "Resides in Karnataka",
+            "descriptionKn": "ಕರ್ನಾಟಕದ ನಿವಾಸಿಯಾಗಿರಬೇಕು",
+            "requiresOfficialVerification": false,
+            "outcome": "PASSED"
+          },
+          {
+            "ruleId": "drip-r2",
+            "fact": "ownershipTypes",
+            "op": "in",
+            "expectedValue": [
+              "OWNER",
+              "JOINT_FAMILY"
+            ],
+            "actualValue": [
+              "OWNER"
+            ],
+            "descriptionEn": "Holds land as Owner or Joint Family",
+            "descriptionKn": "ಸ್ವಂತ ಅಥವಾ ಅವಿಭಕ್ತ ಕುಟುಂಬದ ಜಮೀನು ಹೊಂದಿರಬೇಕು",
+            "requiresOfficialVerification": true,
+            "outcome": "PASSED"
+          },
+          {
+            "ruleId": "drip-r3",
+            "fact": "totalLandHectares",
+            "op": "between",
+            "expectedValue": [
+              0.2,
+              5
+            ],
+            "actualValue": 1.0117,
+            "descriptionEn": "Total cultivable land between 0.2 ha and 5.0 ha",
+            "descriptionKn": "ಒಟ್ಟು ಕೃಷಿ ಭೂಮಿ 0.2 ರಿಂದ 5.0 ಹೆಕ್ಟೇರ್ ಒಳಗಿರಬೇಕು",
+            "requiresOfficialVerification": false,
+            "outcome": "PASSED"
+          }
+        ],
+        "failedRules": [],
+        "missingFacts": [],
+        "relevanceScore": 100,
+        "evaluatedAtIso": "2026-11-03T06:32:01.121Z"
+      },
+      "createdAt": "2026-11-03T06:32:01.121Z"
+    },
+    {
+      "id": "01a1a01b-8762-7993-b54d-d734b55fe9ba",
+      "farmerId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "schemeVersionId": "demo-scheme-v1-crop-insurance",
+      "factsSnapshot": {
+        "state": "Karnataka",
+        "districtCode": "KA-MYS",
+        "talukCode": "KA-MYS-HDK",
+        "villageCode": "KA-MYS-HDK-001",
+        "farmerCategory": "SMALL",
+        "hasKccCard": true,
+        "livestockTypes": [
+          "DAIRY"
+        ],
+        "plotCount": 1,
+        "totalLandHectares": 1.0117,
+        "ownershipTypes": [
+          "OWNER"
+        ],
+        "irrigationTypes": [
+          "BOREWELL"
+        ],
+        "crops": [
+          "RAGI"
+        ],
+        "seasons": [
+          "KHARIF"
+        ]
+      },
+      "evaluation": {
+        "status": "LIKELY_ELIGIBLE",
+        "passedRules": [
+          {
+            "ruleId": "ins-r1",
+            "fact": "state",
+            "op": "eq",
+            "expectedValue": "Karnataka",
+            "actualValue": "Karnataka",
+            "descriptionEn": "Plot located in Karnataka",
+            "descriptionKn": "ಜಮೀನು ಕರ್ನಾಟಕದಲ್ಲಿರಬೇಕು",
+            "requiresOfficialVerification": false,
+            "outcome": "PASSED"
+          },
+          {
+            "ruleId": "ins-r2",
+            "fact": "crops",
+            "op": "in",
+            "expectedValue": [
+              "PADDY",
+              "RAGI",
+              "TUR",
+              "MAIZE",
+              "COTTON"
+            ],
+            "actualValue": [
+              "RAGI"
+            ],
+            "descriptionEn": "Grows a notified seasonal crop (Paddy, Ragi, Tur, Maize, Cotton)",
+            "descriptionKn": "ಅಧಿಸೂಚಿತ ಬೆಳೆ (ಭತ್ತ, ರಾಗಿ, ತೊಗರಿ, ಮೆಕ್ಕೆಜೋಳ, ಹತ್ತಿ) ಬೆಳೆಯುತ್ತಿರಬೇಕು",
+            "requiresOfficialVerification": false,
+            "outcome": "PASSED"
+          },
+          {
+            "ruleId": "ins-r3",
+            "fact": "plotCount",
+            "op": "gte",
+            "expectedValue": 1,
+            "actualValue": 1,
+            "descriptionEn": "At least 1 plot registered",
+            "descriptionKn": "ಕನಿಷ್ಠ 1 ಜಮೀನು ತಾಕು ನೋಂದಾಯಿಸಿರಬೇಕು",
+            "requiresOfficialVerification": false,
+            "outcome": "PASSED"
+          }
+        ],
+        "failedRules": [],
+        "missingFacts": [],
+        "relevanceScore": 100,
+        "evaluatedAtIso": "2026-11-03T06:32:01.122Z"
+      },
+      "createdAt": "2026-11-03T06:32:01.122Z"
+    },
+    {
+      "id": "01a1a01b-8762-70cb-aba1-0166aff34a0c",
+      "farmerId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "schemeVersionId": "demo-scheme-v1-allied-dairy",
+      "factsSnapshot": {
+        "state": "Karnataka",
+        "districtCode": "KA-MYS",
+        "talukCode": "KA-MYS-HDK",
+        "villageCode": "KA-MYS-HDK-001",
+        "farmerCategory": "SMALL",
+        "hasKccCard": true,
+        "livestockTypes": [
+          "DAIRY"
+        ],
+        "plotCount": 1,
+        "totalLandHectares": 1.0117,
+        "ownershipTypes": [
+          "OWNER"
+        ],
+        "irrigationTypes": [
+          "BOREWELL"
+        ],
+        "crops": [
+          "RAGI"
+        ],
+        "seasons": [
+          "KHARIF"
+        ]
+      },
+      "evaluation": {
+        "status": "LIKELY_ELIGIBLE",
+        "passedRules": [
+          {
+            "ruleId": "allied-r1",
+            "fact": "farmerCategory",
+            "op": "in",
+            "expectedValue": [
+              "MARGINAL",
+              "SMALL"
+            ],
+            "actualValue": "SMALL",
+            "descriptionEn": "Farmer category is Marginal or Small",
+            "descriptionKn": "ಸಣ್ಣ ಅಥವಾ ಅತಿ ಸಣ್ಣ ರೈತ ವರ್ಗಕ್ಕೆ ಸೇರಿರಬೇಕು",
+            "requiresOfficialVerification": false,
+            "outcome": "PASSED"
+          },
+          {
+            "ruleId": "allied-r2",
+            "fact": "livestockTypes",
+            "op": "in",
+            "expectedValue": [
+              "DAIRY",
+              "SERICULTURE",
+              "GOAT_SHEEP"
+            ],
+            "actualValue": [
+              "DAIRY"
+            ],
+            "descriptionEn": "Engaged in Dairy, Sericulture, or Goat/Sheep rearing",
+            "descriptionKn": "ಹೈನುಗಾರಿಕೆ, ರೇಷ್ಮೆ ಅಥವಾ ಕುರಿ/ಮೇಕೆ ಸಾಕಾಣಿಕೆ ಹೊಂದಿರಬೇಕು",
+            "requiresOfficialVerification": false,
+            "outcome": "PASSED"
+          }
+        ],
+        "failedRules": [],
+        "missingFacts": [],
+        "relevanceScore": 100,
+        "evaluatedAtIso": "2026-11-03T06:32:01.122Z"
+      },
+      "createdAt": "2026-11-03T06:32:01.122Z"
+    },
+    {
+      "id": "01a1a01b-8ebf-73c3-8402-6fb53c932390",
+      "farmerId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "schemeVersionId": "demo-scheme-v1-drip-irrigation",
+      "factsSnapshot": {
+        "state": "Karnataka",
+        "districtCode": "KA-MYS",
+        "talukCode": "KA-MYS-HDK",
+        "villageCode": "KA-MYS-HDK-001",
+        "farmerCategory": "SMALL",
+        "hasKccCard": true,
+        "livestockTypes": [
+          "DAIRY"
+        ],
+        "plotCount": 1,
+        "totalLandHectares": 1.0117,
+        "ownershipTypes": [
+          "OWNER"
+        ],
+        "irrigationTypes": [
+          "BOREWELL"
+        ],
+        "crops": [
+          "RAGI"
+        ],
+        "seasons": [
+          "KHARIF"
+        ]
+      },
+      "evaluation": {
+        "status": "POTENTIALLY_ELIGIBLE",
+        "passedRules": [
+          {
+            "ruleId": "drip-r1",
+            "fact": "state",
+            "op": "eq",
+            "expectedValue": "Karnataka",
+            "actualValue": "Karnataka",
+            "descriptionEn": "Resides in Karnataka",
+            "descriptionKn": "ಕರ್ನಾಟಕದ ನಿವಾಸಿಯಾಗಿರಬೇಕು",
+            "requiresOfficialVerification": false,
+            "outcome": "PASSED"
+          },
+          {
+            "ruleId": "drip-r2",
+            "fact": "ownershipTypes",
+            "op": "in",
+            "expectedValue": [
+              "OWNER",
+              "JOINT_FAMILY"
+            ],
+            "actualValue": [
+              "OWNER"
+            ],
+            "descriptionEn": "Holds land as Owner or Joint Family",
+            "descriptionKn": "ಸ್ವಂತ ಅಥವಾ ಅವಿಭಕ್ತ ಕುಟುಂಬದ ಜಮೀನು ಹೊಂದಿರಬೇಕು",
+            "requiresOfficialVerification": true,
+            "outcome": "PASSED"
+          },
+          {
+            "ruleId": "drip-r3",
+            "fact": "totalLandHectares",
+            "op": "between",
+            "expectedValue": [
+              0.2,
+              5
+            ],
+            "actualValue": 1.0117,
+            "descriptionEn": "Total cultivable land between 0.2 ha and 5.0 ha",
+            "descriptionKn": "ಒಟ್ಟು ಕೃಷಿ ಭೂಮಿ 0.2 ರಿಂದ 5.0 ಹೆಕ್ಟೇರ್ ಒಳಗಿರಬೇಕು",
+            "requiresOfficialVerification": false,
+            "outcome": "PASSED"
+          }
+        ],
+        "failedRules": [],
+        "missingFacts": [],
+        "relevanceScore": 100,
+        "evaluatedAtIso": "2026-11-03T06:32:03.007Z"
+      },
+      "createdAt": "2026-11-03T06:32:03.007Z"
+    },
+    {
+      "id": "01a1a01b-8ebf-704b-ae3f-c40c1649b4d2",
+      "farmerId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "schemeVersionId": "demo-scheme-v1-crop-insurance",
+      "factsSnapshot": {
+        "state": "Karnataka",
+        "districtCode": "KA-MYS",
+        "talukCode": "KA-MYS-HDK",
+        "villageCode": "KA-MYS-HDK-001",
+        "farmerCategory": "SMALL",
+        "hasKccCard": true,
+        "livestockTypes": [
+          "DAIRY"
+        ],
+        "plotCount": 1,
+        "totalLandHectares": 1.0117,
+        "ownershipTypes": [
+          "OWNER"
+        ],
+        "irrigationTypes": [
+          "BOREWELL"
+        ],
+        "crops": [
+          "RAGI"
+        ],
+        "seasons": [
+          "KHARIF"
+        ]
+      },
+      "evaluation": {
+        "status": "LIKELY_ELIGIBLE",
+        "passedRules": [
+          {
+            "ruleId": "ins-r1",
+            "fact": "state",
+            "op": "eq",
+            "expectedValue": "Karnataka",
+            "actualValue": "Karnataka",
+            "descriptionEn": "Plot located in Karnataka",
+            "descriptionKn": "ಜಮೀನು ಕರ್ನಾಟಕದಲ್ಲಿರಬೇಕು",
+            "requiresOfficialVerification": false,
+            "outcome": "PASSED"
+          },
+          {
+            "ruleId": "ins-r2",
+            "fact": "crops",
+            "op": "in",
+            "expectedValue": [
+              "PADDY",
+              "RAGI",
+              "TUR",
+              "MAIZE",
+              "COTTON"
+            ],
+            "actualValue": [
+              "RAGI"
+            ],
+            "descriptionEn": "Grows a notified seasonal crop (Paddy, Ragi, Tur, Maize, Cotton)",
+            "descriptionKn": "ಅಧಿಸೂಚಿತ ಬೆಳೆ (ಭತ್ತ, ರಾಗಿ, ತೊಗರಿ, ಮೆಕ್ಕೆಜೋಳ, ಹತ್ತಿ) ಬೆಳೆಯುತ್ತಿರಬೇಕು",
+            "requiresOfficialVerification": false,
+            "outcome": "PASSED"
+          },
+          {
+            "ruleId": "ins-r3",
+            "fact": "plotCount",
+            "op": "gte",
+            "expectedValue": 1,
+            "actualValue": 1,
+            "descriptionEn": "At least 1 plot registered",
+            "descriptionKn": "ಕನಿಷ್ಠ 1 ಜಮೀನು ತಾಕು ನೋಂದಾಯಿಸಿರಬೇಕು",
+            "requiresOfficialVerification": false,
+            "outcome": "PASSED"
+          }
+        ],
+        "failedRules": [],
+        "missingFacts": [],
+        "relevanceScore": 100,
+        "evaluatedAtIso": "2026-11-03T06:32:03.007Z"
+      },
+      "createdAt": "2026-11-03T06:32:03.007Z"
+    },
+    {
+      "id": "01a1a01b-8ebf-7956-9581-c209e86a330e",
+      "farmerId": "01a19ebf-dedb-79d8-9c70-5d02485fdcf0",
+      "schemeVersionId": "demo-scheme-v1-allied-dairy",
+      "factsSnapshot": {
+        "state": "Karnataka",
+        "districtCode": "KA-MYS",
+        "talukCode": "KA-MYS-HDK",
+        "villageCode": "KA-MYS-HDK-001",
+        "farmerCategory": "SMALL",
+        "hasKccCard": true,
+        "livestockTypes": [
+          "DAIRY"
+        ],
+        "plotCount": 1,
+        "totalLandHectares": 1.0117,
+        "ownershipTypes": [
+          "OWNER"
+        ],
+        "irrigationTypes": [
+          "BOREWELL"
+        ],
+        "crops": [
+          "RAGI"
+        ],
+        "seasons": [
+          "KHARIF"
+        ]
+      },
+      "evaluation": {
+        "status": "LIKELY_ELIGIBLE",
+        "passedRules": [
+          {
+            "ruleId": "allied-r1",
+            "fact": "farmerCategory",
+            "op": "in",
+            "expectedValue": [
+              "MARGINAL",
+              "SMALL"
+            ],
+            "actualValue": "SMALL",
+            "descriptionEn": "Farmer category is Marginal or Small",
+            "descriptionKn": "ಸಣ್ಣ ಅಥವಾ ಅತಿ ಸಣ್ಣ ರೈತ ವರ್ಗಕ್ಕೆ ಸೇರಿರಬೇಕು",
+            "requiresOfficialVerification": false,
+            "outcome": "PASSED"
+          },
+          {
+            "ruleId": "allied-r2",
+            "fact": "livestockTypes",
+            "op": "in",
+            "expectedValue": [
+              "DAIRY",
+              "SERICULTURE",
+              "GOAT_SHEEP"
+            ],
+            "actualValue": [
+              "DAIRY"
+            ],
+            "descriptionEn": "Engaged in Dairy, Sericulture, or Goat/Sheep rearing",
+            "descriptionKn": "ಹೈನುಗಾರಿಕೆ, ರೇಷ್ಮೆ ಅಥವಾ ಕುರಿ/ಮೇಕೆ ಸಾಕಾಣಿಕೆ ಹೊಂದಿರಬೇಕು",
+            "requiresOfficialVerification": false,
+            "outcome": "PASSED"
+          }
+        ],
+        "failedRules": [],
+        "missingFacts": [],
+        "relevanceScore": 100,
+        "evaluatedAtIso": "2026-11-03T06:32:03.007Z"
+      },
+      "createdAt": "2026-11-03T06:32:03.007Z"
+    }
+  ],
   "claims": [],
   "receipts": [],
   "scamReports": [],
