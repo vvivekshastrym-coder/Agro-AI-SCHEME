@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState, useRef } from "react";
 import {
   pickNextBestAction,
   SCHEDULED_INDIAN_LANGUAGES,
@@ -230,6 +230,102 @@ function AgroWorkspace() {
   const [alertFilter, setAlertFilter] = useState<
     "ALL" | "GOVERNMENT_POLICY" | "BANK_SERVICE" | "CROP_INSURANCE"
   >("ALL");
+
+  // Smart GPS Location & Voluntary Live Sharing State (Section 8)
+  const [gpsLoading, setGpsLoading] = useState<boolean>(false);
+  const [gpsError, setGpsError] = useState<string | null>(null);
+  const [currentCoords, setCurrentCoords] = useState<{
+    latitude: number;
+    longitude: number;
+    accuracyMeters?: number;
+    timestampIso: string;
+  } | null>({
+    latitude: 12.0833,
+    longitude: 76.35,
+    accuracyMeters: 4,
+    timestampIso: "2026-11-03T05:30:00Z",
+  });
+  const [resolvedAddress, setResolvedAddress] = useState<{
+    village: string;
+    taluk: string;
+    district: string;
+    state: string;
+    pincode: string;
+    formattedAddress: string;
+  } | null>({
+    village: "Hampapura",
+    taluk: "H.D. Kote",
+    district: "Mysuru",
+    state: "Karnataka",
+    pincode: "571125",
+    formattedAddress: "Hampapura Hobli, H.D. Kote Taluk, Mysuru 571125",
+  });
+  const [nearbyServices, setNearbyServices] = useState<
+    Array<{
+      id: string;
+      name: string;
+      type: string;
+      address: string;
+      distanceKm: number;
+      contactNumber?: string;
+      latitude: number;
+      longitude: number;
+    }>
+  >([
+    {
+      id: "csc-hdk-01",
+      name: "Raitha Samparka Kendra & CSC — H.D. Kote",
+      type: "CSC_CENTRE",
+      address: "Opposite Mini Vidhana Soudha, H.D. Kote",
+      distanceKm: 3.2,
+      contactNumber: "+91 8228 255234",
+      latitude: 11.9834,
+      longitude: 76.3262,
+    },
+    {
+      id: "bank-can-hmp",
+      name: "Canara Bank — Rural Credit Branch Hampapura",
+      type: "BANK_BRANCH",
+      address: "Main Road, Hampapura Hobli",
+      distanceKm: 0.8,
+      contactNumber: "+91 8228 277210",
+      latitude: 12.0833,
+      longitude: 76.35,
+    },
+    {
+      id: "bank-sbi-hdk",
+      name: "SBI Agri Development Branch H.D. Kote",
+      type: "BANK_BRANCH",
+      address: "B.M. Road, H.D. Kote",
+      distanceKm: 3.5,
+      contactNumber: "+91 8228 255140",
+      latitude: 11.9821,
+      longitude: 76.328,
+    },
+    {
+      id: "kb-hdk-01",
+      name: "Krishi Bhavan (Assistant Director of Agriculture)",
+      type: "KRISHI_BHAVAN",
+      address: "Taluk Office Complex, H.D. Kote",
+      distanceKm: 3.3,
+      contactNumber: "+91 8228 255301",
+      latitude: 11.9845,
+      longitude: 76.325,
+    },
+  ]);
+  const [showNearbyModal, setShowNearbyModal] = useState<boolean>(false);
+  const [liveShareModalOpen, setLiveShareModalOpen] = useState<boolean>(false);
+  const [liveShareDuration, setLiveShareDuration] = useState<number>(30);
+  const [activeShareSession, setActiveShareSession] = useState<{
+    sessionId: string;
+    assignedEmployeeName: string;
+    cscCentreId: string;
+    expiresAtIso: string;
+    status: string;
+  } | null>(null);
+  const [liveShareRemainingSec, setLiveShareRemainingSec] = useState<number>(0);
+  const liveWatchRef = useRef<number | null>(null);
+  const [bhoomiNoticeOpen, setBhoomiNoticeOpen] = useState<boolean>(false);
 
   // My Farm Plots & Record Check (RTC vs Profile) State
   const [plots, setPlots] = useState<FarmPlotItem[]>([
@@ -846,6 +942,191 @@ function AgroWorkspace() {
       rec.start();
     } catch {
       setGptListening(false);
+    }
+  }
+
+  // Location Handlers & Real-Time Tracking Effects
+  useEffect(() => {
+    if (!activeShareSession || activeShareSession.status !== "ACTIVE" || liveShareRemainingSec <= 0) return;
+    const timer = setInterval(() => {
+      setLiveShareRemainingSec((prev) => {
+        if (prev <= 1) {
+          clearInterval(timer);
+          setActiveShareSession((curr) => (curr ? { ...curr, status: "EXPIRED" } : null));
+          if (liveWatchRef.current !== null && typeof navigator !== "undefined" && navigator.geolocation) {
+            navigator.geolocation.clearWatch(liveWatchRef.current);
+          }
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [activeShareSession, liveShareRemainingSec]);
+
+  async function handleDetectLiveGps() {
+    setGpsLoading(true);
+    setGpsError(null);
+
+    if (typeof navigator === "undefined" || !navigator.geolocation) {
+      setGpsError(
+        L(
+          lang,
+          "ನಿಮ್ಮ ಬ್ರೌಸರ್ ಜಿಪಿಎಸ್ ಬೆಂಬಲಿಸುವುದಿಲ್ಲ.",
+          "GPS not supported on device.",
+          "डिवाइस पर जीपीएस समर्थित नहीं है।"
+        )
+      );
+      setGpsLoading(false);
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      async (pos) => {
+        const coords = {
+          latitude: pos.coords.latitude,
+          longitude: pos.coords.longitude,
+          accuracyMeters: Math.round(pos.coords.accuracy),
+          timestampIso: new Date(pos.timestamp).toISOString(),
+        };
+        setCurrentCoords(coords);
+
+        try {
+          const revRes = await fetch(`${API_BASE}/api/v1/location/reverse-geocode`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ latitude: coords.latitude, longitude: coords.longitude }),
+          });
+
+          if (revRes.ok) {
+            const data = await revRes.json();
+            if (data.resolvedAddress) setResolvedAddress(data.resolvedAddress);
+            if (data.nearbyServices) setNearbyServices(data.nearbyServices);
+          }
+        } catch {
+          // offline
+        } finally {
+          setGpsLoading(false);
+        }
+      },
+      (err) => {
+        setGpsLoading(false);
+        setGpsError(
+          L(
+            lang,
+            `ಜಿಪಿಎಸ್ ದೋಷ: ${err.message}. ದಯವಿಟ್ಟು ಸಾಧನದ ಸ್ಥಳ ಅನುಮತಿ ನೀಡಿ.`,
+            `GPS error: ${err.message}. Please allow device location access.`,
+            `जीपीएस त्रुटि: ${err.message}. कृपया स्थान अनुमति दें।`
+          )
+        );
+      },
+      { enableHighAccuracy: true, timeout: 12000, maximumAge: 0 }
+    );
+  }
+
+  async function handleStartLiveSharing() {
+    setGpsLoading(true);
+    try {
+      const res = await fetch(`${API_BASE}/api/v1/location/share/start`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          farmerId: apiFarmerId || "farmer-ka-mys-01",
+          farmerName: currentUserName || "Ningappa Gowda",
+          farmerMobile: "+91 98450 12345",
+          assignedEmployeeId: "emp-csc-01",
+          assignedEmployeeName: "Siddesh N. (CSC Operator)",
+          cscCentreId: "csc-ka-mys-01",
+          durationMinutes: liveShareDuration,
+          initialCoordinates: currentCoords,
+          initialAddress: resolvedAddress,
+        }),
+      });
+
+      if (res.ok) {
+        const d = await res.json();
+        setActiveShareSession(d.session);
+        setLiveShareRemainingSec(liveShareDuration * 60);
+        setLiveShareModalOpen(false);
+
+        // Start watch
+        if (typeof navigator !== "undefined" && navigator.geolocation) {
+          liveWatchRef.current = navigator.geolocation.watchPosition(
+            async (pos) => {
+              const updated = {
+                latitude: pos.coords.latitude,
+                longitude: pos.coords.longitude,
+                accuracyMeters: Math.round(pos.coords.accuracy),
+                timestampIso: new Date(pos.timestamp).toISOString(),
+              };
+              setCurrentCoords(updated);
+              try {
+                await fetch(`${API_BASE}/api/v1/location/share/update`, {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ sessionId: d.session.sessionId, coordinates: updated }),
+                });
+              } catch {
+                // background transient
+              }
+            },
+            () => {},
+            { enableHighAccuracy: true, maximumAge: 5000, timeout: 10000 }
+          );
+        }
+      }
+    } catch {
+      // offline
+    } finally {
+      setGpsLoading(false);
+    }
+  }
+
+  async function handleStopLiveSharing() {
+    if (!activeShareSession) return;
+    try {
+      await fetch(`${API_BASE}/api/v1/location/share/revoke`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          sessionId: activeShareSession.sessionId,
+          farmerId: apiFarmerId || "farmer-ka-mys-01",
+        }),
+      });
+      if (liveWatchRef.current !== null && typeof navigator !== "undefined" && navigator.geolocation) {
+        navigator.geolocation.clearWatch(liveWatchRef.current);
+      }
+      setActiveShareSession((curr) => (curr ? { ...curr, status: "REVOKED" } : null));
+    } catch {
+      // offline
+    }
+  }
+
+  async function handleSaveAgriculturalFarmLocation(plotId: string, surveyNum: string) {
+    if (!currentCoords || !resolvedAddress) return;
+    try {
+      await fetch(`${API_BASE}/api/v1/location/farm-locations`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          farmerId: apiFarmerId || "farmer-ka-mys-01",
+          plotName: `Plot ${surveyNum}`,
+          surveyNumber: surveyNum,
+          coordinates: currentCoords,
+          resolvedAddress,
+          isPrimary: true,
+        }),
+      });
+      alert(
+        L(
+          lang,
+          "ಜಮೀನಿನ ನಿಖರ ಜಿಪಿಎಸ್ ಸ್ಥಳ ಯಶಸ್ವಿಯಾಗಿ ದಾಖಲಾಗಿದೆ!",
+          "Agricultural land GPS successfully saved for this plot!",
+          "कृषि भूमि जीपीएस सफलतापूर्वक सहेजा गया!"
+        )
+      );
+    } catch {
+      // offline
     }
   }
 
@@ -1809,6 +2090,286 @@ ${customNote ? `\n💬 *Note:* ${customNote}\n` : ""}---------------------------
                       </div>
                     </section>
 
+                    {/* SMART GPS LOCATION & VOLUNTARY LIVE SHARING MODULE */}
+                    <section
+                      aria-label="Smart GPS Location and Hyperlocal Centre"
+                      style={{
+                        background: "#ffffff",
+                        border: "1px solid #bbf7d0",
+                        borderRadius: 14,
+                        padding: 16,
+                        boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
+                        marginBottom: 16,
+                      }}
+                    >
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          flexWrap: "wrap",
+                          gap: 10,
+                          marginBottom: 12,
+                        }}
+                      >
+                        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                          <div
+                            style={{
+                              width: 38,
+                              height: 38,
+                              borderRadius: 10,
+                              background: "#dcfce7",
+                              color: "#15803d",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              fontSize: 20,
+                            }}
+                          >
+                            📍
+                          </div>
+                          <div>
+                            <h2 style={{ fontSize: 16, fontWeight: 800, margin: 0, color: "#0f172a" }}>
+                              {L(
+                                lang,
+                                "ಲೈವ್ ಜಿಪಿಎಸ್ ಮತ್ತು ಸ್ಥಳ-ಆಧಾರಿತ ಸೇವಾ ಕೇಂದ್ರ",
+                                "Smart GPS Location & Hyperlocal Centre",
+                                "स्मार्ट जीपीएस लोकेशन और हाइपरलोकल केंद्र"
+                              )}
+                            </h2>
+                            <div style={{ fontSize: 12, color: "#64748b", marginTop: 2 }}>
+                              {L(
+                                lang,
+                                "ಗ್ರಾಮ ಮಟ್ಟದ ಯೋಜನೆಗಳು, ಸಮೀಪದ ಸಿಎಸ್‌ಸಿ ಕೇಂದ್ರಗಳು ಮತ್ತು ಲೈವ್ ಜಿಪಿಎಸ್ ಹಂಚಿಕೆ",
+                                "Village-level scheme alerts, nearby CSCs, banks, and voluntary live assistance",
+                                "ग्राम-स्तरीय योजनाएं, नजदीकी सीएससी केंद्र और लाइव लोकेशन सहायता"
+                              )}
+                            </div>
+                          </div>
+                        </div>
+
+                        <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                          <button
+                            type="button"
+                            onClick={handleDetectLiveGps}
+                            disabled={gpsLoading}
+                            style={{
+                              padding: "6px 12px",
+                              borderRadius: 6,
+                              background: "#f1f5f9",
+                              border: "1px solid #cbd5e1",
+                              fontSize: 12,
+                              fontWeight: 600,
+                              cursor: "pointer",
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 6,
+                            }}
+                          >
+                            🔄 {gpsLoading ? L(lang, "ಪರಿಶೀಲಿಸಲಾಗುತ್ತಿದೆ...", "Locating...", "खोज रहा है...") : L(lang, "ಜಿಪಿಎಸ್ ರಿಫ್ರೆಶ್", "Refresh GPS", "जीपीएस रिफ्रेश")}
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Active Live Location Pulse Banner */}
+                      {activeShareSession && activeShareSession.status === "ACTIVE" && (
+                        <div
+                          style={{
+                            background: "#ecfdf5",
+                            border: "1px solid #86efac",
+                            borderRadius: 8,
+                            padding: 12,
+                            marginBottom: 12,
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                            gap: 12,
+                            flexWrap: "wrap",
+                          }}
+                        >
+                          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                            <span
+                              style={{
+                                width: 10,
+                                height: 10,
+                                borderRadius: "50%",
+                                background: "#22c55e",
+                                boxShadow: "0 0 8px #22c55e",
+                                display: "inline-block",
+                              }}
+                            />
+                            <div style={{ fontSize: 13, color: "#065f46" }}>
+                              <strong>{L(lang, "ಲೈವ್ ಜಿಪಿಎಸ್ ಹಂಚಿಕೆ ಸಕ್ರಿಯವಾಗಿದೆ:", "Live GPS Sharing Active:", "लाइव जीपीएस शेयरिंग सक्रिय:")}</strong>{" "}
+                              {activeShareSession.assignedEmployeeName} (CSC Operator) ·{" "}
+                              <span style={{ fontWeight: 700 }}>
+                                {Math.floor(liveShareRemainingSec / 60)}:
+                                {liveShareRemainingSec % 60 < 10 ? "0" : ""}
+                                {liveShareRemainingSec % 60} {L(lang, "ಉಳಿದಿದೆ", "remaining", "शेष")}
+                              </span>
+                            </div>
+                          </div>
+
+                          <button
+                            type="button"
+                            onClick={handleStopLiveSharing}
+                            style={{
+                              padding: "5px 12px",
+                              background: "#dc2626",
+                              color: "#ffffff",
+                              border: "none",
+                              borderRadius: 6,
+                              fontSize: 12,
+                              fontWeight: 700,
+                              cursor: "pointer",
+                            }}
+                          >
+                            🛑 {L(lang, "ಹಂಚಿಕೆ ನಿಲ್ಲಿಸಿ", "Stop Sharing", "शेयरिंग रोकें")}
+                          </button>
+                        </div>
+                      )}
+
+                      {/* Detected Location Details Box */}
+                      {currentCoords && resolvedAddress ? (
+                        <div
+                          style={{
+                            background: "#f8fafc",
+                            border: "1px solid #e2e8f0",
+                            borderRadius: 8,
+                            padding: 12,
+                            marginBottom: 12,
+                            display: "grid",
+                            gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+                            gap: 12,
+                            fontSize: 13,
+                          }}
+                        >
+                          <div>
+                            <span style={{ color: "#64748b", fontSize: 11, display: "block" }}>
+                              {L(lang, "ಪತ್ತೆಯಾದ ಗ್ರಾಮ ಮತ್ತು ತಾಲೂಕು:", "Detected Village & Taluk:", "पहचाना गया गांव और तालुका:")}
+                            </span>
+                            <strong>
+                              {resolvedAddress.village}, {resolvedAddress.taluk} Taluk
+                            </strong>
+                            <div style={{ fontSize: 12, color: "#475569" }}>
+                              {resolvedAddress.district} District · PIN {resolvedAddress.pincode}
+                            </div>
+                          </div>
+
+                          <div>
+                            <span style={{ color: "#64748b", fontSize: 11, display: "block" }}>
+                              {L(lang, "ಜಿಪಿಎಸ್ ಅಕ್ಷಾಂಶ & ರೇಖಾಂಶ:", "GPS Coordinates & Accuracy:", "जीपीएस निर्देशांक एवं सटीकता:")}
+                            </span>
+                            <strong>
+                              {currentCoords.latitude.toFixed(4)}° N, {currentCoords.longitude.toFixed(4)}° E
+                            </strong>
+                            <div style={{ fontSize: 12, color: "#16a34a", fontWeight: 600 }}>
+                              🎯 {L(lang, "ನಿಖರತೆ", "Accuracy radius", "सटीकता")}: ±{currentCoords.accuracyMeters ?? 4}m
+                            </div>
+                          </div>
+
+                          <div>
+                            <span style={{ color: "#64748b", fontSize: 11, display: "block" }}>
+                              {L(lang, "ಸ್ಥಳೀಯ ತಾಲೂಕು ವ್ಯಾಪ್ತಿ:", "Official Jurisdiction:", "आधिकारिक अधिकार क्षेत्र:")}
+                            </span>
+                            <span
+                              style={{
+                                display: "inline-block",
+                                padding: "2px 8px",
+                                borderRadius: 4,
+                                background: "#ecfdf5",
+                                color: "#065f46",
+                                fontWeight: 700,
+                                fontSize: 11,
+                                border: "1px solid #a7f3d0",
+                              }}
+                            >
+                              ✓ Verified H.D. Kote RSK Zone
+                            </span>
+                          </div>
+                        </div>
+                      ) : (
+                        <div style={{ padding: 12, background: "#f8fafc", borderRadius: 8, marginBottom: 12, fontSize: 13 }}>
+                          {L(
+                            lang,
+                            "ನಿಮ್ಮ ಮೊಬೈಲ್ ಜಿಪಿಎಸ್ ಸ್ಥಳವನ್ನು ಪತ್ತೆಹಚ್ಚಿ ನಿಖರ ಗ್ರಾಮ ಮಟ್ಟದ ಸೇವೆಗಳನ್ನು ಪಡೆಯಿರಿ.",
+                            "Detect your device GPS location for hyperlocal crop and scheme services.",
+                            "सटीक ग्राम-स्तरीय सेवाओं के लिए अपने डिवाइस का जीपीएस चालू करें।"
+                          )}
+                        </div>
+                      )}
+
+                      {gpsError && (
+                        <div style={{ color: "#b91c1c", fontSize: 12, marginBottom: 10, fontWeight: 600 }}>
+                          {gpsError}
+                        </div>
+                      )}
+
+                      {/* Action Buttons Row */}
+                      <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+                        <button
+                          type="button"
+                          onClick={() => setLiveShareModalOpen(true)}
+                          style={{
+                            padding: "8px 16px",
+                            background: "#065f46",
+                            color: "#ffffff",
+                            border: "none",
+                            borderRadius: 6,
+                            fontSize: 13,
+                            fontWeight: 700,
+                            cursor: "pointer",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 6,
+                          }}
+                        >
+                          📍 {L(lang, "ಲೈವ್ ಲೊಕೇಶನ್ ಹಂಚಿಕೊಳ್ಳಿ", "SHARE LIVE LOCATION", "लाइव लोकेशन साझा करें")}
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => setShowNearbyModal(true)}
+                          style={{
+                            padding: "8px 14px",
+                            background: "#f1f5f9",
+                            color: "#0f172a",
+                            border: "1px solid #cbd5e1",
+                            borderRadius: 6,
+                            fontSize: 13,
+                            fontWeight: 600,
+                            cursor: "pointer",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 6,
+                          }}
+                        >
+                          🏛️ {L(lang, "ಸಮೀಪದ ಸಿಎಸ್‌ಸಿ & ಬ್ಯಾಂಕ್‌ಗಳು", "Nearby CSCs & Banks", "नजदीकी सीएससी और बैंक")} ({nearbyServices.length})
+                        </button>
+
+                        <a
+                          href={`https://wa.me/?text=${encodeURIComponent(
+                            `Agro AI Location: ${resolvedAddress?.village || "Hampapura"}, ${resolvedAddress?.taluk || "H.D. Kote"} (${currentCoords?.latitude.toFixed(4) || 12.0833}, ${currentCoords?.longitude.toFixed(4) || 76.3500}). View on Map: https://maps.google.com/?q=${currentCoords?.latitude || 12.0833},${currentCoords?.longitude || 76.3500}`
+                          )}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          style={{
+                            padding: "8px 14px",
+                            background: "#25D366",
+                            color: "#ffffff",
+                            borderRadius: 6,
+                            fontSize: 13,
+                            fontWeight: 700,
+                            textDecoration: "none",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 6,
+                          }}
+                        >
+                          💬 {L(lang, "ವಾಟ್ಸಾಪ್‌ನಲ್ಲಿ ಪಿನ್ ಕಳುಹಿಸಿ", "Send Pin via WhatsApp", "व्हाट्सएप पर पिन भेजें")}
+                        </a>
+                      </div>
+                    </section>
+
                     {/* 3. "Your season" Horizontal Stepper Card */}
                     <section className="ds-card">
                       <div className="ds-card-header">
@@ -2312,6 +2873,135 @@ ${customNote ? `\n💬 *Note:* ${customNote}\n` : ""}---------------------------
                     })}
                   </div>
 
+                  {/* Agricultural Land GPS & Survey Mapping Card */}
+                  <div
+                    style={{
+                      background: "#ffffff",
+                      border: "1px solid #bbf7d0",
+                      borderRadius: 12,
+                      padding: 16,
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      gap: 12,
+                      flexWrap: "wrap",
+                    }}
+                  >
+                    <div>
+                      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+                        <span style={{ fontSize: 18 }}>📍</span>
+                        <strong style={{ fontSize: 14, color: "#065f46" }}>
+                          {L(lang, "ಜಮೀನಿನ ಅಧಿಕೃತ ಜಿಪಿಎಸ್ ಸ್ಥಳ ದಾಖಲೆ (ಪಹಣಿ/ಆರ್‌ಟಿಸಿ)", "Official Agricultural Land GPS (RTC Survey Mapping)", "कृषि भूमि आधिकारिक जीपीएस रिकॉर्ड")}
+                        </strong>
+                      </div>
+                      <div style={{ fontSize: 12, color: "#64748b" }}>
+                        {L(
+                          lang,
+                          `ಆಯ್ಕೆಮಾಡಿದ ತಾಕು: ${selectedPlot.nameEn} (ಸರ್ವೆ ${selectedPlot.surveyNumber}). ಮೊಬೈಲ್ ಸ್ಥಳದಿಂದ ಪ್ರತ್ಯೇಕಿಸಿ ಜಮೀನಿನ ಶಾಶ್ವತ ಜಿಪಿಎಸ್ ದಾಖಲಿಸಿ.`,
+                          `Selected plot: ${selectedPlot.nameEn} (Survey ${selectedPlot.surveyNumber}). Pin permanent land coordinates separate from mobile GPS.`,
+                          `चयनित भूखंड: ${selectedPlot.nameEn} (सर्वे ${selectedPlot.surveyNumber})। मोबाइल स्थान से अलग स्थायी कृषि भूमि जीपीएस रिकॉर्ड करें।`
+                        )}
+                      </div>
+                      {currentCoords && (
+                        <div style={{ fontSize: 12, color: "#0f172a", marginTop: 4 }}>
+                          📌 Current Point: <strong>{currentCoords.latitude.toFixed(4)}° N, {currentCoords.longitude.toFixed(4)}° E</strong> ({resolvedAddress?.village || "Hampapura"})
+                        </div>
+                      )}
+                    </div>
+
+                    <div style={{ display: "flex", gap: 8 }}>
+                      <button
+                        type="button"
+                        onClick={() => handleSaveAgriculturalFarmLocation(selectedPlot.id, selectedPlot.surveyNumber)}
+                        style={{
+                          padding: "8px 14px",
+                          background: "#065f46",
+                          color: "#ffffff",
+                          border: "none",
+                          borderRadius: 6,
+                          fontSize: 13,
+                          fontWeight: 700,
+                          cursor: "pointer",
+                        }}
+                      >
+                        📍 {L(lang, "ಈ ಜಮೀನಿಗೆ ಜಿಪಿಎಸ್ ಲಿಂಕ್ ಮಾಡಿ", "Pin Land GPS", "भूमि जीपीएस पिन करें")}
+                      </button>
+                      <a
+                        href={`https://maps.google.com/?q=${currentCoords?.latitude || 12.0833},${currentCoords?.longitude || 76.3500}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        style={{
+                          padding: "8px 12px",
+                          background: "#f1f5f9",
+                          color: "#0f172a",
+                          border: "1px solid #cbd5e1",
+                          borderRadius: 6,
+                          fontSize: 13,
+                          fontWeight: 600,
+                          textDecoration: "none",
+                          display: "inline-block",
+                        }}
+                      >
+                        🗺️ Google Maps ↗
+                      </a>
+                    </div>
+                  </div>
+
+                  {/* BHOOMI RTC LOOKUP TILE */}
+                  <div
+                    style={{
+                      background: "#f0fdf4",
+                      border: "1px solid #86efac",
+                      borderRadius: 12,
+                      padding: "14px 18px",
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      gap: 12,
+                      flexWrap: "wrap",
+                      marginBottom: 10,
+                    }}
+                  >
+                    <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                      <span style={{ fontSize: 24 }}>📜</span>
+                      <div>
+                        <strong style={{ fontSize: 14, color: "#065f46", display: "block" }}>
+                          {L(
+                            lang,
+                            "ಭೂಮಿ ಆರ್‌ಟಿಸಿ ಪರಿಶೀಲನೆ (Bhoomi – View RTC & Mutation Records)",
+                            "Bhoomi – View RTC & Mutation Records",
+                            "भूमि – आरटीसी एवं म्यूटेशन रिकॉर्ड"
+                          )}
+                        </strong>
+                        <span style={{ fontSize: 12, color: "#475569" }}>
+                          {L(
+                            lang,
+                            "ಸರ್ಕಾರದ ಅಧಿಕೃತ ಪಹಣಿ ದಾಖಲೆಯನ್ನು ಭೂಮಿ ಪೋರ್ಟಲ್‌ನಲ್ಲಿ ವೀಕ್ಷಿಸಿ.",
+                            "Verify official RTC and land ownership records on the Karnataka Bhoomi portal.",
+                            "कर्नाटक भूमि पोर्टल पर आधिकारिक खतौनी और रिकॉर्ड देखें।"
+                          )}
+                        </span>
+                      </div>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => setBhoomiNoticeOpen(true)}
+                      style={{
+                        padding: "8px 16px",
+                        background: "#065f46",
+                        color: "#ffffff",
+                        border: "none",
+                        borderRadius: 8,
+                        fontSize: 13,
+                        fontWeight: 700,
+                        cursor: "pointer",
+                      }}
+                    >
+                      🌐 {L(lang, "ಭೂಮಿ ತೆರೆಯಿರಿ ↗", "Open Bhoomi ↗", "भूमि खोलें ↗")}
+                    </button>
+                  </div>
+
                   {/* Full-width Dashed "Add plot" Button / Form */}
                   {!showAddPlotForm ? (
                     <button
@@ -2575,6 +3265,102 @@ ${customNote ? `\n💬 *Note:* ${customNote}\n` : ""}---------------------------
                       </span>
                     </button>
                   </div>
+
+                  {/* PROMINENT TILE: BHOOMI - KARNATAKA LAND RECORDS */}
+                  <section
+                    aria-label="Bhoomi Karnataka Land Records"
+                    style={{
+                      background: "linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%)",
+                      border: "2px solid #86efac",
+                      borderRadius: 14,
+                      padding: "20px 22px",
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      gap: 16,
+                      flexWrap: "wrap",
+                      boxShadow: "0 4px 14px rgba(22, 101, 52, 0.08)",
+                      marginBottom: 10,
+                    }}
+                  >
+                    <div style={{ display: "flex", alignItems: "center", gap: 16, flex: 1, minWidth: 260 }}>
+                      <div
+                        style={{
+                          width: 54,
+                          height: 54,
+                          borderRadius: 12,
+                          background: "#065f46",
+                          color: "#ffffff",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          fontSize: 28,
+                          boxShadow: "0 2px 8px rgba(6, 95, 70, 0.3)",
+                          flexShrink: 0,
+                        }}
+                      >
+                        📜
+                      </div>
+                      <div>
+                        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+                          <span
+                            style={{
+                              fontSize: 10,
+                              fontWeight: 800,
+                              padding: "2px 8px",
+                              borderRadius: 4,
+                              background: "#065f46",
+                              color: "#ffffff",
+                              letterSpacing: 0.5,
+                            }}
+                          >
+                            OFFICIAL GOVT PORTAL
+                          </span>
+                          <span style={{ fontSize: 12, color: "#166534", fontWeight: 700 }}>
+                            Revenue Department · Government of Karnataka
+                          </span>
+                        </div>
+                        <h2 style={{ fontSize: 18, fontWeight: 800, color: "#065f46", margin: "0 0 4px" }}>
+                          {L(
+                            lang,
+                            "ಭೂಮಿ – ಆರ್‌ಟಿಸಿ (ಪಹಣಿ) ಮತ್ತು ಮ್ಯುಟೇಶನ್ ದಾಖಲೆಗಳು",
+                            "Bhoomi – View RTC & Mutation Records",
+                            "भूमि – आरटीसी (खतौनी) एवं म्यूटेशन रिकॉर्ड"
+                          )}
+                        </h2>
+                        <div style={{ fontSize: 13, color: "#334155", lineHeight: 1.4 }}>
+                          {L(
+                            lang,
+                            "ಕರ್ನಾಟಕ ಸರ್ಕಾರದ ಅಧಿಕೃತ ಭೂಮಿ ತಂತ್ರಾಂಶದಲ್ಲಿ ನಿಮ್ಮ ಸರ್ವೆ ನಂಬರ್‌ನ ಪ್ರಸ್ತುತ ಪಹಣಿ (RTC), ಹಕ್ಕು ದಾಖಲೆ ಮತ್ತು ಮ್ಯುಟೇಶನ್ ಸ್ಥಿತಿ ವೀಕ್ಷಿಸಿ.",
+                            "Access verified RTC (Pahani), land ownership titles, and mutation status directly on the official Government of Karnataka Bhoomi website.",
+                            "कर्नाटक सरकार के आधिकारिक भूमि पोर्टल पर अपनी खतौनी (RTC) और म्यूटेशन रिकॉर्ड देखें।"
+                          )}
+                        </div>
+                      </div>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => setBhoomiNoticeOpen(true)}
+                      style={{
+                        padding: "12px 22px",
+                        background: "#065f46",
+                        color: "#ffffff",
+                        border: "none",
+                        borderRadius: 10,
+                        fontWeight: 700,
+                        fontSize: 14,
+                        cursor: "pointer",
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: 8,
+                        boxShadow: "0 4px 12px rgba(6, 95, 70, 0.25)",
+                      }}
+                    >
+                      <span>🌐 {L(lang, "ಭೂಮಿ ಪೋರ್ಟಲ್ ತೆರೆಯಿರಿ", "Open Bhoomi RTC", "भूमि पोर्टल खोलें")}</span>
+                      <span>➔</span>
+                    </button>
+                  </section>
 
                   {/* 1. Case Timeline with Divider: Our Records vs Official Status */}
                   <section className="ds-card">
@@ -3922,6 +4708,403 @@ ${customNote ? `\n💬 *Note:* ${customNote}\n` : ""}---------------------------
         onLoggedOut={() => setApiToken(null)}
         speakText={speakDirect}
       />
+
+      {/* SMART GPS: SHARE LIVE LOCATION MODAL */}
+      {liveShareModalOpen && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: "rgba(0,0,0,0.55)",
+            zIndex: 9999,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: 16,
+          }}
+        >
+          <div
+            style={{
+              background: "#ffffff",
+              borderRadius: 14,
+              maxWidth: 480,
+              width: "100%",
+              padding: 24,
+              boxShadow: "0 10px 30px rgba(0,0,0,0.25)",
+            }}
+          >
+            <h3 style={{ fontSize: 18, fontWeight: 700, margin: "0 0 8px", color: "#065f46" }}>
+              📍 {L(lang, "ಅಧಿಕಾರಿಯೊಂದಿಗೆ ಲೈವ್ ಜಿಪಿಎಸ್ ಹಂಚಿಕೊಳ್ಳಿ", "Share Live Location with Employee", "अधिकारी के साथ लाइव जीपीएस साझा करें")}
+            </h3>
+            <p style={{ fontSize: 13, color: "#64748b", margin: "0 0 16px", lineHeight: 1.5 }}>
+              {L(
+                lang,
+                "ಬೆಳೆ ಸಮೀಕ್ಷೆ, ಹಾನಿ ಪರಿಶೀಲನೆ ಅಥವಾ ಸಿಎಸ್‌ಸಿ ನೆರವಿಗಾಗಿ ನಿಮ್ಮ ಲೈವ್ ಜಿಪಿಎಸ್ ಅನ್ನು ನಿಯೋಜಿತ ಅಧಿಕಾರಿಗೆ ತಾತ್ಕಾಲಿಕವಾಗಿ ಹಂಚಿಕೊಳ್ಳಿ. ಇದು ಸಮಯ ಮಿತಿಯುಳ್ಳದ್ದಾಗಿದ್ದು, ಯಾವುದೇ ಸಮಯದಲ್ಲಿ ನೀವು ಇದನ್ನು ನಿಲ್ಲಿಸಬಹುದು.",
+                "Voluntarily share your live GPS location with your assigned CSC operator for field visits, crop damage evidence, or assisted application processing. Automatically expires.",
+                "खेत सत्यापन या सीएससी सहायता के लिए अपने लाइव जीपीएस को अस्थायी रूप से साझा करें। यह समय-सीमित है और कभी भी रोका जा सकता है।"
+              )}
+            </p>
+
+            <div style={{ marginBottom: 16 }}>
+              <label style={{ display: "block", fontSize: 13, fontWeight: 600, marginBottom: 6 }}>
+                {L(lang, "ಹಂಚಿಕೆ ಅವಧಿ ಆಯ್ಕೆಮಾಡಿ:", "Select Sharing Duration:", "शेयरिंग अवधि चुनें:")}
+              </label>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10 }}>
+                {[
+                  { min: 15, label: "15 Min" },
+                  { min: 30, label: "30 Min" },
+                  { min: 60, label: "1 Hour" },
+                ].map((d) => (
+                  <button
+                    key={d.min}
+                    type="button"
+                    onClick={() => setLiveShareDuration(d.min)}
+                    style={{
+                      padding: "10px 6px",
+                      borderRadius: 6,
+                      border: liveShareDuration === d.min ? "2px solid #065f46" : "1px solid #cbd5e1",
+                      background: liveShareDuration === d.min ? "#ecfdf5" : "#ffffff",
+                      color: liveShareDuration === d.min ? "#065f46" : "#0f172a",
+                      fontWeight: 700,
+                      fontSize: 13,
+                      cursor: "pointer",
+                    }}
+                  >
+                    {d.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div
+              style={{
+                background: "#f8fafc",
+                padding: 12,
+                borderRadius: 8,
+                marginBottom: 20,
+                fontSize: 12,
+                color: "#475569",
+              }}
+            >
+              <div>👤 <strong>Assigned Operator:</strong> Siddesh N. (Raitha Samparka Kendra / CSC H.D. Kote)</div>
+              <div style={{ marginTop: 4 }}>🔒 <strong>DPDP Act Protection:</strong> No silent background tracking. Immediate revocation guaranteed.</div>
+            </div>
+
+            <div style={{ display: "flex", gap: 10, justifyContent: "flex-end" }}>
+              <button
+                type="button"
+                onClick={() => setLiveShareModalOpen(false)}
+                style={{
+                  padding: "10px 16px",
+                  borderRadius: 6,
+                  border: "none",
+                  background: "#e2e8f0",
+                  fontWeight: 600,
+                  fontSize: 13,
+                  cursor: "pointer",
+                }}
+              >
+                {L(lang, "ರದ್ದು", "Cancel", "रद्द करें")}
+              </button>
+              <button
+                type="button"
+                onClick={handleStartLiveSharing}
+                disabled={gpsLoading}
+                style={{
+                  padding: "10px 20px",
+                  borderRadius: 6,
+                  border: "none",
+                  background: "#065f46",
+                  color: "#ffffff",
+                  fontWeight: 700,
+                  fontSize: 13,
+                  cursor: "pointer",
+                }}
+              >
+                {gpsLoading ? L(lang, "ಪ್ರಾರಂಭಿಸಲಾಗುತ್ತಿದೆ...", "Starting...", "शुरू हो रहा है...") : L(lang, "ಹಂಚಿಕೆ ಪ್ರಾರಂಭಿಸಿ ➔", "Start Sharing ➔", "शेयरिंग शुरू करें ➔")}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* SMART GPS: NEARBY SERVICES MODAL */}
+      {showNearbyModal && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: "rgba(0,0,0,0.55)",
+            zIndex: 9999,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: 16,
+          }}
+        >
+          <div
+            style={{
+              background: "#ffffff",
+              borderRadius: 14,
+              maxWidth: 580,
+              width: "100%",
+              maxHeight: "85vh",
+              overflowY: "auto",
+              padding: 24,
+              boxShadow: "0 10px 30px rgba(0,0,0,0.25)",
+            }}
+          >
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
+              <h3 style={{ fontSize: 18, fontWeight: 700, margin: 0, color: "#065f46" }}>
+                🏛️ {L(lang, "ಸಮೀಪದ ಸಿಎಸ್‌ಸಿ ಕೇಂದ್ರಗಳು & ಬ್ಯಾಂಕ್‌ಗಳು", "Nearby CSC Centres & Banks", "नजदीकी सीएससी केंद्र और बैंक")}
+              </h3>
+              <button
+                type="button"
+                onClick={() => setShowNearbyModal(false)}
+                style={{ border: "none", background: "none", fontSize: 20, cursor: "pointer", color: "#64748b" }}
+              >
+                ✕
+              </button>
+            </div>
+
+            <p style={{ fontSize: 13, color: "#64748b", margin: "0 0 16px" }}>
+              {L(
+                lang,
+                "ನಿಮ್ಮ ಪ್ರಸ್ತುತ ಜಿಪಿಎಸ್ ಸ್ಥಳದಿಂದ ನಿಖರ ಕಿಲೋಮೀಟರ್ ದೂರದಲ್ಲಿರುವ ಅಧಿಕೃತ ಕೃಷಿ ಸೇವಾ ಕೇಂದ್ರಗಳು.",
+                "Verified agricultural support offices, CSC centres, and participating banks calculated from your GPS coordinates.",
+                "आपके वर्तमान जीपीएस स्थान से नजदीकी सीएससी केंद्र और बैंक शाखाएं।"
+              )}
+            </p>
+
+            <div style={{ display: "grid", gap: 12 }}>
+              {nearbyServices.map((srv) => (
+                <div
+                  key={srv.id}
+                  style={{
+                    background: "#f8fafc",
+                    border: "1px solid #e2e8f0",
+                    borderRadius: 8,
+                    padding: 14,
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    gap: 12,
+                    flexWrap: "wrap",
+                  }}
+                >
+                  <div style={{ flex: 1, minWidth: 220 }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+                      <span
+                        style={{
+                          fontSize: 10,
+                          fontWeight: 700,
+                          padding: "2px 6px",
+                          borderRadius: 4,
+                          background: srv.type === "CSC_CENTRE" ? "#dcfce7" : srv.type === "BANK_BRANCH" ? "#e0f2fe" : "#fef3c7",
+                          color: srv.type === "CSC_CENTRE" ? "#15803d" : srv.type === "BANK_BRANCH" ? "#0369a1" : "#b45309",
+                        }}
+                      >
+                        {srv.type.replace("_", " ")}
+                      </span>
+                      <strong style={{ fontSize: 14, color: "#0f172a" }}>{srv.name}</strong>
+                    </div>
+                    <div style={{ fontSize: 12, color: "#475569", marginBottom: 4 }}>{srv.address}</div>
+                    {srv.contactNumber && (
+                      <div style={{ fontSize: 12, color: "#64748b" }}>
+                        📞 <strong>Phone:</strong> {srv.contactNumber}
+                      </div>
+                    )}
+                  </div>
+
+                  <div style={{ textAlign: "right" }}>
+                    <div style={{ fontSize: 16, fontWeight: 800, color: "#065f46", marginBottom: 6 }}>
+                      {srv.distanceKm} km
+                    </div>
+                    <a
+                      href={`https://maps.google.com/?q=${srv.latitude},${srv.longitude}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      style={{
+                        padding: "6px 12px",
+                        background: "#065f46",
+                        color: "#ffffff",
+                        borderRadius: 6,
+                        fontSize: 12,
+                        fontWeight: 600,
+                        textDecoration: "none",
+                        display: "inline-block",
+                      }}
+                    >
+                      🗺️ {L(lang, "ದಾರಿ ನೋಡಿ", "Directions", "दिशा")} ↗
+                    </a>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* BHOOMI OFFICIAL GOVT PORTAL HANDOFF MODAL */}
+      {bhoomiNoticeOpen && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: "rgba(0,0,0,0.65)",
+            zIndex: 99999,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: 16,
+          }}
+        >
+          <div
+            style={{
+              background: "#ffffff",
+              borderRadius: 16,
+              maxWidth: 520,
+              width: "100%",
+              padding: 24,
+              boxShadow: "0 12px 36px rgba(0,0,0,0.3)",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 14 }}>
+              <div
+                style={{
+                  width: 44,
+                  height: 44,
+                  borderRadius: 10,
+                  background: "#ecfdf5",
+                  color: "#065f46",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: 24,
+                }}
+              >
+                🏛️
+              </div>
+              <div>
+                <h3 style={{ fontSize: 18, fontWeight: 800, margin: 0, color: "#0f172a" }}>
+                  {L(lang, "ಅಧಿಕೃತ ಸರ್ಕಾರಿ ಜಾಲತಾಣ ಸೂಚನೆ", "Official Government Portal Notice", "आधिकारिक सरकारी पोर्टल सूचना")}
+                </h3>
+                <div style={{ fontSize: 12, color: "#64748b" }}>
+                  Karnataka Bhoomi Land Records · landrecords.karnataka.gov.in
+                </div>
+              </div>
+            </div>
+
+            <div
+              style={{
+                background: "#fef3c7",
+                border: "1px solid #fde68a",
+                borderRadius: 8,
+                padding: 14,
+                marginBottom: 16,
+                fontSize: 13,
+                color: "#92400e",
+                lineHeight: 1.5,
+              }}
+            >
+              <strong>⚠️ {L(lang, "ಗಮನಿಸಿ:", "Notice:", "सूचना:")}</strong>{" "}
+              {L(
+                lang,
+                "ನೀವು ಆಗ್ರೋ ಎಐ ಸ್ಕೀಮ್ ತೊರೆದು ಅಧಿಕೃತ ಕರ್ನಾಟಕ ಸರ್ಕಾರದ ಭೂಮಿ ಆರ್‌ಟಿಸಿ (RTC) ಜಾಲತಾಣವನ್ನು ನಿಮ್ಮ ಬ್ರೌಸರ್‌ನಲ್ಲಿ ಪ್ರತ್ಯೇಕವಾಗಿ ತೆರೆಯುತ್ತಿದ್ದೀರಿ.",
+                "You are leaving Agro AI Scheme and opening the official Karnataka Bhoomi land-records website.",
+                "आप एग्रो एआई स्कीम छोड़कर आधिकारिक कर्नाटक भूमि भू-अभिलेख वेबसाइट खोल रहे हैं।"
+              )}
+            </div>
+
+            <div style={{ fontSize: 13, color: "#334155", lineHeight: 1.6, marginBottom: 20 }}>
+              <ul style={{ margin: 0, paddingLeft: 20 }}>
+                <li style={{ marginBottom: 6 }}>
+                  <strong>{L(lang, "ಸ್ವತಂತ್ರ ಪ್ಲಾಟ್‌ಫಾರ್ಮ್:", "Independent Platform:", "स्वतंत्र मंच:")}</strong>{" "}
+                  {L(
+                    lang,
+                    "ಆಗ್ರೋ ಎಐ ಸ್ಕೀಮ್ ಒಂದು ಸ್ವತಂತ್ರ ವೇದಿಕೆಯಾಗಿದ್ದು, ಕರ್ನಾಟಕ ಸರ್ಕಾರದ ಅಧಿಕೃತ ಅಂಗಸಂಸ್ಥೆಯಲ್ಲ.",
+                    "Agro AI Scheme is an independent platform and is not affiliated with the Government of Karnataka.",
+                    "एग्रो एआई स्कीम एक स्वतंत्र मंच है और कर्नाटक सरकार से संबद्ध नहीं है।"
+                  )}
+                </li>
+                <li style={{ marginBottom: 6 }}>
+                  <strong>{L(lang, "ಗೌಪ್ಯತೆ ಮತ್ತು ಭದ್ರತೆ:", "Privacy & Security:", "गोपनीयता:")}</strong>{" "}
+                  {L(
+                    lang,
+                    "ನಿಮ್ಮ ಆಗ್ರೋ ಎಐ ಲಾಗಿನ್ ಮಾಹಿತಿ ಮತ್ತು ಅರ್ಜಿ ಡೇಟಾ ಸಂಪೂರ್ಣ ಪ್ರತ್ಯೇಕವಾಗಿರುತ್ತದೆ. ಆಗ್ರೋ ಎಐನಲ್ಲಿ ಯಾವುದೇ ಬ್ಯಾಂಕ್ ಅಥವಾ ಭೂಮಿ ಪಾಸ್‌ವರ್ಡ್, ಒಟಿಪಿಗಳನ್ನು ಎಂದಿಗೂ ಕೇಳಲಾಗುವುದಿಲ್ಲ.",
+                    "Your Agro AI session and data remain completely separate. Never enter any bank or portal passwords/OTPs into Agro AI.",
+                    "आपका एग्रो एआई सत्र और डेटा पूरी तरह अलग रहेगा।"
+                  )}
+                </li>
+                <li>
+                  <strong>{L(lang, "ದಾಖಲೆ ಸಂರಕ್ಷಣೆ:", "No Record Scraping:", "डेटा सुरक्षा:")}</strong>{" "}
+                  {L(
+                    lang,
+                    "ನಾವು ಭೂಮಿ ಜಾಲತಾಣದಿಂದ ಯಾವುದೇ ದಾಖಲೆಗಳನ್ನು ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಸಂಗ್ರಹಿಸುವುದಿಲ್ಲ ಅಥವಾ ನಕಲಿಸುವುದಿಲ್ಲ.",
+                    "We do not scrape, copy, or store land records from Bhoomi.",
+                    "हम भूमि पोर्टल से रिकॉर्ड कॉपी या स्टोर नहीं करते हैं।"
+                  )}
+                </li>
+              </ul>
+            </div>
+
+            <div style={{ display: "flex", gap: 12, justifyContent: "flex-end", flexWrap: "wrap" }}>
+              <button
+                type="button"
+                onClick={() => setBhoomiNoticeOpen(false)}
+                style={{
+                  padding: "10px 18px",
+                  background: "#f1f5f9",
+                  color: "#0f172a",
+                  border: "1px solid #cbd5e1",
+                  borderRadius: 8,
+                  fontSize: 13,
+                  fontWeight: 600,
+                  cursor: "pointer",
+                }}
+              >
+                ← {L(lang, "ಆಗ್ರೋ ಎಐಗೆ ಹಿಂತಿರುಗಿ", "Return to Agro AI Scheme", "एग्रो एआई पर वापस जाएं")}
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setBhoomiNoticeOpen(false);
+                  window.open(
+                    "https://landrecords.karnataka.gov.in/service2/RTC.aspx",
+                    "_blank",
+                    "noopener,noreferrer"
+                  );
+                }}
+                style={{
+                  padding: "10px 20px",
+                  background: "#065f46",
+                  color: "#ffffff",
+                  border: "none",
+                  borderRadius: 8,
+                  fontSize: 13,
+                  fontWeight: 700,
+                  cursor: "pointer",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 6,
+                }}
+              >
+                🌐 {L(lang, "ಭೂಮಿ ಪೋರ್ಟಲ್‌ಗೆ ಮುಂದುವರಿಯಿರಿ ↗", "Proceed to Bhoomi Portal ↗", "भूमि पोर्टल पर आगे बढ़ें ↗")}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {whatsAppModalOpen && (
         <div

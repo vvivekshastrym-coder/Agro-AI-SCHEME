@@ -123,7 +123,76 @@ export default function SuperAdminPanel() {
     | "banks"
     | "health"
     | "alerts"
+    | "location"
   >("dashboard");
+
+  const [locationAudit, setLocationAudit] = useState<{
+    activeCount: number;
+    expiredCount: number;
+    revokedCount: number;
+    totalSessions: number;
+    activeSessions: Array<{
+      sessionId: string;
+      farmerName: string;
+      farmerMobile: string;
+      assignedEmployeeName: string;
+      minutesRemaining: number;
+      startTimeIso: string;
+      expiresAtIso: string;
+      coordinates?: { latitude: number; longitude: number; accuracyMeters?: number };
+      address?: string;
+      accessCount: number;
+    }>;
+    recentAuditLogs: Array<{
+      eventId: string;
+      sessionId: string;
+      farmerId: string;
+      action: string;
+      actorId: string;
+      timestampIso: string;
+      details?: string;
+    }>;
+    dataRetentionPolicy: {
+      retentionHours: number;
+      purgeExpiredGpsAutomatically: boolean;
+      lastPurgeIso: string;
+    };
+  }>({
+    activeCount: 1,
+    expiredCount: 0,
+    revokedCount: 0,
+    totalSessions: 1,
+    activeSessions: [
+      {
+        sessionId: "loc-demo-01",
+        farmerName: "Ningappa Gowda",
+        farmerMobile: "+91 98450 12345",
+        assignedEmployeeName: "Siddesh N. (CSC Operator)",
+        minutesRemaining: 22,
+        startTimeIso: new Date().toISOString(),
+        expiresAtIso: new Date(Date.now() + 22 * 60 * 1000).toISOString(),
+        coordinates: { latitude: 12.0833, longitude: 76.35, accuracyMeters: 4 },
+        address: "Hampapura Hobli, H.D. Kote Taluk, Mysuru 571125",
+        accessCount: 2,
+      },
+    ],
+    recentAuditLogs: [
+      {
+        eventId: "audit-init-01",
+        sessionId: "loc-demo-01",
+        farmerId: "farmer-ka-mys-01",
+        action: "SESSION_STARTED",
+        actorId: "farmer-ka-mys-01",
+        timestampIso: new Date().toISOString(),
+        details: "Started 30 min voluntary live sharing with Siddesh N. (CSC Operator)",
+      },
+    ],
+    dataRetentionPolicy: {
+      retentionHours: 24,
+      purgeExpiredGpsAutomatically: true,
+      lastPurgeIso: new Date().toISOString(),
+    },
+  });
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [metrics, setMetrics] = useState<DashboardMetrics>({
@@ -245,10 +314,33 @@ export default function SuperAdminPanel() {
         setSourcesList(al.sources || []);
         setPolicyUpdatesList(al.policyUpdates || []);
       }
+
+      try {
+        const locRes = await fetch(`${API_BASE}/api/v1/admin/location/audit`);
+        if (locRes.ok) {
+          const ld = await locRes.json();
+          setLocationAudit(ld);
+        }
+      } catch {
+        // offline
+      }
     } catch {
       // offline fallback
     } finally {
       setIsLoading(false);
+    }
+  }
+
+  async function handlePurgeExpiredLocationData() {
+    try {
+      const res = await fetch(`${API_BASE}/api/v1/admin/location/purge`, { method: "POST" });
+      if (res.ok) {
+        const d = await res.json();
+        alert(`Data Retention Purge Complete: ${d.purgedCount} expired GPS coordinate records sanitized under DPDP Act.`);
+        fetchLiveAdminData();
+      }
+    } catch {
+      alert("Error purging expired location data.");
     }
   }
 
@@ -453,6 +545,7 @@ export default function SuperAdminPanel() {
           { key: "banks", label: `🏦 Bank Partners (${metrics.partnerBanksCount})` },
           { key: "health", label: "🩺 Integration Health" },
           { key: "alerts", label: `🔔 Policy & Alerts (${policyUpdatesList.length})` },
+          { key: "location", label: `📍 Geo-Audit & Privacy (${locationAudit.activeCount})` },
         ].map((tab) => (
           <button
             key={tab.key}
@@ -1392,6 +1485,200 @@ export default function SuperAdminPanel() {
                   </div>
                 </div>
               ))}
+            </div>
+          </div>
+        )}
+
+        {/* TAB 10: GEO-AUDIT & LOCATION SECURITY CONTROLS */}
+        {activeTab === "location" && (
+          <div>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+              <div>
+                <h2 style={{ fontSize: 20, fontWeight: 700, margin: "0 0 4px" }}>
+                  📍 Geo-Audit & Location Security Controls
+                </h2>
+                <p style={{ color: "#64748b", fontSize: 13, margin: 0 }}>
+                  Real-time monitoring of voluntary farmer live-location sharing sessions, employee access logs, and DPDP Act 2023 data retention.
+                </p>
+              </div>
+              <div style={{ display: "flex", gap: 10 }}>
+                <button
+                  type="button"
+                  onClick={handlePurgeExpiredLocationData}
+                  style={{
+                    padding: "8px 14px",
+                    background: "#fef2f2",
+                    color: "#b91c1c",
+                    border: "1px solid #fecaca",
+                    borderRadius: 6,
+                    fontSize: 13,
+                    fontWeight: 700,
+                    cursor: "pointer",
+                  }}
+                >
+                  🧹 Purge Expired GPS Data
+                </button>
+                <button
+                  type="button"
+                  onClick={fetchLiveAdminData}
+                  style={{
+                    padding: "8px 14px",
+                    background: "#f1f5f9",
+                    border: "1px solid #cbd5e1",
+                    borderRadius: 6,
+                    fontSize: 13,
+                    fontWeight: 600,
+                    cursor: "pointer",
+                  }}
+                >
+                  🔄 Refresh Audit
+                </button>
+              </div>
+            </div>
+
+            {/* Privacy Guarantee Alert */}
+            <div
+              style={{
+                background: "#ecfdf5",
+                border: "1px solid #a7f3d0",
+                borderRadius: 8,
+                padding: "12px 18px",
+                marginBottom: 20,
+                fontSize: 13,
+                color: "#065f46",
+                display: "flex",
+                alignItems: "center",
+                gap: 12,
+              }}
+            >
+              <span style={{ fontSize: 20 }}>🛡️</span>
+              <div>
+                <strong>Zero-Surveillance Architecture:</strong> Location sharing is strictly opt-in, time-limited, and scoped to the farmer's assigned CSC operator. Continuous background mass surveillance is architecturally impossible.
+              </div>
+            </div>
+
+            {/* Stat Cards */}
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 16, marginBottom: 24 }}>
+              <div style={{ background: "#ffffff", padding: 18, borderRadius: 8, border: "1px solid #e2e8f0", borderLeft: "4px solid #10b981" }}>
+                <div style={{ fontSize: 13, color: "#64748b", fontWeight: 600 }}>🟢 Active Live Sharing Sessions</div>
+                <div style={{ fontSize: 28, fontWeight: 800, color: "#065f46", margin: "6px 0" }}>
+                  {locationAudit.activeCount}
+                </div>
+                <div style={{ fontSize: 12, color: "#94a3b8" }}>Farmers currently broadcasting</div>
+              </div>
+              <div style={{ background: "#ffffff", padding: 18, borderRadius: 8, border: "1px solid #e2e8f0", borderLeft: "4px solid #f59e0b" }}>
+                <div style={{ fontSize: 13, color: "#64748b", fontWeight: 600 }}>⏳ Expired Sessions</div>
+                <div style={{ fontSize: 28, fontWeight: 800, color: "#b45309", margin: "6px 0" }}>
+                  {locationAudit.expiredCount}
+                </div>
+                <div style={{ fontSize: 12, color: "#94a3b8" }}>Time duration reached</div>
+              </div>
+              <div style={{ background: "#ffffff", padding: 18, borderRadius: 8, border: "1px solid #e2e8f0", borderLeft: "4px solid #ef4444" }}>
+                <div style={{ fontSize: 13, color: "#64748b", fontWeight: 600 }}>🛑 Explicitly Revoked Sessions</div>
+                <div style={{ fontSize: 28, fontWeight: 800, color: "#b91c1c", margin: "6px 0" }}>
+                  {locationAudit.revokedCount}
+                </div>
+                <div style={{ fontSize: 12, color: "#94a3b8" }}>Cancelled early by farmers</div>
+              </div>
+              <div style={{ background: "#ffffff", padding: 18, borderRadius: 8, border: "1px solid #e2e8f0", borderLeft: "4px solid #0284c7" }}>
+                <div style={{ fontSize: 13, color: "#64748b", fontWeight: 600 }}>📋 Total Geo-Audit Events</div>
+                <div style={{ fontSize: 28, fontWeight: 800, color: "#0369a1", margin: "6px 0" }}>
+                  {locationAudit.recentAuditLogs.length}
+                </div>
+                <div style={{ fontSize: 12, color: "#94a3b8" }}>Consent & access records</div>
+              </div>
+            </div>
+
+            {/* Active Sessions Table */}
+            <div style={{ background: "#ffffff", borderRadius: 8, border: "1px solid #e2e8f0", overflow: "hidden", marginBottom: 24 }}>
+              <div style={{ padding: "16px 20px", borderBottom: "1px solid #e2e8f0", background: "#f8fafc", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <h3 style={{ fontSize: 15, fontWeight: 700, margin: 0 }}>Active Voluntary Sharing Sessions</h3>
+                <span style={{ fontSize: 12, color: "#64748b" }}>Auto-refreshing</span>
+              </div>
+              {locationAudit.activeSessions.length === 0 ? (
+                <div style={{ padding: 30, textAlign: "center", color: "#64748b", fontSize: 13 }}>
+                  No active sharing sessions at this moment.
+                </div>
+              ) : (
+                <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
+                  <thead>
+                    <tr style={{ background: "#f1f5f9", textAlign: "left" }}>
+                      <th style={{ padding: "10px 14px", borderBottom: "1px solid #e2e8f0" }}>Session ID</th>
+                      <th style={{ padding: "10px 14px", borderBottom: "1px solid #e2e8f0" }}>Farmer</th>
+                      <th style={{ padding: "10px 14px", borderBottom: "1px solid #e2e8f0" }}>Assigned Operator</th>
+                      <th style={{ padding: "10px 14px", borderBottom: "1px solid #e2e8f0" }}>Time Left</th>
+                      <th style={{ padding: "10px 14px", borderBottom: "1px solid #e2e8f0" }}>Detected Location</th>
+                      <th style={{ padding: "10px 14px", borderBottom: "1px solid #e2e8f0" }}>Access Count</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {locationAudit.activeSessions.map((s) => (
+                      <tr key={s.sessionId} style={{ borderBottom: "1px solid #f1f5f9" }}>
+                        <td style={{ padding: "10px 14px" }}><code>{s.sessionId}</code></td>
+                        <td style={{ padding: "10px 14px" }}>
+                          <strong>{s.farmerName}</strong>
+                          <div style={{ fontSize: 11, color: "#64748b" }}>{s.farmerMobile}</div>
+                        </td>
+                        <td style={{ padding: "10px 14px" }}>{s.assignedEmployeeName}</td>
+                        <td style={{ padding: "10px 14px", color: "#16a34a", fontWeight: 700 }}>
+                          {s.minutesRemaining} min
+                        </td>
+                        <td style={{ padding: "10px 14px" }}>
+                          {s.address || "Resolving..."}
+                          {s.coordinates && (
+                            <div style={{ fontSize: 11, color: "#64748b" }}>
+                              {s.coordinates.latitude.toFixed(4)}, {s.coordinates.longitude.toFixed(4)} (±{s.coordinates.accuracyMeters ?? 4}m)
+                            </div>
+                          )}
+                        </td>
+                        <td style={{ padding: "10px 14px" }}>{s.accessCount} reads</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </div>
+
+            {/* Audit Log Table */}
+            <div style={{ background: "#ffffff", borderRadius: 8, border: "1px solid #e2e8f0", overflow: "hidden" }}>
+              <div style={{ padding: "16px 20px", borderBottom: "1px solid #e2e8f0", background: "#f8fafc" }}>
+                <h3 style={{ fontSize: 15, fontWeight: 700, margin: 0 }}>Location Access & Consent Audit Trail (DPDP Act)</h3>
+              </div>
+              <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}>
+                <thead>
+                  <tr style={{ background: "#f1f5f9", textAlign: "left" }}>
+                    <th style={{ padding: "8px 14px", borderBottom: "1px solid #e2e8f0" }}>Event ID</th>
+                    <th style={{ padding: "8px 14px", borderBottom: "1px solid #e2e8f0" }}>Action</th>
+                    <th style={{ padding: "8px 14px", borderBottom: "1px solid #e2e8f0" }}>Actor</th>
+                    <th style={{ padding: "8px 14px", borderBottom: "1px solid #e2e8f0" }}>Timestamp (IST)</th>
+                    <th style={{ padding: "8px 14px", borderBottom: "1px solid #e2e8f0" }}>Details</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {locationAudit.recentAuditLogs.map((log) => (
+                    <tr key={log.eventId} style={{ borderBottom: "1px solid #f1f5f9" }}>
+                      <td style={{ padding: "8px 14px" }}><code>{log.eventId}</code></td>
+                      <td style={{ padding: "8px 14px" }}>
+                        <span
+                          style={{
+                            padding: "2px 6px",
+                            borderRadius: 4,
+                            fontSize: 10,
+                            fontWeight: 700,
+                            background: log.action.includes("REVOKED") ? "#fee2e2" : log.action.includes("STARTED") ? "#dcfce7" : "#f1f5f9",
+                            color: log.action.includes("REVOKED") ? "#991b1b" : log.action.includes("STARTED") ? "#15803d" : "#334155",
+                          }}
+                        >
+                          {log.action}
+                        </span>
+                      </td>
+                      <td style={{ padding: "8px 14px" }}>{log.actorId}</td>
+                      <td style={{ padding: "8px 14px" }}>{new Date(log.timestampIso).toLocaleString()}</td>
+                      <td style={{ padding: "8px 14px", color: "#475569" }}>{log.details || "-"}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
         )}

@@ -1114,6 +1114,152 @@ export function createApiServer(platform = new AgroPlatformService()) {
         return;
       }
 
+      // ============================================================================
+      // Smart GPS Location & Voluntary Live Sharing System (Section 8)
+      // ============================================================================
+
+      if (req.method === "POST" && pathname === "/api/v1/location/reverse-geocode") {
+        const body = (await readJsonBody(req)) as { latitude: number; longitude: number };
+        const lat = Number(body.latitude);
+        const lon = Number(body.longitude);
+        if (isNaN(lat) || isNaN(lon)) {
+          sendJson(res, 400, { error: "Valid latitude and longitude required." });
+          return;
+        }
+        const resolved = await platform.location.reverseGeocode(lat, lon);
+        const nearby = platform.location.getNearbyServices(lat, lon, 35);
+        sendJson(res, 200, { resolvedAddress: resolved, nearbyServices: nearby });
+        return;
+      }
+
+      if (req.method === "GET" && pathname === "/api/v1/location/nearby") {
+        const lat = Number(url.searchParams.get("lat") ?? 12.0833);
+        const lon = Number(url.searchParams.get("lon") ?? 76.35);
+        const maxDist = Number(url.searchParams.get("maxDist") ?? 40);
+        const services = platform.location.getNearbyServices(lat, lon, maxDist);
+        sendJson(res, 200, { services });
+        return;
+      }
+
+      if (req.method === "GET" && pathname === "/api/v1/location/farm-locations") {
+        const farmerId = url.searchParams.get("farmerId") || "farmer-ka-mys-01";
+        const farms = platform.location.getFarmLocations(farmerId);
+        sendJson(res, 200, { farmLocations: farms });
+        return;
+      }
+
+      if (req.method === "POST" && pathname === "/api/v1/location/farm-locations") {
+        const body = (await readJsonBody(req)) as any;
+        const farmerId = body.farmerId || "farmer-ka-mys-01";
+        const saved = platform.location.saveFarmLocation(farmerId, body);
+        sendJson(res, 201, { farmLocation: saved });
+        return;
+      }
+
+      if (req.method === "POST" && pathname === "/api/v1/location/share/start") {
+        const body = (await readJsonBody(req)) as any;
+        const session = platform.location.createSharingSession({
+          farmerId: body.farmerId || "farmer-ka-mys-01",
+          farmerName: body.farmerName || "Ningappa Gowda",
+          farmerMobile: body.farmerMobile || "+91 98450 12345",
+          assignedEmployeeId: body.assignedEmployeeId || "emp-csc-01",
+          assignedEmployeeName: body.assignedEmployeeName || "Siddesh N. (CSC Operator)",
+          cscCentreId: body.cscCentreId || "csc-ka-mys-01",
+          durationMinutes: Number(body.durationMinutes || 30),
+          initialCoordinates: body.initialCoordinates,
+          initialAddress: body.initialAddress,
+        });
+
+        const shareUrl = `/share-location?sessionId=${session.sessionId}`;
+        sendJson(res, 201, { session, shareUrl });
+        return;
+      }
+
+      if (req.method === "POST" && pathname === "/api/v1/location/share/update") {
+        const body = (await readJsonBody(req)) as any;
+        const result = platform.location.updateLiveCoordinates(
+          body.sessionId,
+          body.coordinates,
+          body.resolvedAddress
+        );
+        if (!result.success) {
+          sendJson(res, 400, { error: result.error });
+          return;
+        }
+        sendJson(res, 200, { session: result.session });
+        return;
+      }
+
+      if (req.method === "POST" && pathname === "/api/v1/location/share/revoke") {
+        const body = (await readJsonBody(req)) as any;
+        const result = platform.location.revokeSharingSession(
+          body.sessionId,
+          body.farmerId || "farmer-ka-mys-01"
+        );
+        sendJson(res, 200, { success: result.success });
+        return;
+      }
+
+      const shareSessionMatch = pathname.match(/^\/api\/v1\/location\/share\/([^/]+)$/);
+      if (shareSessionMatch && req.method === "GET") {
+        const sessionId = shareSessionMatch[1]!;
+        const empId = url.searchParams.get("employeeId") || undefined;
+        const empName = url.searchParams.get("employeeName") || undefined;
+        const actor = empId ? { employeeId: empId, employeeName: empName || "CSC Operator" } : undefined;
+        const session = platform.location.getSession(sessionId, actor);
+        if (!session) {
+          sendJson(res, 404, { error: "Session not found or expired." });
+          return;
+        }
+        sendJson(res, 200, { session });
+        return;
+      }
+
+      if (req.method === "GET" && pathname === "/api/v1/employee/location/live-farmers") {
+        const empId = url.searchParams.get("employeeId") || "emp-csc-01";
+        const cscId = url.searchParams.get("cscCentreId") || "csc-ka-mys-01";
+        const sessions = platform.location.getActiveSessionsForEmployee(empId, cscId);
+        sendJson(res, 200, { activeSessions: sessions });
+        return;
+      }
+
+      if (req.method === "GET" && pathname === "/api/v1/admin/location/audit") {
+        const overview = platform.location.getAdminLocationOverview();
+        sendJson(res, 200, overview);
+        return;
+      }
+
+      if (req.method === "POST" && pathname === "/api/v1/admin/location/purge") {
+        const purgeRes = platform.location.purgeExpiredPreciseLocationData();
+        sendJson(res, 200, purgeRes);
+        return;
+      }
+
+      if (req.method === "POST" && pathname === "/api/v1/whatsapp/location-pin") {
+        const body = (await readJsonBody(req)) as any;
+        const lat = Number(body.latitude);
+        const lon = Number(body.longitude);
+        const resolved = await platform.location.reverseGeocode(lat, lon);
+        const nearby = platform.location.getNearbyServices(lat, lon, 25);
+        const nearestCsc = nearby.find((s) => s.type === "CSC_CENTRE");
+        const nearestBank = nearby.find((s) => s.type === "BANK_BRANCH");
+
+        const replyMessage = `🌾 *Agro AI Location Detected*
+📍 Location: ${resolved.village}, ${resolved.taluk} Taluk (${resolved.pincode})
+🏛️ Nearest CSC: ${nearestCsc?.name || "H.D. Kote CSC"} (${nearestCsc?.distanceKm || 3.2} km)
+🏦 Nearest Bank: ${nearestBank?.name || "SBI Agri"} (${nearestBank?.distanceKm || 2.8} km)
+
+To share continuous live location with your assigned CSC operator, open your secure Agro AI session link:
+https://web-blue-nine-20.vercel.app/share-location?farmerId=farmer-ka-mys-01`;
+
+        sendJson(res, 200, {
+          resolvedAddress: resolved,
+          nearbyServices: nearby,
+          replyText: replyMessage,
+        });
+        return;
+      }
+
       // Scheme Rollback Route
       const rollbackRoute = pathname.match(
         /^\/api\/v1\/schemes\/([^/]+)\/rollback$/

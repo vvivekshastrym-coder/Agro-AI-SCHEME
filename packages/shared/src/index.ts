@@ -467,6 +467,96 @@ export const AlertPreferencesSchema = z.object({
 });
 export type AlertPreferences = z.infer<typeof AlertPreferencesSchema>;
 
+// ============================================================================
+// 12. Smart GPS Location & Live Sharing Schemas (Section 8)
+// ============================================================================
+
+export const GeoCoordinatesSchema = z.object({
+  latitude: z.number().min(-90).max(90),
+  longitude: z.number().min(-180).max(180),
+  accuracyMeters: z.number().nonnegative().optional(),
+  altitude: z.number().optional(),
+  speed: z.number().optional(),
+  heading: z.number().optional(),
+  timestampIso: z.string(),
+});
+export type GeoCoordinates = z.infer<typeof GeoCoordinatesSchema>;
+
+export const ResolvedAddressSchema = z.object({
+  village: z.string(),
+  taluk: z.string(),
+  district: z.string(),
+  state: z.string().default("Karnataka"),
+  pincode: z.string(),
+  formattedAddress: z.string(),
+  source: z.enum(["GPS_REVERSE_GEOCODED", "MANUAL_CONFIRMED"]),
+});
+export type ResolvedAddress = z.infer<typeof ResolvedAddressSchema>;
+
+export const SavedFarmLocationSchema = z.object({
+  id: z.string(),
+  farmerId: z.string(),
+  plotName: z.string(),
+  surveyNumber: z.string().optional(),
+  coordinates: GeoCoordinatesSchema,
+  resolvedAddress: ResolvedAddressSchema,
+  areaHectares: z.number().positive().optional(),
+  cropCode: z.string().optional(),
+  isPrimary: z.boolean().default(false),
+  createdAt: z.string(),
+});
+export type SavedFarmLocation = z.infer<typeof SavedFarmLocationSchema>;
+
+export const LocationSharingStatusEnum = z.enum(["ACTIVE", "EXPIRED", "REVOKED"]);
+export type LocationSharingStatus = z.infer<typeof LocationSharingStatusEnum>;
+
+export const LocationAccessLogSchema = z.object({
+  accessedByEmployeeId: z.string(),
+  accessedByName: z.string(),
+  accessedAtIso: z.string(),
+  ipAddress: z.string().optional(),
+});
+export type LocationAccessLog = z.infer<typeof LocationAccessLogSchema>;
+
+export const LiveLocationSharingSessionSchema = z.object({
+  sessionId: z.string(),
+  farmerId: z.string(),
+  farmerName: z.string(),
+  farmerMobile: z.string(),
+  assignedEmployeeId: z.string(),
+  assignedEmployeeName: z.string(),
+  cscCentreId: z.string(),
+  durationMinutes: z.number().int().min(5).max(120),
+  startTimeIso: z.string(),
+  expiresAtIso: z.string(),
+  status: LocationSharingStatusEnum,
+  currentCoordinates: GeoCoordinatesSchema.optional(),
+  resolvedAddress: ResolvedAddressSchema.optional(),
+  accessAuditLog: z.array(LocationAccessLogSchema).default([]),
+});
+export type LiveLocationSharingSession = z.infer<typeof LiveLocationSharingSessionSchema>;
+
+export const NearbyServiceTypeEnum = z.enum([
+  "CSC_CENTRE",
+  "BANK_BRANCH",
+  "INSURANCE_POINT",
+  "KRISHI_BHAVAN",
+]);
+export type NearbyServiceType = z.infer<typeof NearbyServiceTypeEnum>;
+
+export const NearbyServicePointSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  type: NearbyServiceTypeEnum,
+  address: z.string(),
+  distanceKm: z.number().nonnegative(),
+  contactNumber: z.string().optional(),
+  latitude: z.number(),
+  longitude: z.number(),
+  operatingHours: z.string().optional(),
+});
+export type NearbyServicePoint = z.infer<typeof NearbyServicePointSchema>;
+
 export * from "./nextAction";
 
 export * from "./innovations";

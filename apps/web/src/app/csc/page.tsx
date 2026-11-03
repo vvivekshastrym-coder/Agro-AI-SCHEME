@@ -85,8 +85,39 @@ const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
 
 export default function EmployeeCscPortal() {
   const [activeTab, setActiveTab] = useState<
-    "dashboard" | "register" | "schemes" | "prepare" | "tracker" | "alerts" | "whatsapp"
+    "dashboard" | "register" | "schemes" | "prepare" | "tracker" | "alerts" | "livemap" | "whatsapp"
   >("dashboard");
+
+  const [liveFarmers, setLiveFarmers] = useState<Array<{
+    sessionId: string;
+    farmerId: string;
+    farmerName: string;
+    farmerMobile: string;
+    durationMinutes: number;
+    startTimeIso: string;
+    expiresAtIso: string;
+    status: string;
+    currentCoordinates?: { latitude: number; longitude: number; accuracyMeters?: number };
+    resolvedAddress?: { village: string; taluk: string; district: string; formattedAddress: string };
+  }>>([
+    {
+      sessionId: "loc-demo-01",
+      farmerId: "farmer-ka-mys-01",
+      farmerName: "Ningappa Gowda",
+      farmerMobile: "+91 98450 12345",
+      durationMinutes: 30,
+      startTimeIso: new Date().toISOString(),
+      expiresAtIso: new Date(Date.now() + 22 * 60 * 1000).toISOString(),
+      status: "ACTIVE",
+      currentCoordinates: { latitude: 12.0833, longitude: 76.35, accuracyMeters: 4 },
+      resolvedAddress: {
+        village: "Hampapura",
+        taluk: "H.D. Kote",
+        district: "Mysuru",
+        formattedAddress: "Hampapura Hobli, H.D. Kote Taluk, Mysuru 571125",
+      },
+    },
+  ]);
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [farmers, setFarmers] = useState<FarmerRecord[]>([]);
@@ -171,6 +202,18 @@ export default function EmployeeCscPortal() {
           readyReviewCount: al.counts?.readyReviewCount || 0,
           items: al.items || [],
         });
+      }
+
+      try {
+        const liveRes = await fetch(`${API_BASE}/api/v1/employee/location/live-farmers?employeeId=emp-csc-01&cscCentreId=csc-ka-mys-01`);
+        if (liveRes.ok) {
+          const ld = await liveRes.json();
+          if (ld.activeSessions && ld.activeSessions.length > 0) {
+            setLiveFarmers(ld.activeSessions);
+          }
+        }
+      } catch {
+        // offline
       }
     } catch {
       // offline
@@ -413,6 +456,7 @@ export default function EmployeeCscPortal() {
         {[
           { key: "dashboard", label: "📋 Operator Dashboard" },
           { key: "alerts", label: `🔔 Alerts & Actions (${employeeAlerts.items.length})` },
+          { key: "livemap", label: `🗺️ Live Farmer Map (${liveFarmers.length})` },
           { key: "register", label: "📝 Register Farmer & Consent" },
           { key: "schemes", label: `🏛️ Government Schemes (${schemes.length})` },
           { key: "prepare", label: "🚀 Application Preparation" },
@@ -763,6 +807,212 @@ export default function EmployeeCscPortal() {
                 })}
               </div>
             )}
+          </div>
+        )}
+
+        {/* TAB: LIVE FARMER MAP & GPS FIELD ASSISTANCE */}
+        {activeTab === "livemap" && (
+          <div>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+              <div>
+                <h2 style={{ fontSize: 20, fontWeight: 700, margin: "0 0 4px" }}>
+                  🗺️ Live Farmer Field Assistance & GPS Tracking Desk
+                </h2>
+                <p style={{ color: "#64748b", fontSize: 13, margin: 0 }}>
+                  Real-time GPS coordinates of farmers who have voluntarily initiated live sharing for assisted visits and crop loss verification.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={fetchLiveData}
+                style={{
+                  padding: "8px 14px",
+                  background: "#f1f5f9",
+                  border: "1px solid #cbd5e1",
+                  borderRadius: 6,
+                  fontSize: 13,
+                  fontWeight: 600,
+                  cursor: "pointer",
+                }}
+              >
+                🔄 Refresh Coordinates
+              </button>
+            </div>
+
+            {/* Scope & DPDP Compliance Banner */}
+            <div
+              style={{
+                background: "#ecfdf5",
+                border: "1px solid #a7f3d0",
+                borderRadius: 8,
+                padding: "12px 16px",
+                marginBottom: 20,
+                fontSize: 13,
+                color: "#065f46",
+                display: "flex",
+                alignItems: "center",
+                gap: 10,
+              }}
+            >
+              <span>🔒</span>
+              <div>
+                <strong>Scoped Access Enforcement:</strong> You are viewing only farmers in{" "}
+                <strong>Raitha Samparka Kendra / CSC H.D. Kote</strong> who have actively granted voluntary live sharing consent. Mass surveillance is strictly prevented under the DPDP Act 2023.
+              </div>
+            </div>
+
+            {/* Live Farmers List */}
+            {liveFarmers.length === 0 ? (
+              <div style={{ background: "#ffffff", padding: 40, textAlign: "center", borderRadius: 8, border: "1px solid #e2e8f0" }}>
+                <div style={{ fontSize: 32, marginBottom: 8 }}>📍</div>
+                <h3 style={{ fontSize: 16, fontWeight: 700, margin: "0 0 6px" }}>No Active Live Sessions</h3>
+                <p style={{ fontSize: 13, color: "#64748b", margin: 0 }}>
+                  No assigned farmers are currently sharing their live location. When a farmer taps "Share Live Location" on the mobile app or WhatsApp link, their live pin will appear here instantly.
+                </p>
+              </div>
+            ) : (
+              <div style={{ display: "grid", gap: 16, marginBottom: 28 }}>
+                {liveFarmers.map((farmer) => {
+                  const coords = farmer.currentCoordinates;
+                  const addr = farmer.resolvedAddress;
+                  return (
+                    <div
+                      key={farmer.sessionId}
+                      style={{
+                        background: "#ffffff",
+                        border: "1px solid #86efac",
+                        borderRadius: 10,
+                        padding: 20,
+                        boxShadow: "0 2px 8px rgba(22, 101, 52, 0.08)",
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        gap: 16,
+                        flexWrap: "wrap",
+                      }}
+                    >
+                      <div style={{ flex: 1, minWidth: 260 }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
+                          <span
+                            style={{
+                              width: 10,
+                              height: 10,
+                              borderRadius: "50%",
+                              background: "#22c55e",
+                              boxShadow: "0 0 8px #22c55e",
+                              display: "inline-block",
+                            }}
+                          />
+                          <strong style={{ fontSize: 16, color: "#0f172a" }}>{farmer.farmerName}</strong>
+                          <span style={{ fontSize: 12, color: "#64748b" }}>({farmer.farmerMobile})</span>
+                          <span
+                            style={{
+                              fontSize: 11,
+                              padding: "2px 8px",
+                              borderRadius: 4,
+                              background: "#dcfce7",
+                              color: "#15803d",
+                              fontWeight: 700,
+                            }}
+                          >
+                            LIVE BROADCASTING
+                          </span>
+                        </div>
+
+                        {addr && (
+                          <div style={{ fontSize: 13, color: "#334155", marginBottom: 6 }}>
+                            📍 <strong>Detected Location:</strong> {addr.formattedAddress}
+                          </div>
+                        )}
+
+                        {coords && (
+                          <div style={{ fontSize: 12, color: "#64748b", display: "flex", gap: 16 }}>
+                            <span>Coordinates: <code>{coords.latitude.toFixed(5)}, {coords.longitude.toFixed(5)}</code></span>
+                            <span style={{ color: "#16a34a", fontWeight: 600 }}>Accuracy: ±{coords.accuracyMeters ?? 4}m</span>
+                          </div>
+                        )}
+
+                        <div style={{ fontSize: 11, color: "#94a3b8", marginTop: 6 }}>
+                          Session ID: <code>{farmer.sessionId}</code> · Auto-expires at: {new Date(farmer.expiresAtIso).toLocaleTimeString()}
+                        </div>
+                      </div>
+
+                      <div style={{ display: "flex", gap: 10 }}>
+                        {coords && (
+                          <a
+                            href={`https://maps.google.com/?q=${coords.latitude},${coords.longitude}`}
+                            target="_blank"
+                            rel="noreferrer"
+                            style={{
+                              padding: "10px 16px",
+                              background: "#065f46",
+                              color: "#ffffff",
+                              borderRadius: 6,
+                              fontSize: 13,
+                              fontWeight: 700,
+                              textDecoration: "none",
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 6,
+                            }}
+                          >
+                            🗺️ Open in Google Maps ↗
+                          </a>
+                        )}
+
+                        <a
+                          href={`https://wa.me/${farmer.farmerMobile.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(
+                            "Namaskara, this is Siddesh from CSC H.D. Kote. I have received your live location and am proceeding to your farm for verification."
+                          )}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          style={{
+                            padding: "10px 16px",
+                            background: "#25D366",
+                            color: "#ffffff",
+                            borderRadius: 6,
+                            fontSize: 13,
+                            fontWeight: 700,
+                            textDecoration: "none",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 6,
+                          }}
+                        >
+                          💬 WhatsApp Farmer
+                        </a>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+
+            {/* Permanent Farm Plots Reference */}
+            <div style={{ background: "#ffffff", border: "1px solid #e2e8f0", borderRadius: 8, padding: 20 }}>
+              <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 12 }}>
+                🌾 Registered Agricultural Farm Lands (RTC Survey Points)
+              </h3>
+              <p style={{ fontSize: 13, color: "#64748b", margin: "0 0 16px" }}>
+                Official land survey locations confirmed against Karnataka Bhoomi & FRUITS database:
+              </p>
+              <div style={{ display: "grid", gap: 10 }}>
+                <div style={{ padding: 12, background: "#f8fafc", borderRadius: 6, border: "1px solid #e2e8f0", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <div>
+                    <strong>Ningappa Gowda — North Ragi & Sugarcane Land</strong>
+                    <div style={{ fontSize: 12, color: "#64748b" }}>Survey No: 142/2A · Area: 2.5 Acres · Hampapura Hobli, H.D. Kote (571125)</div>
+                  </div>
+                  <a
+                    href="https://maps.google.com/?q=12.0833,76.3500"
+                    target="_blank"
+                    rel="noreferrer"
+                    style={{ padding: "6px 12px", background: "#f1f5f9", borderRadius: 6, fontSize: 12, fontWeight: 600, color: "#0f172a", textDecoration: "none" }}
+                  >
+                    Plot Map ↗
+                  </a>
+                </div>
+              </div>
+            </div>
           </div>
         )}
 

@@ -3,6 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { AgroEnterpriseService } from "./enterprise.service.js";
 import { AgroAlertEngineService } from "./alert.service.js";
+import { AgroLocationService } from "./location.service.js";
 import {
   compareDocumentXRay,
   convertToHectares,
@@ -564,6 +565,7 @@ export class AgroPlatformService {
   public readonly twilioWhatsAppProvider: TwilioWhatsAppProvider;
   public readonly enterprise = new AgroEnterpriseService();
   public readonly alerts = new AgroAlertEngineService();
+  public readonly location = new AgroLocationService();
 
   private readonly users = new Map<string, UserRecord>();
   private readonly profiles = new Map<string, UserProfileRecord>();
