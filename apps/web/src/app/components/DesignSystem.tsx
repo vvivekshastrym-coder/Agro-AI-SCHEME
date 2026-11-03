@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import {
   AlertTriangle,
   ArrowRight,
@@ -363,6 +364,22 @@ export function AppBar({
         </span>
       </div>
       <div className="app-bar-actions">
+        <Link
+          href="/admin"
+          className="icon-pill-btn"
+          style={{
+            textDecoration: "none",
+            fontSize: 12,
+            fontWeight: 700,
+            color: "#166534",
+            background: "#f0fdf4",
+            border: "1px solid #86efac",
+            padding: "4px 8px",
+          }}
+          title="Open Enterprise Portals (Super Admin, Employee/CSC, Bank Partner)"
+        >
+          <span>🛡️ Portals</span>
+        </Link>
         <button
           type="button"
           className="icon-pill-btn"

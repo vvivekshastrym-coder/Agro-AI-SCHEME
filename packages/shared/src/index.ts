@@ -5,9 +5,15 @@ import { z } from "zod";
 // ============================================================================
 
 export const RoleEnum = z.enum([
+  "SUPER_ADMIN",
+  "ORGANIZATION_ADMIN",
+  "CSC_MANAGER",
+  "EMPLOYEE",
+  "CSC_OPERATOR",
+  "APPLICATION_REVIEWER",
+  "BANK_PARTNER",
   "FARMER",
   "FAMILY_HELPER",
-  "CSC_OPERATOR",
   "GROUP_COORDINATOR",
   "SCHEME_REVIEWER",
   "DEPARTMENT_OFFICER",
@@ -17,10 +23,14 @@ export const RoleEnum = z.enum([
 export type Role = z.infer<typeof RoleEnum>;
 
 export const STAFF_MFA_REQUIRED_ROLES: Role[] = [
+  "SUPER_ADMIN",
+  "ORGANIZATION_ADMIN",
+  "CSC_MANAGER",
   "PLATFORM_ADMIN",
   "SECURITY_AUDITOR",
   "SCHEME_REVIEWER",
   "DEPARTMENT_OFFICER",
+  "BANK_PARTNER",
 ];
 
 export const PermissionEnum = z.enum([
@@ -264,6 +274,102 @@ export function convertToHectares(value: number, unit: AreaUnit): number {
   }
 }
 
-export * from "./nextAction.js";
+// ============================================================================
+// 5. 16-State Application Workflow Engine & Integration Health (PRD & Operation)
+// ============================================================================
 
-export * from "./innovations.js";
+export const ApplicationWorkflowStatusEnum = z.enum([
+  "DRAFT",
+  "CONSENT_PENDING",
+  "DOCUMENTS_PENDING",
+  "READY_FOR_REVIEW",
+  "INTERNAL_REVIEW",
+  "READY_FOR_SUBMISSION",
+  "SUBMISSION_PENDING",
+  "SUBMITTED_CONFIRMED",
+  "PORTAL_HANDOFF",
+  "GOVERNMENT_REVIEW",
+  "BANK_REVIEW",
+  "ADDITIONAL_INFORMATION_REQUIRED",
+  "APPROVED",
+  "REJECTED",
+  "CLOSED",
+  "CANCELLED",
+]);
+export type ApplicationWorkflowStatus = z.infer<typeof ApplicationWorkflowStatusEnum>;
+
+export const IntegrationStatusEnum = z.enum([
+  "CONNECTED",
+  "PENDING_APPROVAL",
+  "FAILED",
+  "NOT_CONNECTED",
+  "PORTAL_HANDOFF_REQUIRED",
+]);
+export type IntegrationStatus = z.infer<typeof IntegrationStatusEnum>;
+
+export const DataFreshnessLabelEnum = z.enum([
+  "LIVE",
+  "PENDING",
+  "MANUAL",
+  "STALE",
+  "UNAVAILABLE",
+  "NOT_CONNECTED",
+]);
+export type DataFreshnessLabel = z.infer<typeof DataFreshnessLabelEnum>;
+
+export const ApplicationCategoryEnum = z.enum([
+  "CENTRAL_GOVERNMENT",
+  "STATE_GOVERNMENT",
+  "BANK_CREDIT",
+  "CROP_INSURANCE",
+]);
+export type ApplicationCategory = z.infer<typeof ApplicationCategoryEnum>;
+
+export const SubmissionModeEnum = z.enum([
+  "AUTHORIZED_API",
+  "OFFICIAL_PORTAL_HANDOFF",
+]);
+export type SubmissionMode = z.infer<typeof SubmissionModeEnum>;
+
+export const FarmerRegistrationSchema = z.object({
+  fullName: z.string().min(2).max(100),
+  mobile: z.string().regex(/^\+91[6-9]\d{9}$/, "Must be valid Indian mobile (+91XXXXXXXXXX)"),
+  state: z.string().default("Karnataka"),
+  districtCode: z.string().min(1, "District required"),
+  talukCode: z.string().min(1, "Taluk required"),
+  villageCode: z.string().min(1, "Village required"),
+  cropCode: z.string().min(1, "Primary crop required"),
+  landAreaValue: z.number().positive("Land area must be positive"),
+  landAreaUnit: AreaUnitEnum.default("ACRE"),
+  ownershipType: LandOwnershipTypeEnum.default("OWNER"),
+  preferredLanguage: SupportedLanguageEnum.default("kn"),
+  farmerCategory: FarmerCategoryEnum.default("SMALL"),
+  consentVersion: z.string().default("v1.2-DPDP"),
+  consentPurpose: z.string().min(5, "Consent purpose required"),
+});
+export type FarmerRegistrationInput = z.infer<typeof FarmerRegistrationSchema>;
+
+export const ApplicationCreateSchema = z.object({
+  farmerId: z.string().min(1),
+  schemeId: z.string().min(1),
+  schemeName: z.string().min(1),
+  schemeCategory: ApplicationCategoryEnum,
+  requestedAmount: z.number().optional(),
+  submissionMode: SubmissionModeEnum.default("OFFICIAL_PORTAL_HANDOFF"),
+  assignedBankId: z.string().optional(),
+  cscCentreId: z.string().optional(),
+  notes: z.string().optional(),
+});
+export type ApplicationCreateInput = z.infer<typeof ApplicationCreateSchema>;
+
+export const ApplicationTransitionSchema = z.object({
+  applicationId: z.string().min(1),
+  toStatus: ApplicationWorkflowStatusEnum,
+  reasonOrNote: z.string().min(1),
+  officialReferenceNumber: z.string().optional(),
+});
+export type ApplicationTransitionInput = z.infer<typeof ApplicationTransitionSchema>;
+
+export * from "./nextAction";
+
+export * from "./innovations";

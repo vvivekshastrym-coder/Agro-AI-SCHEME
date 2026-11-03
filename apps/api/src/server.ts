@@ -833,6 +833,179 @@ export function createApiServer(platform = new AgroPlatformService()) {
         return;
       }
 
+      // ============================================================================
+      // Enterprise Multi-Portal Endpoints: Super Admin, Employee/CSC, Bank Partner
+      // ============================================================================
+
+      if (req.method === "GET" && pathname === "/api/v1/admin/dashboard") {
+        sendJson(res, 200, platform.enterprise.getSuperAdminDashboard());
+        return;
+      }
+
+      if (req.method === "GET" && pathname === "/api/v1/admin/farmers") {
+        sendJson(res, 200, {
+          farmers: Array.from(platform.enterprise.farmers.values()),
+        });
+        return;
+      }
+
+      if (req.method === "POST" && pathname === "/api/v1/admin/farmers") {
+        const body = (await readJsonBody(req)) as any;
+        const farmer = platform.enterprise.registerFarmer("super-admin", body);
+        sendJson(res, 201, { farmer });
+        return;
+      }
+
+      if (req.method === "GET" && pathname === "/api/v1/admin/employees") {
+        sendJson(res, 200, {
+          employees: Array.from(platform.enterprise.employees.values()),
+        });
+        return;
+      }
+
+      if (req.method === "POST" && pathname === "/api/v1/admin/employees") {
+        const body = (await readJsonBody(req)) as any;
+        const id = `emp-${Date.now().toString(36)}`;
+        const emp = {
+          id,
+          name: String(body.name || "Staff Member"),
+          email: String(body.email || `${id}@agroaischeme.in`),
+          role: body.role || "EMPLOYEE",
+          cscCentreId: body.cscCentreId || "csc-ka-mys-01",
+          status: "ACTIVE" as const,
+          createdAt: new Date().toISOString(),
+        };
+        platform.enterprise.employees.set(id, emp);
+        sendJson(res, 201, { employee: emp });
+        return;
+      }
+
+      if (req.method === "GET" && pathname === "/api/v1/admin/csc-centres") {
+        sendJson(res, 200, {
+          cscCentres: Array.from(platform.enterprise.cscCentres.values()),
+        });
+        return;
+      }
+
+      if (req.method === "POST" && pathname === "/api/v1/admin/csc-centres") {
+        const body = (await readJsonBody(req)) as any;
+        const id = `csc-${Date.now().toString(36)}`;
+        const centre = {
+          id,
+          code: body.code || `CSC-${id.toUpperCase()}`,
+          name: body.name || "Gram One / CSC Centre",
+          districtCode: body.districtCode || "KA-MYS",
+          talukCode: body.talukCode || "KA-MYS-HDK",
+          managerId: body.managerId || null,
+          contactPhone: body.contactPhone || "+918212000000",
+          status: "ACTIVE" as const,
+          createdAt: new Date().toISOString(),
+        };
+        platform.enterprise.cscCentres.set(id, centre);
+        sendJson(res, 201, { cscCentre: centre });
+        return;
+      }
+
+      if (req.method === "GET" && pathname === "/api/v1/admin/schemes") {
+        sendJson(res, 200, {
+          schemes: Array.from(platform.enterprise.schemes.values()),
+        });
+        return;
+      }
+
+      if (req.method === "GET" && pathname === "/api/v1/admin/applications") {
+        sendJson(res, 200, {
+          applications: Array.from(platform.enterprise.applications.values()),
+        });
+        return;
+      }
+
+      if (req.method === "GET" && pathname === "/api/v1/admin/bank-partners") {
+        sendJson(res, 200, {
+          bankPartners: Array.from(platform.enterprise.bankPartners.values()),
+        });
+        return;
+      }
+
+      if (req.method === "GET" && pathname === "/api/v1/admin/integrations/health") {
+        sendJson(res, 200, {
+          integrations: platform.enterprise.getIntegrationHealth(),
+        });
+        return;
+      }
+
+      // Employee / CSC Portal APIs
+      if (req.method === "GET" && pathname === "/api/v1/employee/dashboard") {
+        const empId = url.searchParams.get("employeeId") || undefined;
+        sendJson(res, 200, platform.enterprise.getEmployeeDashboard(empId));
+        return;
+      }
+
+      if (req.method === "POST" && pathname === "/api/v1/employee/farmers/register") {
+        const body = (await readJsonBody(req)) as any;
+        const farmer = platform.enterprise.registerFarmer(
+          body.actorId || "emp-lead-01",
+          body
+        );
+        sendJson(res, 201, { farmer });
+        return;
+      }
+
+      if (req.method === "POST" && pathname === "/api/v1/employee/applications/create") {
+        const body = (await readJsonBody(req)) as any;
+        const app = platform.enterprise.createApplication(
+          body.actorId || "emp-lead-01",
+          body.actorRole || "EMPLOYEE",
+          body.actorName || "Suresh Patil",
+          body
+        );
+        sendJson(res, 201, { application: app });
+        return;
+      }
+
+      if (req.method === "POST" && pathname === "/api/v1/employee/applications/transition") {
+        const body = (await readJsonBody(req)) as any;
+        const app = platform.enterprise.transitionApplicationStatus(
+          body.actorId || "emp-lead-01",
+          body.actorRole || "EMPLOYEE",
+          body.actorName || "Suresh Patil",
+          body
+        );
+        sendJson(res, 200, { application: app });
+        return;
+      }
+
+      if (req.method === "POST" && pathname === "/api/v1/employee/applications/handoff") {
+        const body = (await readJsonBody(req)) as any;
+        const app = platform.enterprise.recordPortalHandoff(
+          body.actorId || "emp-lead-01",
+          body.actorRole || "EMPLOYEE",
+          body.actorName || "Suresh Patil",
+          body
+        );
+        sendJson(res, 200, { application: app });
+        return;
+      }
+
+      // Bank Partner Portal APIs
+      if (req.method === "GET" && pathname === "/api/v1/bank/dashboard") {
+        const bankId = url.searchParams.get("bankId") || undefined;
+        sendJson(res, 200, platform.enterprise.getBankDashboard(bankId));
+        return;
+      }
+
+      if (req.method === "POST" && pathname === "/api/v1/bank/applications/decision") {
+        const body = (await readJsonBody(req)) as any;
+        const app = platform.enterprise.recordBankDecision(
+          body.actorId || "bank-mgr-01",
+          "BANK_PARTNER",
+          body.bankName || "SBI Relationship Manager",
+          body
+        );
+        sendJson(res, 200, { application: app });
+        return;
+      }
+
       // Scheme Rollback Route
       const rollbackRoute = pathname.match(
         /^\/api\/v1\/schemes\/([^/]+)\/rollback$/

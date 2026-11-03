@@ -1,6 +1,7 @@
 import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
+import { AgroEnterpriseService } from "./enterprise.service.js";
 import {
   compareDocumentXRay,
   convertToHectares,
@@ -560,6 +561,7 @@ export class AgroPlatformService {
   public readonly llmProvider = new CachedMockLlmProvider();
   public readonly sttProvider = new MockBhashiniSttProvider();
   public readonly twilioWhatsAppProvider: TwilioWhatsAppProvider;
+  public readonly enterprise = new AgroEnterpriseService();
 
   private readonly users = new Map<string, UserRecord>();
   private readonly profiles = new Map<string, UserProfileRecord>();
