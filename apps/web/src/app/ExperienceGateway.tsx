@@ -237,6 +237,19 @@ export function ExperienceGateway({
               "एआई प्रेडिक्शन ऐप"
             )}
           >
+            <div style={{ display: "flex", justifyContent: "center", marginBottom: 16 }}>
+              <img
+                src="/logo.png"
+                alt="Agro AI Schemes"
+                width={88}
+                height={88}
+                style={{
+                  borderRadius: 20,
+                  boxShadow: "0 8px 24px rgba(0, 0, 0, 0.2)",
+                  border: "2px solid rgba(255, 255, 255, 0.8)",
+                }}
+              />
+            </div>
             <div>
               <div
                 style={{
@@ -358,12 +371,18 @@ export function ExperienceGateway({
             ================================================================ */}
         {step === "brand_reveal" && (
           <div className="brand-reveal-stage" aria-live="polite">
-            <div className="brand-emblem-hero">
+            <div className="brand-emblem-hero" style={{ textAlign: "center" }}>
               <img
-                src="/emblem.png"
-                alt="Agro AI Scheme Official Emblem"
-                width={92}
-                height={92}
+                src="/logo.png"
+                alt="Agro AI Scheme Official Logo"
+                width={128}
+                height={128}
+                style={{
+                  borderRadius: 24,
+                  boxShadow: "0 12px 32px rgba(46, 125, 50, 0.28)",
+                  border: "3px solid #ffffff",
+                  display: "inline-block",
+                }}
               />
             </div>
 

@@ -141,4 +141,22 @@ describe("@agro/web UI integration and Phase 0 & 1 Acceptance Tests", () => {
     expect(pageSource).toContain("floating-actions-cluster");
     expect(pageSource).toContain("WhatsApp Papers & Advisory");
   });
+
+  it("verifies Agro AI Schemes brand logo is configured in AppBar, Gateway and Manifest", () => {
+    const designSource = fs.readFileSync(
+      path.resolve(process.cwd(), "src/app/components/DesignSystem.tsx"),
+      "utf8"
+    );
+    const gatewaySource = fs.readFileSync(
+      path.resolve(process.cwd(), "src/app/ExperienceGateway.tsx"),
+      "utf8"
+    );
+    const manifestSource = fs.readFileSync(
+      path.resolve(process.cwd(), "public/manifest.json"),
+      "utf8"
+    );
+    expect(designSource).toContain('/logo.png');
+    expect(gatewaySource).toContain('/logo.png');
+    expect(manifestSource).toContain('/logo.png');
+  });
 });

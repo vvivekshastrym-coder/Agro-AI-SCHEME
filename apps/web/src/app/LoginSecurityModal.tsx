@@ -18,14 +18,22 @@ export function AgroEmblem({ size = 42 }: { size?: number }) {
   return (
     <div
       className="brand-emblem"
-      style={{ width: size, height: size }}
+      style={{
+        width: size,
+        height: size,
+        borderRadius: Math.round(size * 0.22),
+        overflow: "hidden",
+        border: "1.5px solid rgba(46, 125, 50, 0.25)",
+        flexShrink: 0,
+      }}
       aria-hidden="true"
     >
       <img
-        src="/emblem.png"
-        alt=""
+        src="/logo.png"
+        alt="Agro AI Schemes"
         width={size}
         height={size}
+        style={{ width: "100%", height: "100%", objectFit: "cover" }}
         onError={(e) => {
           (e.currentTarget as HTMLImageElement).style.display = "none";
         }}

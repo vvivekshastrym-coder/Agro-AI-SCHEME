@@ -7,6 +7,11 @@ export const metadata: Metadata = {
   description:
     "Independent farmer helper for Indian government schemes, crop insurance claims, land record checks, and benefit tracking.",
   manifest: "/manifest.json",
+  icons: {
+    icon: "/logo.png",
+    shortcut: "/logo.png",
+    apple: "/logo.png",
+  },
 };
 
 export default function RootLayout({

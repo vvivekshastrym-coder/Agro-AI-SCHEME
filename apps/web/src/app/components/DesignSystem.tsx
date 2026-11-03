@@ -352,7 +352,7 @@ export function AppBar({
     <header className="app-bar">
       <div className="app-bar-brand">
         <div className="app-bar-logo">
-          <img src="/logo.svg" alt="" width={28} height={28} />
+          <img src="/logo.png" alt="Agro AI Scheme Logo" width={32} height={32} />
         </div>
         <span className="app-bar-title">
           {lang === "kn"
@@ -935,7 +935,7 @@ export function SideRail({
           }}
         >
           <div className="app-bar-logo">
-            <img src="/logo.svg" alt="" width={28} height={28} />
+            <img src="/logo.png" alt="Agro AI Scheme Logo" width={32} height={32} />
           </div>
           <div>
             <div style={{ fontWeight: 700, color: "var(--green-900)" }}>

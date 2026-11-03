@@ -6,5 +6,12 @@
   "display": "standalone",
   "background_color": "#FAF8F5",
   "theme_color": "#14532D",
-  "lang": "kn"
+  "lang": "kn",
+  "icons": [
+    {
+      "src": "/logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
 }
